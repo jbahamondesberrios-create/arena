@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Arena · Dojo de Joaquín</title>
+<link rel="stylesheet" href="css/estilos.css">
+<link rel="stylesheet" href="css/especiales.css">
+
+<!-- Instalable y sin internet cuando está publicada. Con Jugar.bat (file://)
+     todo esto se ignora solo: el manifiesto no aplica y el service worker
+     ni se registra, así que la app local sigue funcionando igual. -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2f6fed">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="La Arena">
+<link rel="apple-touch-icon" href="iconos/icono-192.png">
+<link rel="icon" href="iconos/icono-192.png">
+</head>
+<body>
+
+<!-- ================= CABECERA ================= -->
+<header id="barra">
+  <div class="marca" id="ir-inicio">
+    <span class="logo">⚔️</span>
+    <span class="titulo">LA ARENA</span>
+  </div>
+  <div class="stats-barra">
+    <div class="stat" title="Rango actual">
+      <span class="stat-icono" id="rango-icono">🌱</span>
+      <div class="stat-txt">
+        <b id="rango-nombre">Novato</b>
+        <div class="barra-xp"><i id="barra-xp-fill"></i></div>
+        <small id="rango-xp">0 / 500 XP</small>
+      </div>
+    </div>
+    <div class="stat" title="Racha diaria: días seguidos entrenando">
+      <span class="stat-icono">🔥</span>
+      <div class="stat-txt"><b id="racha-num">0</b><small>racha</small></div>
+    </div>
+    <div class="stat" title="Medallas ganadas">
+      <span class="stat-icono">🏅</span>
+      <div class="stat-txt"><b id="medallas-num">0</b><small>medallas</small></div>
+    </div>
+    <button class="btn-icono" id="btn-estudiar" title="Sala de estudio: leer los apuntes sin preguntas">📚</button>
+    <button class="btn-icono" id="btn-sonido" title="Activar / desactivar sonido">🔊</button>
+    <button class="btn-icono" id="btn-perfil" title="Ver mi progreso">📊</button>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= INICIO ================= -->
+<section id="pantalla-inicio" class="pantalla activa">
+
+  <div id="aviso-repaso" class="aviso oculto">
+    <span>⚠️ Tienes <b id="repaso-cuenta">0</b> conceptos flojos acumulados.</span>
+    <button class="btn btn-peligro" id="btn-repaso">Duelo de repaso</button>
+  </div>
+
+  <div class="banda-estudio">
+    <div>
+      <b>📚 ¿Prefieres repasar antes de pelear?</b>
+      <p>Lee los apuntes de cualquier mundo con calma: sin preguntas, sin cronómetro, sin perder vidas.</p>
+    </div>
+    <button class="btn" id="btn-ir-estudio">Entrar a la sala de estudio</button>
+  </div>
+
+  <div class="especiales-cab">
+    <h2>🎖️ Juegos especiales</h2>
+    <span class="cinta"></span>
+  </div>
+  <p class="mundo-desc" style="margin-left:0">Dos tableros grandes que se van pintando a medida que los conquistas. No hay vidas ni cronómetro: aquí se trata de llegar al 100&nbsp;%.</p>
+  <div id="especiales" class="rejilla-especiales"></div>
+
+  <div id="mundos" style="margin-top:34px"></div>
+
+  <footer class="pie">
+    <p>Todo se guarda en tu navegador. Sin internet, sin cuentas, sin nada.</p>
+    <p class="pie-tecla">Atajos: <kbd>1</kbd>–<kbd>6</kbd> responder · <kbd>Enter</kbd> continuar · <kbd>Esc</kbd> volver atrás</p>
+  </footer>
+</section>
+
+<!-- ================= JUEGO ================= -->
+<section id="pantalla-juego" class="pantalla">
+  <div id="hud">
+    <button class="btn-icono" id="btn-salir" title="Abandonar batalla">✕</button>
+    <div id="hud-vidas" class="vidas"></div>
+    <div id="hud-progreso" class="progreso-caja">
+      <div class="progreso"><i id="progreso-fill"></i></div>
+      <small id="progreso-txt">0 / 10</small>
+    </div>
+    <div id="hud-combo" class="combo">×1</div>
+    <div id="hud-puntos" class="puntos">0</div>
+  </div>
+
+  <div id="cronometro" class="cronometro oculto"><i id="cronometro-fill"></i></div>
+
+  <div id="zona-pregunta">
+    <div id="etiqueta-juego" class="etiqueta"></div>
+    <div id="enunciado"></div>
+    <div id="subenunciado" class="sub"></div>
+    <div id="zona-respuesta"></div>
+    <div id="pista-caja" class="pista oculta"></div>
+  </div>
+
+  <div id="feedback" class="feedback oculto">
+    <div id="feedback-cabecera"></div>
+    <div id="feedback-nota"></div>
+    <button class="btn btn-grande" id="btn-siguiente">Siguiente →</button>
+  </div>
+</section>
+
+<!-- ================= RESULTADO ================= -->
+<section id="pantalla-fin" class="pantalla">
+  <div class="resultado">
+    <div id="fin-estrellas" class="estrellas"></div>
+    <h1 id="fin-titulo">¡Victoria!</h1>
+    <p id="fin-sub" class="fin-sub"></p>
+    <div class="rejilla-res">
+      <div class="res-caja"><b id="fin-aciertos">0</b><small>aciertos</small></div>
+      <div class="res-caja"><b id="fin-precision">0%</b><small>precisión</small></div>
+      <div class="res-caja"><b id="fin-combo">0</b><small>mejor combo</small></div>
+      <div class="res-caja destacada"><b id="fin-xp">+0</b><small>XP ganado</small></div>
+    </div>
+    <div id="fin-logros" class="logros"></div>
+    <div class="acciones">
+      <button class="btn btn-grande" id="btn-otra">Otra batalla</button>
+      <button class="btn btn-fantasma" id="btn-volver">Volver al dojo</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ESTUDIO · ÍNDICE ================= -->
+<section id="pantalla-estudio" class="pantalla">
+  <div class="estudio-cab">
+    <h1>📚 Sala de estudio</h1>
+    <p>Los mismos temas que salen en los juegos, explicados de corrido. Aquí no se pierde nada: lee, repasa y cuando lo tengas claro, baja a la arena.</p>
+  </div>
+  <div id="estudio-filtros" class="chips"></div>
+  <div id="estudio-lista"></div>
+  <div class="acciones" style="margin-top:30px">
+    <button class="btn btn-fantasma" id="btn-estudio-volver">← Volver al dojo</button>
+  </div>
+</section>
+
+<!-- ================= ESTUDIO · LECTURA ================= -->
+<section id="pantalla-lectura" class="pantalla">
+  <article class="lectura">
+    <div class="lectura-top">
+      <button class="btn-icono" id="btn-lectura-volver" title="Volver al índice de apuntes">←</button>
+      <div id="lectura-migas" class="migas"></div>
+    </div>
+    <h1 id="lectura-titulo"></h1>
+    <p id="lectura-res" class="lectura-res"></p>
+
+    <nav id="lectura-indice" class="indice-ap"></nav>
+
+    <div id="lectura-cuerpo"></div>
+
+    <div class="lectura-pie">
+      <button class="btn btn-grande" id="btn-marcar-leido"></button>
+      <div id="lectura-nav" class="lectura-nav"></div>
+      <button class="btn btn-fantasma" id="btn-lectura-jugar">⚔️ Jugar los juegos de este mundo</button>
+    </div>
+  </article>
+</section>
+
+<!-- ================= TABLA PERIÓDICA ================= -->
+<section id="pantalla-tabla" class="pantalla">
+  <div class="tablero-cab">
+    <button class="btn-icono" id="qu-volver" title="Volver al dojo">←</button>
+    <div>
+      <h1>⚗️ Tabla periódica</h1>
+      <p class="sub-t">Los 118 elementos. En <b>estudiar</b> ves la ficha completa de cada uno; en <b>conquistar</b> te pregunto el nombre, el número atómico y el peso, y solo con las tres bien se pinta la casilla.</p>
+    </div>
+    <div class="tablero-modos">
+      <button class="modo-btn" id="qu-modo-estudio">📖 Estudiar</button>
+      <button class="modo-btn" id="qu-modo-conquista">⚔️ Conquistar</button>
+    </div>
+  </div>
+
+  <div class="tablero-progreso">
+    <small id="qu-progreso-txt">0 / 118</small>
+    <div class="barra"><i id="qu-progreso-fill"></i></div>
+  </div>
+
+  <div class="tablero-cuerpo">
+    <div>
+      <div class="qu-scroll"><div id="qu-rejilla"></div></div>
+      <div id="qu-leyenda"></div>
+    </div>
+    <aside id="qu-panel"></aside>
+  </div>
+</section>
+
+<!-- ================= ATLAS DEL MUNDO ================= -->
+<section id="pantalla-atlas" class="pantalla">
+  <div class="tablero-cab">
+    <button class="btn-icono" id="ge-volver" title="Volver al dojo">←</button>
+    <div>
+      <h1>🌍 Atlas del mundo</h1>
+      <p class="sub-t">Toca cualquier país del mapa. En <b>estudiar</b> ves su capital y su bandera; en <b>conquistar</b> te pregunto qué país es, cuál es su capital y cuál su bandera.</p>
+    </div>
+    <div class="tablero-modos">
+      <button class="modo-btn" id="ge-modo-estudio">📖 Estudiar</button>
+      <button class="modo-btn" id="ge-modo-conquista">⚔️ Conquistar</button>
+    </div>
+  </div>
+
+  <div class="tablero-progreso">
+    <small id="ge-progreso-txt">0 / 0</small>
+    <div class="barra"><i id="ge-progreso-fill"></i></div>
+  </div>
+
+  <div id="ge-continentes" class="chips"></div>
+
+  <div class="tablero-cuerpo">
+    <div id="ge-mapa"></div>
+    <aside id="ge-panel"></aside>
+  </div>
+</section>
+
+<!-- ================= PERFIL ================= -->
+<section id="pantalla-perfil" class="pantalla">
+  <div class="perfil">
+    <h1>📊 Mi progreso</h1>
+    <div id="perfil-resumen" class="rejilla-res"></div>
+    <h2>🏅 Vitrina de medallas</h2>
+    <div id="perfil-medallas"></div>
+    <h2>🎯 Lo que más se te resiste</h2>
+    <div id="perfil-flojos"></div>
+    <h2>💾 Llevarme el progreso a otro dispositivo</h2>
+    <div class="copia">
+      <p>El progreso se guarda en este navegador, así que no viaja solo. Guarda una copia
+         aquí, ábrela en el otro dispositivo y se juntan las dos partidas: se quedan las
+         medallas mejores y todo lo conquistado en cualquiera de los dos.</p>
+      <div class="copia-btns">
+        <button class="btn" id="btn-exportar">⬇️ Guardar copia</button>
+        <button class="btn btn-fantasma" id="btn-importar">⬆️ Restaurar copia</button>
+        <input type="file" id="campo-copia" accept=".json,application/json" hidden>
+      </div>
+      <p id="copia-aviso" class="copia-aviso"></p>
+    </div>
+
+    <div class="acciones">
+      <button class="btn btn-fantasma" id="btn-perfil-volver">Volver</button>
+      <button class="btn btn-peligro-fantasma" id="btn-borrar">Borrar todo mi progreso</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div id="brindis" class="brindis"></div>
+
+<script src="datos/aleman.js" charset="utf-8"></script>
+<script src="datos/arabe.js" charset="utf-8"></script>
+<script src="datos/finanzas.js" charset="utf-8"></script>
+<script src="datos/matematicas.js" charset="utf-8"></script>
+<script src="datos/quimica.js" charset="utf-8"></script>
+<script src="datos/geografia.js" charset="utf-8"></script>
+<script src="datos/mapa-mundi.js" charset="utf-8"></script>
+<script src="datos/apuntes-aleman.js" charset="utf-8"></script>
+<script src="datos/apuntes-arabe.js" charset="utf-8"></script>
+<script src="datos/apuntes-finanzas.js" charset="utf-8"></script>
+<script src="datos/apuntes-matematicas.js" charset="utf-8"></script>
+<script src="datos/apuntes-quimica.js" charset="utf-8"></script>
+<script src="datos/apuntes-geografia.js" charset="utf-8"></script>
+<script src="datos/ejercicios-matematicas.js" charset="utf-8"></script>
+<script src="datos/ejercicios-finanzas.js" charset="utf-8"></script>
+<script src="js/motor.js" charset="utf-8"></script>
+<script src="js/juegos.js" charset="utf-8"></script>
+<script src="js/estudio.js" charset="utf-8"></script>
+<script src="js/especiales.js" charset="utf-8"></script>
+<script src="js/app.js" charset="utf-8"></script>
+
+<script>
+/* El service worker solo existe en la versión publicada: en file:// no está
+   permitido y lanzaría un error en la consola cada vez que se abre. */
+if("serviceWorker" in navigator && location.protocol.startsWith("http")){
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
+}
+</script>
+</body>
+</html>

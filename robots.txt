@@ -1,0 +1,3 @@
+# App personal de estudio: se comparte por link, no para buscadores.
+User-agent: *
+Disallow: /

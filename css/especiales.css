@@ -1,0 +1,273 @@
+/* ============================================================
+   ESPECIALES — tabla periódica y atlas del mundo
+   ============================================================ */
+
+/* ---------------- Cabecera común de tablero ---------------- */
+.tablero-cab{
+  display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:14px;
+}
+.tablero-cab h1{ font-size:26px; line-height:1.2; }
+.tablero-cab .sub-t{ color:var(--texto-2); font-size:13px; margin-top:2px; max-width:560px; line-height:1.5; }
+.tablero-modos{ display:flex; gap:8px; margin-left:auto; flex-wrap:wrap; }
+.modo-btn{
+  background:var(--panel); border:1px solid var(--borde); color:var(--texto-2);
+  border-radius:99px; padding:9px 18px; font-size:13px; font-weight:700;
+  cursor:pointer; font-family:inherit; transition:.15s; white-space:nowrap;
+}
+.modo-btn:hover{ background:var(--panel-alto); color:var(--texto); }
+.modo-btn.activo{
+  color:#fff; border-color:transparent;
+  background:linear-gradient(135deg,var(--acento),var(--acento-2));
+}
+.tablero-progreso{
+  display:flex; align-items:center; gap:12px; margin-bottom:18px;
+  background:var(--panel); border:1px solid var(--borde);
+  border-radius:var(--r); padding:11px 16px;
+}
+.tablero-progreso .barra{ flex:1; height:8px; background:var(--fondo-2); border-radius:99px; overflow:hidden; }
+.tablero-progreso .barra i{ display:block; height:100%; width:0;
+  background:linear-gradient(90deg,var(--acento),var(--ok)); transition:width .5s ease; }
+.tablero-progreso small{ color:var(--texto-2); font-size:12.5px; white-space:nowrap; font-weight:600; }
+
+/* minmax(0,…) es lo que impide que la rejilla de 790 px empuje la página
+   hacia la derecha: la columna puede encogerse y el scroll queda dentro. */
+.tablero-cuerpo{ display:grid; grid-template-columns:minmax(0,1fr) 330px; gap:20px; align-items:start; }
+@media (max-width:1000px){ .tablero-cuerpo{ grid-template-columns:minmax(0,1fr); } }
+
+/* ---------------- Tabla periódica ---------------- */
+.qu-scroll{ overflow-x:auto; padding-bottom:8px; }
+#qu-rejilla{
+  display:grid;
+  grid-template-columns:18px repeat(18, minmax(40px,1fr));
+  grid-auto-rows:auto;
+  gap:3px;
+  min-width:790px;
+}
+.qu-rot{
+  display:grid; place-items:center; color:var(--texto-2);
+  font-size:10px; font-weight:700; letter-spacing:.5px;
+}
+.qu-rot-larga{ justify-content:flex-end; padding-right:6px; font-size:9.5px; text-align:right; }
+.qu-hueco{ height:10px; }
+
+.qu-celda{
+  position:relative; aspect-ratio:1/1; min-height:40px;
+  background:var(--panel); border:1px solid var(--borde);
+  border-top:3px solid var(--c,var(--acento));
+  border-radius:7px; padding:2px 1px; cursor:pointer; overflow:hidden;
+  color:var(--texto); font-family:inherit; transition:.12s;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+}
+.qu-celda:hover{ transform:translateY(-2px) scale(1.06); z-index:5;
+  box-shadow:var(--sombra); border-color:var(--c,var(--acento)); }
+.qu-celda.activa{ outline:2px solid var(--acento); outline-offset:1px; z-index:6; }
+.qu-celda .qu-z{ position:absolute; top:2px; left:4px; font-size:8.5px; font-style:normal; color:var(--texto-2); }
+.qu-celda .qu-s{ font-size:16px; font-weight:800; line-height:1.05; }
+.qu-celda .qu-n{ font-size:7.5px; font-style:normal; color:var(--texto-2); line-height:1.1;
+  text-align:center; padding:0 1px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:100%; }
+.qu-celda .qu-m{ font-size:7px; color:var(--texto-2); opacity:.75; }
+
+.qu-celda.dominada{ background:linear-gradient(160deg, rgba(15,157,110,.16), var(--panel)); }
+.qu-celda.dominada::after{
+  content:"✓"; position:absolute; top:1px; right:3px; font-size:9px;
+  color:var(--ok); font-weight:900;
+}
+/* en modo conquista, un elemento sin descubrir solo enseña el símbolo */
+.qu-celda.oculta-datos .qu-z,
+.qu-celda.oculta-datos .qu-n,
+.qu-celda.oculta-datos .qu-m{ visibility:hidden; }
+.qu-celda.oculta-datos{ background:var(--fondo-2); }
+
+#qu-leyenda{ display:flex; flex-wrap:wrap; gap:6px 14px; margin-top:14px; }
+.qu-lg{ display:inline-flex; align-items:center; gap:6px; font-size:11.5px; color:var(--texto-2); }
+.qu-lg i{ width:11px; height:11px; border-radius:3px; display:inline-block; }
+
+/* ---------------- Panel lateral ---------------- */
+#qu-panel, #ge-panel{
+  background:var(--panel); border:1px solid var(--borde); border-radius:var(--r);
+  padding:18px; position:sticky; top:80px;
+}
+.qu-vacio{ color:var(--texto-2); font-size:13.5px; line-height:1.65; margin-bottom:14px; }
+.qu-acciones{ display:flex; gap:9px; flex-wrap:wrap; align-items:center; margin-top:16px; }
+.qu-acciones .btn{ font-size:13px; padding:9px 16px; }
+.qu-ok{ color:var(--ok); font-weight:800; font-size:13.5px; }
+
+.ficha-el-cab, .ficha-pa-cab{ display:flex; gap:14px; align-items:center; margin-bottom:16px; }
+.ficha-simbolo{
+  flex:0 0 74px; height:74px; border-radius:12px; position:relative;
+  background:var(--c,var(--acento)); color:#fff;
+  display:grid; place-items:center; box-shadow:var(--sombra);
+}
+.ficha-simbolo b{ font-size:30px; font-weight:800; line-height:1; }
+.ficha-simbolo i{ position:absolute; top:5px; left:8px; font-size:11px; font-style:normal; opacity:.85; }
+.ficha-simbolo small{ position:absolute; bottom:4px; font-size:9.5px; opacity:.9; }
+.ficha-el h3, .ficha-pa h3{ font-size:19px; line-height:1.2; margin-bottom:3px; }
+.ficha-cat{ color:var(--texto-2); font-size:12.5px; }
+
+.ficha-datos{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+.ficha-datos > div{ background:var(--fondo-2); border-radius:9px; padding:8px 10px; }
+.ficha-datos small{ display:block; color:var(--texto-2); font-size:10.5px; letter-spacing:.3px; }
+.ficha-datos b{ font-size:14px; }
+.ficha-config{ background:var(--fondo-2); border-radius:9px; padding:8px 10px; margin-bottom:10px; }
+.ficha-config small{ display:block; color:var(--texto-2); font-size:10.5px; }
+.ficha-config b{ font-size:14px; font-family:Consolas,"Courier New",monospace; }
+.ficha-fam{ font-size:12.5px; color:var(--texto-2); margin-bottom:8px; }
+.ficha-dato{ font-size:13px; line-height:1.6;
+  background:rgba(251,191,36,.15); border:1px solid rgba(201,138,6,.4);
+  border-radius:10px; padding:10px 13px; }
+
+/* ---------------- Reto (las 3 preguntas) ---------------- */
+.reto-cab{ display:flex; gap:12px; align-items:center; margin-bottom:14px; }
+.reto-icono{
+  flex:0 0 54px; height:54px; border-radius:12px; background:var(--c,var(--acento));
+  color:#fff; display:grid; place-items:center; font-size:22px; font-weight:800;
+}
+.reto-cab small{ display:block; color:var(--texto-2); font-size:11.5px; margin-bottom:5px; }
+.reto-pasos{ display:flex; gap:5px; }
+.reto-pasos span{
+  width:20px; height:20px; border-radius:6px; display:grid; place-items:center;
+  font-size:11px; font-weight:700; background:var(--fondo-2);
+  color:var(--texto-2); border:1px solid var(--borde);
+}
+.reto-pasos span.actual{ background:var(--c,var(--acento)); color:#fff; border-color:transparent; }
+.reto-pasos span.hecho{ background:var(--ok); color:#fff; border-color:transparent; }
+.reto h3{ font-size:16px; line-height:1.4; margin-bottom:14px; }
+.reto .escribir{ flex-direction:column; gap:9px; max-width:none; }
+.reto .escribir input{ font-size:17px; padding:12px 14px; }
+.reto .escribir .btn{ width:100%; }
+.reto-fb{ font-size:13.5px; line-height:1.6; min-height:22px; margin-top:12px; }
+.reto-fb.bien{ color:var(--ok); }
+.reto-fb.mal{ color:var(--mal); }
+.reto-fb b{ color:var(--texto); }
+.reto-salir{ margin-top:14px; width:100%; font-size:12.5px; padding:9px; }
+
+/* ---------------- Banderas ---------------- */
+.bandera{ width:54px; height:36px; border-radius:4px; display:block; flex:0 0 auto; }
+.bandera-g{ width:84px; height:56px; border-radius:5px; }
+.bandera-m{ width:100%; height:auto; aspect-ratio:3/2; border-radius:4px; }
+/* dentro de una opción de respuesta del motor de batalla */
+.bandera-op{ width:120px; height:80px; border-radius:6px; margin:0 auto; }
+.opciones.tres .bandera-op{ width:100%; height:auto; aspect-ratio:3/2; }
+/* como enunciado de la pregunta */
+.bandera-xl{ width:210px; height:140px; border-radius:8px; margin:6px auto 4px;
+  box-shadow:var(--sombra); }
+
+.ge-banderas{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.ge-op-bandera{
+  position:relative; background:var(--panel); border:2px solid var(--borde);
+  border-radius:10px; padding:8px; cursor:pointer; transition:.13s; font-family:inherit;
+}
+.ge-op-bandera:hover:not(:disabled){ border-color:var(--acento); transform:translateY(-2px); }
+.ge-op-bandera .tecla{
+  position:absolute; top:3px; left:5px; z-index:2;
+  background:rgba(255,255,255,.9); border-radius:5px; padding:0 5px;
+  font-size:10px; font-weight:700; color:var(--texto-2);
+}
+.ge-op-bandera.correcta{ border-color:var(--ok); background:rgba(15,157,110,.12); }
+.ge-op-bandera.incorrecta{ border-color:var(--mal); background:rgba(220,61,84,.12); }
+.ge-op-bandera:disabled{ cursor:default; }
+
+/* ---------------- Mapa ----------------
+   Los países son contornos reales: el borde blanco de cada uno es la
+   frontera. Todos los trazos usan vector-effect para que el grosor no
+   cambie al hacer zoom por continente. */
+#ge-mapa{
+  position:relative;
+  background:linear-gradient(160deg,#e8f3ff,#d3e7fa);
+  border:1px solid var(--borde); border-radius:var(--r);
+  padding:10px; overflow:hidden;
+}
+/* marco de proporción fija: el zoom por continente cambia el viewBox, no la
+   altura del bloque, así la página no da saltos al cambiar de filtro */
+#ge-svg{ width:100%; aspect-ratio:2.4; display:block; touch-action:none; }
+
+/* botones de zoom: en el móvil son la vía principal, los gestos van aparte */
+/* abajo a la derecha: en la vista del mundo ahí solo hay océano */
+.ge-zoom{ position:absolute; bottom:16px; right:16px; display:flex; flex-direction:column; gap:6px; }
+.ge-zoom button{
+  width:34px; height:34px; border-radius:9px; cursor:pointer;
+  background:rgba(255,255,255,.92); border:1px solid var(--borde);
+  color:var(--texto); font-size:17px; font-weight:700; font-family:inherit;
+  line-height:1; display:flex; align-items:center; justify-content:center;
+  box-shadow:0 1px 3px rgba(16,42,73,.18); transition:.12s;
+}
+.ge-zoom button:hover{ background:#fff; border-color:var(--acento); color:var(--acento); }
+.ge-zoom button:active{ transform:scale(.94); }
+#ge-svg path, #ge-svg circle{ vector-effect:non-scaling-stroke; }
+
+.ge-rejilla path{ fill:none; stroke:rgba(255,255,255,.55); stroke-width:1; }
+
+/* tierra sin país que jugar: Groenlandia, territorios, otros continentes */
+.ge-otros path{ fill:#c2d4e4; stroke:#aec4d8; stroke-width:.8; }
+
+.ge-pais{
+  stroke:#f7fbff; stroke-width:1; stroke-linejoin:round;
+  fill-opacity:.52; cursor:pointer; transition:fill-opacity .12s, stroke .12s;
+}
+.ge-pais:hover{ fill-opacity:.75; stroke:#12243f; stroke-width:1.4; }
+.ge-pais.dominado{ fill-opacity:.92; stroke:#ffffff; stroke-width:1.2; }
+.ge-pais.activo{ fill-opacity:.95; stroke:#12243f; stroke-width:2; }
+
+/* En conquistar el mapa arranca apagado y cada país se pinta con el color de
+   su continente al ganarlo: se ve de un vistazo cuánto mundo llevas. */
+#ge-svg.conquista .ge-pais:not(.dominado){ fill:#93aec8; fill-opacity:.45; }
+#ge-svg.conquista .ge-pais:not(.dominado):hover{ fill-opacity:.7; }
+#ge-svg.conquista .ge-punto:not(.dominado){ fill:#93aec8; }
+
+.ge-punto{ cursor:pointer; stroke:#f7fbff; stroke-width:1; transition:.12s; }
+.ge-punto:hover{ stroke:#12243f; stroke-width:1.6; }
+.ge-punto.dominado{ stroke:#fff; stroke-width:1.4; }
+.ge-punto.activo{ stroke:#12243f; stroke-width:2; }
+
+/* círculo transparente que agranda la zona tocable de los países diminutos */
+.ge-toque{ fill:transparent; cursor:pointer; }
+
+#ge-marca{
+  fill:none; stroke:#12243f; stroke-width:2.4; opacity:.9; pointer-events:none;
+  transform-box:fill-box; transform-origin:center;    /* si no, escala desde 0,0 */
+  animation:ge-latido 1.4s ease-out infinite;
+}
+@keyframes ge-latido{
+  0%   { transform:scale(.45); opacity:1; }
+  70%  { transform:scale(1);   opacity:.15; }
+  100% { transform:scale(1);   opacity:0; }
+}
+
+#ge-continentes{ margin-bottom:14px; }
+#ge-continentes .chip b{ font-weight:700; font-size:11.5px; }
+
+/* ---------------- Cartas de juego especial en el hub ---------------- */
+.especiales-cab{ display:flex; align-items:center; gap:12px; margin:4px 0 6px; }
+.especiales-cab h2{ font-size:22px; }
+.especiales-cab .cinta{ height:3px; flex:1; border-radius:99px; opacity:.55;
+  background:linear-gradient(90deg,var(--qu),var(--ge)); }
+.rejilla-especiales{ display:grid; grid-template-columns:repeat(auto-fit,minmax(330px,1fr)); gap:16px; }
+.carta-esp{
+  position:relative; overflow:hidden; text-align:left;
+  background:linear-gradient(150deg,var(--panel),var(--fondo-2));
+  border:1px solid var(--borde); border-radius:var(--r); padding:20px;
+  display:flex; gap:16px; align-items:flex-start;
+}
+.carta-esp::before{ content:""; position:absolute; inset:0 auto 0 0; width:5px; background:var(--c,var(--acento)); }
+.carta-esp:hover{ box-shadow:var(--sombra); border-color:var(--c,var(--acento)); }
+.carta-esp .esp-emo{ font-size:38px; line-height:1; }
+.carta-esp h3{ font-size:17px; margin-bottom:5px; }
+.carta-esp p{ color:var(--texto-2); font-size:13px; line-height:1.55; margin-bottom:12px; }
+.esp-barra{ height:6px; background:var(--fondo-2); border-radius:99px; overflow:hidden; margin-bottom:10px; }
+.esp-barra i{ display:block; height:100%; background:var(--c,var(--acento)); transition:width .5s; }
+.esp-botones{ display:flex; gap:9px; flex-wrap:wrap; }
+.esp-botones .btn{ font-size:13px; padding:10px 18px; }
+.esp-cuenta{ color:var(--texto-2); font-size:11.5px; margin-bottom:8px; display:block; }
+
+@media (max-width:640px){
+  .tablero-modos{ margin-left:0; width:100%; }
+  #qu-panel, #ge-panel{ position:static; }
+  .ficha-datos{ grid-template-columns:1fr; }
+}
+
+/* En un móvil el mapa mide unos 150 px de alto: la columna de botones se lo
+   comería entero, así que van en fila y algo más juntos. */
+@media (max-width:760px){
+  .ge-zoom{ flex-direction:row; bottom:14px; right:14px; gap:5px; }
+  .ge-zoom button{ width:31px; height:31px; font-size:15px; }
+}

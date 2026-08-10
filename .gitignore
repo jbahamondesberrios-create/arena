@@ -1,0 +1,10 @@
+# el topojson de origen se baja aparte, no hace falta versionarlo
+countries-50m.json
+
+# archivos temporales de las pruebas
+_*.html
+
+# basura del sistema
+Thumbs.db
+desktop.ini
+.DS_Store

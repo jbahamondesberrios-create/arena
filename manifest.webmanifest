@@ -1,0 +1,16 @@
+{
+  "name": "La Arena · Dojo de Joaquín",
+  "short_name": "La Arena",
+  "description": "Juegos de estudio con XP, medallas y dos tableros grandes: la tabla periódica y el atlas del mundo.",
+  "lang": "es",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#eef4fd",
+  "theme_color": "#2f6fed",
+  "icons": [
+    { "src": "iconos/icono-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "iconos/icono-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
