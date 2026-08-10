@@ -139,7 +139,9 @@ function pintarHub(){
       carta.innerHTML = `
         <h3>${j.emo} ${j.nombre}</h3>
         <p>${j.desc}</p>
-        <div class="niveles">${nivelesHtml}</div>`;
+        <div class="niveles">${nivelesHtml}</div>
+        <button class="niv-perso" data-perso="${j.id}"
+          title="Elegir vidas, tiempo y número de preguntas">⚙️ A tu medida</button>`;
       rej.appendChild(carta);
     });
 
@@ -150,6 +152,13 @@ function pintarHub(){
     b.addEventListener("click", () => {
       M.Sonido.clic();
       empezar(b.dataset.juego, +b.dataset.nivel);
+    });
+  });
+
+  cont.querySelectorAll("[data-perso]").forEach(b => {
+    b.addEventListener("click", () => {
+      M.Sonido.clic();
+      abrirPerso(b.dataset.perso);
     });
   });
 
@@ -176,10 +185,12 @@ function pintarHub(){
 /* =====================================================================
    BATALLA
    ===================================================================== */
-function empezar(juegoId, nivel, esRepaso){
-  const cfg = M.NIVELES[nivel];
+/* `perso` es la configuración del nivel a medida ({base,preguntas,vidas,tiempo}).
+   Si viene, manda ella: el nivel solo decide de qué preguntas se tira. */
+function empezar(juegoId, nivel, esRepaso, perso){
+  const cfg = perso ? M.cfgPerso(perso) : M.NIVELES[nivel];
   P = {
-    juegoId, nivel, esRepaso: !!esRepaso, cfg,
+    juegoId, nivel, esRepaso: !!esRepaso, perso: perso || null, cfg,
     total: cfg.preguntas,
     idx: 0,
     aciertos: 0,
@@ -216,9 +227,13 @@ function siguientePregunta(){
 
   /* Evita repetir dentro de la misma batalla: reintenta mientras el banco dé
      de sí. Si el pool del juego es más pequeño que la ronda, acaba cediendo
-     en vez de quedarse colgado. */
+     en vez de quedarse colgado. El margen crece con la ronda porque en una
+     batalla de 118 elementos las últimas preguntas son agujas en un pajar;
+     en cuanto el banco se agota de verdad, se deja de insistir. */
+  const tope = P.sinBanco ? 12 : Math.min(1400, 40 + P.total * 12);
   let q = generarPregunta(), guarda = 0;
-  while(P.vistos.has(q.id) && guarda++ < 40) q = generarPregunta();
+  while(P.vistos.has(q.id) && guarda++ < tope) q = generarPregunta();
+  if(P.vistos.has(q.id)) P.sinBanco = true;
   P.pregunta = q;
   P.vistos.add(q.id);
 
@@ -505,7 +520,14 @@ function terminar(){
   const rachaNueva = M.marcarDia();
 
   const logros = [];
-  if(!P.esRepaso){
+  if(P.perso){
+    /* Las medallas y los récords siguen siendo de los tres niveles de siempre:
+       si contaran aquí, bastaría con pedir 10 vidas y sin cronómetro para
+       llenar la vitrina de oros. El XP sí cuenta, que es lo que se suda. */
+    logros.push(`⚙️ Batalla a tu medida: <b>${P.total} preguntas</b> · ${P.cfg.vidas} ${P.cfg.vidas===1?"vida":"vidas"} · ` +
+                (P.cfg.tiempo ? `${P.cfg.tiempo} s por pregunta` : "sin cronómetro"));
+  }
+  if(!P.esRepaso && !P.perso){
     const mejorada = M.registrarMedalla(P.juegoId, P.nivel, medalla);
     if(mejorada) logros.push(`${M.ICONO_MED[medalla]} Nueva medalla de <b>${medalla}</b> en este juego y nivel`);
     if(M.registrarRecord(P.juegoId, P.nivel, xp)) logros.push(`📈 ¡Nuevo récord personal: <b>${xp} puntos</b>!`);
@@ -603,6 +625,133 @@ function pintarPerfil(){
 }
 
 /* =====================================================================
+   NIVEL PERSONALIZADO
+   Vidas, tiempo y número de preguntas los pone él. El tope de preguntas
+   lo decide el juego: 40 en general, y en países y elementos, cuántos
+   haya (Juegos.topePreguntas), porque una batalla no repite pregunta.
+   ===================================================================== */
+let perso = null;          // {juegoId, cfg:{base,preguntas,vidas,tiempo}}
+
+const PRESETS = [
+  {nombre:"🏃 Maratón",     hacer:(c,t) => ({base:c.base, preguntas:Math.min(t,30), vidas:10, tiempo:0})},
+  {nombre:"⚡ Relámpago",   hacer:(c,t) => ({base:c.base, preguntas:Math.min(t,15), vidas:3,  tiempo:8})},
+  {nombre:"💀 Muerte súbita", hacer:(c,t) => ({base:c.base, preguntas:Math.min(t,20), vidas:1, tiempo:12})},
+  {nombre:"🎯 Banco entero", hacer:(c,t) => ({base:c.base, preguntas:t, vidas:10, tiempo:0})}
+];
+
+/* por qué esos mundos pasan de 40 */
+const TOPE_PORQUE = {
+  geografia: ": uno por cada país del mundo",
+  quimica:   ": uno por cada elemento de la tabla"
+};
+
+function topeActual(){ return Juegos.topePreguntas(perso.juegoId); }
+
+function abrirPerso(juegoId){
+  const j = Juegos.porId(juegoId);
+  if(!j) return;
+  perso = {juegoId, cfg: M.ajustePerso()};
+  perso.cfg = M.limpiarPerso(perso.cfg, Juegos.topePreguntas(juegoId));
+  $("#perso-juego").innerHTML = `${j.emo} <b>${j.nombre}</b> — tú pones las reglas.`;
+  pintarPerso();
+  $("#perso").classList.remove("oculto");
+  $("#perso .modal-caja").scrollTop = 0;
+  /* sin preventScroll, en el móvil el diálogo se abre ya desplazado hasta el
+     botón de empezar y no se ve ni el título */
+  setTimeout(() => $("#perso-empezar").focus({preventScroll:true}), 60);
+}
+
+function cerrarPerso(){
+  $("#perso").classList.add("oculto");
+  perso = null;
+}
+
+function txtTiempo(s){ return s ? s + " s" : "sin límite"; }
+
+function pintarPerso(){
+  const c = perso.cfg, tope = topeActual();
+  if(c.preguntas > tope) c.preguntas = tope;
+
+  /* dificultad base */
+  const base = $("#perso-base");
+  base.innerHTML = [1,2,3].map(n =>
+    `<button class="chip ${n===c.base?"activo":""}" data-base="${n}">${M.NIVELES[n].icono} ${M.NIVELES[n].nombre}</button>`
+  ).join("");
+  base.querySelectorAll("[data-base]").forEach(b => b.addEventListener("click", () => {
+    M.Sonido.clic();
+    c.base = +b.dataset.base;
+    pintarPerso();
+  }));
+  $("#perso-base-nota").textContent =
+    `Marca de qué preguntas se tira y cuántas opciones tiene cada una (${M.NIVELES[c.base].opciones}). ` +
+    `También manda en los puntos: ${M.NIVELES[c.base].xpBase} XP base por acierto.`;
+
+  /* deslizadores */
+  const sp = $("#perso-preguntas"), sv = $("#perso-vidas"), st = $("#perso-tiempo");
+  sp.max = tope;  sp.value = c.preguntas;
+  sv.max = M.LIMITES.vidas.max; sv.value = c.vidas;
+  st.max = M.LIMITES.tiempo.max; st.value = c.tiempo;
+  $("#perso-preguntas-val").textContent = c.preguntas;
+  $("#perso-vidas-val").textContent = c.vidas;
+  $("#perso-tiempo-val").textContent = txtTiempo(c.tiempo);
+
+  /* de cuántas preguntas distintas dispone este juego */
+  const banco = Juegos.tamBanco(perso.juegoId, c.base);
+  const notaP = $("#perso-preguntas-nota");
+  if(c.preguntas > banco && banco <= tope){
+    notaP.textContent = `⚠️ Este juego sabe hacer unas ${banco} preguntas distintas en ${M.NIVELES[c.base].nombre.toLowerCase()}: ` +
+                        `a partir de ahí alguna se repetirá. Máximo ${tope}.`;
+    notaP.className = "aviso-banco";
+  }else{
+    notaP.textContent = `Máximo ${tope} preguntas por batalla${TOPE_PORQUE[Juegos.porId(perso.juegoId).mundo] || ""}.`;
+    notaP.className = "";
+  }
+
+  $("#perso-vidas-nota").textContent = c.vidas === 1
+    ? "Una sola: el primer fallo acaba la batalla."
+    : `Fallas ${c.vidas} veces y se acabó. Los tres niveles de siempre dan 5, 3 y 2.`;
+
+  $("#perso-tiempo-nota").textContent = c.tiempo
+    ? "Con cronómetro, responder rápido suma hasta un 50 % más de puntos."
+    : "Sin cronómetro: piensas lo que haga falta, pero te quedas sin el bono de rapidez.";
+
+  /* atajos */
+  const pre = $("#perso-presets");
+  pre.innerHTML = PRESETS.map((p,i) => `<button class="chip" data-preset="${i}">${p.nombre}</button>`).join("");
+  pre.querySelectorAll("[data-preset]").forEach(b => b.addEventListener("click", () => {
+    M.Sonido.clic();
+    perso.cfg = M.limpiarPerso(PRESETS[+b.dataset.preset].hacer(perso.cfg, topeActual()), topeActual());
+    pintarPerso();
+  }));
+
+  $("#perso-resumen").innerHTML =
+    `<b>${M.NIVELES[c.base].icono} ${M.NIVELES[c.base].nombre}</b> · ${c.preguntas} preguntas · ` +
+    `${c.vidas} ${c.vidas===1?"vida":"vidas"} · ${c.tiempo ? c.tiempo+" s por pregunta" : "sin cronómetro"}.<br>` +
+    `<small style="color:var(--texto-2)">Suma XP y cuenta para la racha, pero las medallas y los récords se ganan solo en los tres niveles de siempre.</small>`;
+}
+
+["#perso-preguntas","#perso-vidas","#perso-tiempo"].forEach(sel => {
+  $(sel).addEventListener("input", e => {
+    if(!perso) return;
+    perso.cfg[sel.replace("#perso-","")] = +e.target.value;
+    pintarPerso();
+  });
+});
+
+$("#perso-empezar").addEventListener("click", () => {
+  if(!perso) return;
+  const cfg = M.guardarPerso(M.limpiarPerso(perso.cfg, topeActual()));
+  const juegoId = perso.juegoId;
+  M.Sonido.clic();
+  cerrarPerso();
+  empezar(juegoId, cfg.base, false, cfg);
+});
+
+$("#perso-cerrar").addEventListener("click", () => { M.Sonido.clic(); cerrarPerso(); });
+$("#perso-cancelar").addEventListener("click", () => { M.Sonido.clic(); cerrarPerso(); });
+$("#perso").addEventListener("click", e => { if(e.target.id === "perso") cerrarPerso(); });
+
+/* =====================================================================
    EVENTOS GLOBALES
    ===================================================================== */
 $("#btn-siguiente").addEventListener("click", () => {
@@ -621,7 +770,7 @@ $("#btn-salir").addEventListener("click", () => {
 
 $("#btn-otra").addEventListener("click", () => {
   M.Sonido.clic();
-  empezar(P.juegoId, P.nivel, P.esRepaso);
+  empezar(P.juegoId, P.nivel, P.esRepaso, P.perso);
 });
 
 $("#btn-volver").addEventListener("click", () => { pintarHub(); ir("pantalla-inicio"); });
@@ -724,6 +873,22 @@ $("#btn-borrar").addEventListener("click", () => {
 /* teclado */
 document.addEventListener("keydown", e => {
   const enJuego = $("#pantalla-juego").classList.contains("activa");
+
+  /* el diálogo del nivel a medida se come las teclas mientras está abierto */
+  if(perso){
+    if(e.key === "Escape"){ e.preventDefault(); cerrarPerso(); }
+    else if(e.key === "Enter"){
+      /* Enter arranca la batalla salvo que el foco esté en otro botón, que
+         entonces lo que quiere es pulsar ese */
+      const f = document.activeElement;
+      if(!f || f.tagName !== "BUTTON" || f.id === "perso-empezar"){
+        e.preventDefault();
+        $("#perso-empezar").click();
+      }
+    }
+    return;
+  }
+
   if(e.key === "Escape"){
     if(enJuego){ pararCrono(); volverAlHub(); }
     else if($("#pantalla-lectura").classList.contains("activa")) Estudio.volverAlIndice();

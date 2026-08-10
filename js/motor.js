@@ -26,6 +26,53 @@ const NIVELES = {
   3:{nombre:"Difícil",    preguntas:14, vidas:2, tiempo:9,  xpBase:30, opciones:5, icono:"🔴"}
 };
 
+/* ---------- Nivel personalizado ----------
+   El tope de preguntas no es fijo: lo decide el juego (Juegos.topePreguntas),
+   porque en países y elementos el límite real es cuántos hay. TOPE_PREGUNTAS
+   es solo el valor por defecto para todo lo demás. */
+const TOPE_PREGUNTAS = 40;
+const LIMITES = {
+  preguntas:{min:3,  max:TOPE_PREGUNTAS},
+  vidas:    {min:1,  max:10},
+  tiempo:   {min:0,  max:90}      // 0 = sin cronómetro
+};
+const PERSO_DEF = {base:2, preguntas:15, vidas:5, tiempo:0};
+
+function acotar(v, min, max, porDefecto){
+  v = Math.round(Number(v));
+  if(!isFinite(v)) return porDefecto;
+  return Math.min(max, Math.max(min, v));
+}
+
+/* Deja una configuración dentro de los límites. `topePreg` lo pasa quien
+   sabe cuántas preguntas distintas tiene ese juego. */
+function limpiarPerso(p, topePreg){
+  p = p || {};
+  const tope = topePreg || LIMITES.preguntas.max;
+  return {
+    base:      [1,2,3].indexOf(+p.base) >= 0 ? +p.base : PERSO_DEF.base,
+    preguntas: acotar(p.preguntas, LIMITES.preguntas.min, tope,                    Math.min(PERSO_DEF.preguntas, tope)),
+    vidas:     acotar(p.vidas,     LIMITES.vidas.min,     LIMITES.vidas.max,       PERSO_DEF.vidas),
+    tiempo:    acotar(p.tiempo,    LIMITES.tiempo.min,    LIMITES.tiempo.max,      PERSO_DEF.tiempo)
+  };
+}
+
+/* La última configuración usada, para no volver a moverlo todo cada vez */
+function ajustePerso(){ return limpiarPerso(E.perso || PERSO_DEF); }
+
+function guardarPerso(p){ E.perso = limpiarPerso(p); guardar(); return E.perso; }
+
+/* Convierte la configuración en un cfg igual al de los niveles fijos:
+   el contenido y los puntos salen del nivel base, el resto lo pone él. */
+function cfgPerso(p){
+  const b = NIVELES[p.base] || NIVELES[2];
+  return {
+    nombre:"A tu medida", icono:"⚙️", personalizado:true, base:p.base,
+    preguntas:p.preguntas, vidas:p.vidas, tiempo:p.tiempo,
+    xpBase:b.xpBase, opciones:b.opciones
+  };
+}
+
 /* ---------- Estado persistente ---------- */
 let E = {
   xp:0,
@@ -40,7 +87,8 @@ let E = {
   records:{},    // "juego|nivel" -> puntos
   items:{},      // idItem -> {a:aciertos, f:fallos, et:etiqueta, ju:juego}
   leidos:{},     // idApunte -> true (modo estudio)
-  conquista:{}   // idCasilla -> true (tabla periódica / atlas)
+  conquista:{},  // idCasilla -> true (tabla periódica / atlas)
+  perso:null     // última configuración del nivel personalizado
 };
 
 let almacenOK = true;
@@ -371,7 +419,7 @@ function importar(texto){
 function borrarTodo(){
   E = {xp:0,totalPartidas:0,totalAciertos:0,totalPreguntas:0,mejorCombo:0,
        racha:0,ultimoDia:null,sonido:E.sonido,medallas:{},records:{},items:{},
-       leidos:{},conquista:{}};
+       leidos:{},conquista:{},perso:E.perso};
   guardar();
 }
 
@@ -380,6 +428,7 @@ cargar();
 return {
   get estado(){ return E; },
   NIVELES, RANGOS, ICONO_MED, XP_APUNTE, XP_CASILLA,
+  LIMITES, TOPE_PREGUNTAS, limpiarPerso, ajustePerso, guardarPerso, cfgPerso,
   guardar, rango, sumarXP, marcarDia,
   estaLeido, marcarLeido, contarLeidos,
   conquistado, conquistar, contarConquistados, rendirCasilla,

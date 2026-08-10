@@ -118,6 +118,36 @@ Cada juego tiene tres niveles. No cambia solo la dificultad de las preguntas: ca
 | 🟡 Intermedio | 12 | 3 ❤️ | 16 s | 4 | 18 |
 | 🔴 Difícil | 14 | 2 ❤️ | 9 s | 5 | 30 |
 
+### ⚙️ A tu medida (nivel personalizado)
+
+Debajo de los tres niveles, cada juego tiene el botón **⚙️ A tu medida**: ahí se eligen a mano
+las **vidas** (1–10), el **tiempo por pregunta** (0 = sin cronómetro, hasta 90 s) y **cuántas
+preguntas** tiene la batalla. La dificultad base que se marque arriba sigue decidiendo de qué
+preguntas se tira, cuántas opciones tiene cada una y el XP por acierto.
+
+**El tope de preguntas depende del mundo:**
+
+| Mundo | Tope | Por qué |
+|-------|------|---------|
+| 🌍 Geografía (los 5 juegos) | **197** | uno por cada país del mundo |
+| ⚗️ Química (los 4 juegos) | **118** | uno por cada elemento de la tabla |
+| Alemán · Árabe · Finanzas · Matemáticas | **40** | tope general |
+
+Una batalla no repite pregunta mientras le queden. Los cinco juegos que van país a país o
+elemento a elemento (Capitales, Banderas, ¿Dónde está?, Símbolo ⇄ nombre y Ficha del elemento)
+llegan al tope sin repetir ni una **en difícil**; en fácil e intermedio la lista es más corta
+(56 / 185 países y 36 / 86 elementos) y el diálogo avisa antes de empezar: «este juego sabe hacer
+unas N preguntas distintas en este nivel». El mismo aviso sale en los de conceptos y V/F, que
+tienen banco pequeño: se puede pedir igual, sabiendo que algunas se repetirán.
+
+Hay cuatro atajos: 🏃 Maratón, ⚡ Relámpago, 💀 Muerte súbita y 🎯 Banco entero (que pone el tope
+del mundo: los 197 países o los 118 elementos de una sentada). La última configuración usada se
+recuerda para la próxima vez.
+
+Estas batallas **suman XP y cuentan para la racha diaria**, pero **no dan medallas ni récords**:
+esos se siguen ganando solo en los tres niveles de siempre, o bastaría con pedir 10 vidas sin
+cronómetro para llenar la vitrina de oros.
+
 En difícil, además, varios juegos pasan de elegir a **escribir la respuesta a mano**, y los
 distractores dejan de ser aleatorios: son los errores que de verdad se cometen (letras árabes de
 la misma familia visual, participios sin el `ge-` en su sitio, pronunciar la ل de una letra solar).
@@ -207,7 +237,7 @@ calor → Black–Scholes, integral sin primitiva → la N, covarianza → Chole
 |-------|--------|
 | `1` – `6` | Responder / colocar pieza |
 | `Enter` | Comprobar y continuar |
-| `Esc` | Volver atrás (de la batalla, la lectura, el índice o el perfil) |
+| `Esc` | Volver atrás (de la batalla, la lectura, el índice o el perfil) y cerrar «A tu medida» |
 
 ## Si quiero añadir contenido
 

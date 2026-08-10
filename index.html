@@ -253,6 +253,55 @@
 
 </main>
 
+<!-- ================= NIVEL PERSONALIZADO ================= -->
+<div id="perso" class="modal oculto">
+  <div class="modal-caja" role="dialog" aria-modal="true" aria-labelledby="perso-titulo">
+    <div class="modal-cab">
+      <div>
+        <h2 id="perso-titulo">⚙️ A tu medida</h2>
+        <p id="perso-juego" class="modal-sub"></p>
+      </div>
+      <button class="btn-icono" id="perso-cerrar" title="Cerrar">✕</button>
+    </div>
+
+    <div class="perso-campo">
+      <label>Contenido y dificultad de las preguntas</label>
+      <div id="perso-base" class="perso-chips"></div>
+      <small id="perso-base-nota"></small>
+    </div>
+
+    <div class="perso-campo">
+      <label for="perso-preguntas">Preguntas · <b id="perso-preguntas-val">15</b></label>
+      <input type="range" id="perso-preguntas" min="3" max="40" step="1">
+      <small id="perso-preguntas-nota"></small>
+    </div>
+
+    <div class="perso-campo">
+      <label for="perso-vidas">Vidas · <b id="perso-vidas-val">5</b></label>
+      <input type="range" id="perso-vidas" min="1" max="10" step="1">
+      <small id="perso-vidas-nota"></small>
+    </div>
+
+    <div class="perso-campo">
+      <label for="perso-tiempo">Tiempo por pregunta · <b id="perso-tiempo-val">sin límite</b></label>
+      <input type="range" id="perso-tiempo" min="0" max="90" step="1">
+      <small id="perso-tiempo-nota"></small>
+    </div>
+
+    <div class="perso-campo">
+      <label>Atajos</label>
+      <div id="perso-presets" class="perso-chips"></div>
+    </div>
+
+    <p id="perso-resumen" class="perso-resumen"></p>
+
+    <div class="modal-acciones">
+      <button class="btn btn-grande" id="perso-empezar">⚔️ Empezar batalla</button>
+      <button class="btn btn-fantasma" id="perso-cancelar">Cancelar</button>
+    </div>
+  </div>
+</div>
+
 <div id="brindis" class="brindis"></div>
 
 <script src="datos/aleman.js" charset="utf-8"></script>

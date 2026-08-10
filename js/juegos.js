@@ -2043,6 +2043,56 @@ const JUEGOS = [
 
 function porId(id){ return JUEGOS.find(j => j.id === id); }
 
+/* =====================================================================
+   TOPE DE PREGUNTAS (nivel personalizado)
+   El máximo general son 40 preguntas por batalla. Geografía y química van
+   por libre: ahí el techo es cuántos países y cuántos elementos hay, para
+   poder recorrerse el mundo entero o la tabla entera de una sentada.
+   ===================================================================== */
+const TOPES_MUNDO = {
+  geografia: () => GE().paises.length,      // 197
+  quimica:   () => QU().elementos.length    // 118
+};
+
+/* Los cinco juegos que preguntan país a país o elemento a elemento sí tienen
+   una lista cerrada: sirve para avisar de a partir de cuántas preguntas
+   empezarían a repetirse en ese nivel. */
+const BANCOS_FIJOS = {
+  "qu-simbolos":    elemsNivel,
+  "qu-datos":       elemsNivel,
+  "ge-capitales":   paisesNivel,
+  "ge-banderas":    paisesNivel,
+  "ge-continentes": paisesNivel
+};
+
+function topePreguntas(juegoId){
+  const j = porId(juegoId);
+  const f = j && TOPES_MUNDO[j.mundo];
+  return f ? Math.max(M.TOPE_PREGUNTAS, f()) : M.TOPE_PREGUNTAS;
+}
+
+/* Cuántas preguntas distintas sabe hacer un juego. Los generadores mezclan
+   plantillas y números al vuelo, así que no hay una lista que contar: se
+   estima muestreando. Solo sirve para avisar de que algo se va a repetir,
+   por eso corta en cuanto ve bastante variedad. */
+const cacheBanco = {};
+
+function tamBanco(juegoId, nivel){
+  const fijo = BANCOS_FIJOS[juegoId];
+  if(fijo) return fijo(nivel).length;
+  const k = juegoId + "|" + nivel;
+  if(cacheBanco[k] != null) return cacheBanco[k];
+  const j = porId(juegoId);
+  if(!j) return 0;
+  const tope = topePreguntas(juegoId);
+  const vistos = new Set();
+  for(let i=0; i<tope*6 && vistos.size <= tope; i++){
+    try{ vistos.add(j.gen(nivel).id); }catch(e){ break; }
+  }
+  cacheBanco[k] = vistos.size;
+  return vistos.size;
+}
+
 /* Modo repaso: mezcla juegos donde tengas ítems flojos */
 function genRepaso(nivel){
   const flojos = M.itemsFlojos();
@@ -2053,6 +2103,6 @@ function genRepaso(nivel){
   return j ? j.gen(nivel) : null;
 }
 
-return {MUNDOS, JUEGOS, porId, genRepaso};
+return {MUNDOS, JUEGOS, porId, genRepaso, topePreguntas, tamBanco};
 
 })();

@@ -129,6 +129,56 @@ main{ max-width:1080px; margin:0 auto; padding:26px 20px 60px; }
 .niv .sinmedalla{ opacity:.22; }
 .niv small{ display:block; color:var(--texto-2); font-weight:500; font-size:10.5px; margin-top:1px; }
 
+.niv-perso{
+  width:100%; margin-top:8px; border:1px dashed var(--borde); background:transparent;
+  color:var(--texto-2); border-radius:10px; padding:8px 4px; cursor:pointer;
+  font-size:12px; font-weight:600; font-family:inherit; transition:.15s;
+}
+.niv-perso:hover{ background:var(--panel-alto); color:var(--texto); border-color:var(--c,var(--acento)); border-style:solid; }
+
+/* ---------------- Nivel personalizado (modal) ---------------- */
+.modal{
+  position:fixed; inset:0; z-index:120;
+  display:flex; align-items:center; justify-content:center; padding:18px;
+  background:rgba(18,36,63,.45); backdrop-filter:blur(3px);
+}
+.modal-caja{
+  background:linear-gradient(160deg,var(--panel),var(--fondo-2));
+  border:1px solid var(--borde); border-radius:var(--r);
+  box-shadow:var(--sombra); padding:22px 24px;
+  width:min(520px,100%); max-height:92vh; overflow:auto;
+  animation:aparece .18s ease-out;
+}
+@keyframes aparece{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
+
+.modal-cab{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:16px; }
+.modal-cab h2{ font-size:20px; }
+.modal-sub{ color:var(--texto-2); font-size:13px; margin-top:3px; }
+
+.perso-campo{ margin-bottom:16px; }
+.perso-campo > label{
+  display:block; font-size:12.5px; font-weight:600; color:var(--texto-2);
+  text-transform:uppercase; letter-spacing:.4px; margin-bottom:7px;
+}
+.perso-campo > label b{ color:var(--texto); text-transform:none; letter-spacing:0; font-size:14px; }
+.perso-campo small{ display:block; color:var(--texto-2); font-size:11.5px; margin-top:5px; line-height:1.5; }
+.perso-campo small.aviso-banco{ color:var(--bronce); }
+
+.perso-campo input[type=range]{
+  width:100%; height:22px; accent-color:var(--acento); cursor:pointer; margin:0;
+}
+
+.perso-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+.perso-chips .chip{ padding:7px 14px; font-size:12.5px; }
+
+.perso-resumen{
+  background:var(--panel-alto); border:1px solid var(--borde); border-radius:10px;
+  padding:11px 14px; font-size:13px; line-height:1.6; color:var(--texto);
+  margin:4px 0 18px;
+}
+.modal-acciones{ display:flex; gap:10px; flex-wrap:wrap; }
+.modal-acciones .btn{ flex:1; }
+
 /* ---------------- HUD ---------------- */
 #hud{
   display:flex; align-items:center; gap:14px; flex-wrap:wrap;
@@ -485,4 +535,7 @@ ol.pasos-res li::marker{ color:var(--c-lectura,var(--acento)); font-weight:800; 
   .ap-cuerpo{ font-size:14.5px; }
   .formula{ font-size:15px; padding:11px 13px; }
   .banda-estudio{ flex-direction:column; align-items:flex-start; }
+  .modal{ padding:10px; align-items:flex-end; }
+  .modal-caja{ padding:18px 16px; max-height:94vh; }
+  .modal-acciones .btn-grande{ padding:13px 20px; font-size:15px; }
 }
