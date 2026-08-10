@@ -59,7 +59,7 @@ const ESPECIALES = [
    prog:() => Especiales.progresoQuimica(), unidad:"elementos",
    abrir:m => Especiales.abrirTabla(m)},
   {id:"atlas", emo:"🌍", color:"var(--ge)", nombre:"Atlas del mundo",
-   desc:"Un mapa con un punto por país. Te pregunto qué país es, cuál es su capital y cuál su bandera. Se puede filtrar por continente para ir por partes.",
+   desc:"Un mapa político con los 197 países y sus fronteras. Te pregunto qué país es, cuál es su capital y cuál su bandera, y cada uno se pinta al ganarlo. Se puede filtrar por continente y acercarse con el zoom.",
    prog:() => Especiales.progresoGeo(), unidad:"países",
    abrir:m => Especiales.abrirAtlas(m)}
 ];
