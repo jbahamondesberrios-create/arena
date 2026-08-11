@@ -54,11 +54,11 @@ function brindis(txt, ms){
    ===================================================================== */
 /* --- cartas de los dos tableros especiales --- */
 const ESPECIALES = [
-  {id:"tabla", emo:"⚗️", color:"var(--qu)", nombre:"Tabla periódica",
+  {id:"tabla", tipo:"qu", emo:"⚗️", color:"var(--qu)", nombre:"Tabla periódica",
    desc:"Los 118 elementos en su rejilla de siempre. Te pregunto nombre, número atómico y peso atómico de cada casilla hasta que la tabla entera esté pintada.",
    prog:() => Especiales.progresoQuimica(), unidad:"elementos",
    abrir:m => Especiales.abrirTabla(m)},
-  {id:"atlas", emo:"🌍", color:"var(--ge)", nombre:"Atlas del mundo",
+  {id:"atlas", tipo:"ge", emo:"🌍", color:"var(--ge)", nombre:"Atlas del mundo",
    desc:"Un mapa político con los 197 países y sus fronteras. Te pregunto qué país es, cuál es su capital y cuál su bandera, y cada uno se pinta al ganarlo. Se puede filtrar por continente y acercarse con el zoom.",
    prog:() => Especiales.progresoGeo(), unidad:"países",
    abrir:m => Especiales.abrirAtlas(m)}
@@ -83,6 +83,7 @@ function pintarEspeciales(){
         <div class="esp-botones">
           <button class="btn" data-esp="${e.id}" data-modo="conquista">⚔️ Jugar</button>
           <button class="btn btn-fantasma" data-esp="${e.id}" data-modo="estudio">📖 Estudiar</button>
+          <button class="btn btn-fantasma" data-esp="${e.id}" data-modo="perso">⚙️ A tu medida</button>
         </div>
       </div>`;
     cont.appendChild(div);
@@ -91,7 +92,9 @@ function pintarEspeciales(){
     b.addEventListener("click", () => {
       M.Sonido.clic();
       const e = ESPECIALES.find(x => x.id === b.dataset.esp);
-      if(e) e.abrir(b.dataset.modo);
+      if(!e) return;
+      if(b.dataset.modo === "perso") abrirPerso(e.tipo);
+      else e.abrir(b.dataset.modo);
     });
   });
 }
@@ -626,18 +629,38 @@ function pintarPerfil(){
 
 /* =====================================================================
    NIVEL PERSONALIZADO
-   Vidas, tiempo y número de preguntas los pone él. El tope de preguntas
-   lo decide el juego: 40 en general, y en países y elementos, cuántos
-   haya (Juegos.topePreguntas), porque una batalla no repite pregunta.
+   Vidas, tiempo y número de preguntas los pone él. El mismo diálogo sirve
+   para los 32 juegos y para los dos tableros:
+     · juego   → una batalla normal con esas reglas. El tope de preguntas
+                 es 40, salvo geografía (197 países) y química (118).
+     · tablero → una "expedición": las mismas 3 preguntas por casilla de
+                 siempre, pero encadenando N casillas con vidas y reloj.
+                 El tope son los elementos o los países que hay.
    ===================================================================== */
-let perso = null;          // {juegoId, cfg:{base,preguntas,vidas,tiempo}}
+let perso = null;          // {D:destino, cfg:{base,preguntas,vidas,tiempo}}
 
 const PRESETS = [
-  {nombre:"🏃 Maratón",     hacer:(c,t) => ({base:c.base, preguntas:Math.min(t,30), vidas:10, tiempo:0})},
-  {nombre:"⚡ Relámpago",   hacer:(c,t) => ({base:c.base, preguntas:Math.min(t,15), vidas:3,  tiempo:8})},
-  {nombre:"💀 Muerte súbita", hacer:(c,t) => ({base:c.base, preguntas:Math.min(t,20), vidas:1, tiempo:12})},
-  {nombre:"🎯 Banco entero", hacer:(c,t) => ({base:c.base, preguntas:t, vidas:10, tiempo:0})}
+  {nombre:"🏃 Maratón",       hacer:(c,t) => ({base:c.base, preguntas:Math.min(t,30), vidas:10, tiempo:0})},
+  {nombre:"⚡ Relámpago",     hacer:(c,t) => ({base:c.base, preguntas:Math.min(t,15), vidas:3,  tiempo:8})},
+  {nombre:"💀 Muerte súbita", hacer:(c,t) => ({base:c.base, preguntas:Math.min(t,20), vidas:1,  tiempo:12})},
+  {nombre:"🎯 Banco entero",  hacer:(c,t) => ({base:c.base, preguntas:t, vidas:10, tiempo:0})}
 ];
+
+/* en los tableros se escribe la respuesta a mano, así que los relojes son
+   más largos y los atajos cuentan casillas, no preguntas sueltas */
+const PRESETS_TABLERO = [
+  {nombre:"🏃 Maratón",        hacer:(c,t) => ({base:c.base, preguntas:Math.min(t,25), vidas:10, tiempo:0})},
+  {nombre:"⚡ Relámpago",      hacer:(c,t) => ({base:c.base, preguntas:Math.min(t,12), vidas:3,  tiempo:20})},
+  {nombre:"💀 Muerte súbita",  hacer:(c,t) => ({base:c.base, preguntas:Math.min(t,20), vidas:1,  tiempo:30})},
+  {nombre:"🎯 Tablero entero", hacer:(c,t) => ({base:c.base, preguntas:t, vidas:10, tiempo:0})}
+];
+
+const TABLEROS = {
+  qu:{emo:"⚗️", nombre:"Tabla periódica", unidad:"Elementos", uno:"elemento", cosas:"elementos de la tabla",
+      pasos:"nombre, número atómico y peso"},
+  ge:{emo:"🌍", nombre:"Atlas del mundo",  unidad:"Países",    uno:"país",     cosas:"países del mapa",
+      pasos:"qué país es, su capital y su bandera"}
+};
 
 /* por qué esos mundos pasan de 40 */
 const TOPE_PORQUE = {
@@ -645,14 +668,26 @@ const TOPE_PORQUE = {
   quimica:   ": uno por cada elemento de la tabla"
 };
 
-function topeActual(){ return Juegos.topePreguntas(perso.juegoId); }
+/* `ref` es el id de un juego, o "qu"/"ge" para los tableros */
+function destinoPerso(ref){
+  if(TABLEROS[ref]){
+    return Object.assign({tablero:ref, tope:Especiales.totalCasillas(ref)}, TABLEROS[ref]);
+  }
+  const j = Juegos.porId(ref);
+  if(!j) return null;
+  return {juego:j.id, mundo:j.mundo, emo:j.emo, nombre:j.nombre,
+          unidad:"Preguntas", tope:Juegos.topePreguntas(j.id)};
+}
 
-function abrirPerso(juegoId){
-  const j = Juegos.porId(juegoId);
-  if(!j) return;
-  perso = {juegoId, cfg: M.ajustePerso()};
-  perso.cfg = M.limpiarPerso(perso.cfg, Juegos.topePreguntas(juegoId));
-  $("#perso-juego").innerHTML = `${j.emo} <b>${j.nombre}</b> — tú pones las reglas.`;
+function topeActual(){ return perso.D.tope; }
+
+function abrirPerso(ref){
+  const D = destinoPerso(ref);
+  if(!D) return;
+  perso = {D, cfg: M.limpiarPerso(M.ajustePerso(), D.tope)};
+  $("#perso-juego").innerHTML = D.tablero
+    ? `${D.emo} <b>${D.nombre}</b> — una expedición con tus reglas.`
+    : `${D.emo} <b>${D.nombre}</b> — tú pones las reglas.`;
   pintarPerso();
   $("#perso").classList.remove("oculto");
   $("#perso .modal-caja").scrollTop = 0;
@@ -669,10 +704,12 @@ function cerrarPerso(){
 function txtTiempo(s){ return s ? s + " s" : "sin límite"; }
 
 function pintarPerso(){
-  const c = perso.cfg, tope = topeActual();
+  const c = perso.cfg, D = perso.D, tope = topeActual();
   if(c.preguntas > tope) c.preguntas = tope;
 
-  /* dificultad base */
+  /* dificultad base — en los tableros no existe: las tres preguntas de cada
+     casilla son siempre las mismas y se escriben a mano */
+  $("#perso-campo-base").classList.toggle("oculto", !!D.tablero);
   const base = $("#perso-base");
   base.innerHTML = [1,2,3].map(n =>
     `<button class="chip ${n===c.base?"activo":""}" data-base="${n}">${M.NIVELES[n].icono} ${M.NIVELES[n].nombre}</button>`
@@ -691,43 +728,58 @@ function pintarPerso(){
   sp.max = tope;  sp.value = c.preguntas;
   sv.max = M.LIMITES.vidas.max; sv.value = c.vidas;
   st.max = M.LIMITES.tiempo.max; st.value = c.tiempo;
+  $("#perso-preguntas-tit").textContent = D.unidad;
   $("#perso-preguntas-val").textContent = c.preguntas;
   $("#perso-vidas-val").textContent = c.vidas;
   $("#perso-tiempo-val").textContent = txtTiempo(c.tiempo);
 
-  /* de cuántas preguntas distintas dispone este juego */
-  const banco = Juegos.tamBanco(perso.juegoId, c.base);
+  /* de cuánto material dispone */
   const notaP = $("#perso-preguntas-nota");
-  if(c.preguntas > banco && banco <= tope){
-    notaP.textContent = `⚠️ Este juego sabe hacer unas ${banco} preguntas distintas en ${M.NIVELES[c.base].nombre.toLowerCase()}: ` +
-                        `a partir de ahí alguna se repetirá. Máximo ${tope}.`;
-    notaP.className = "aviso-banco";
-  }else{
-    notaP.textContent = `Máximo ${tope} preguntas por batalla${TOPE_PORQUE[Juegos.porId(perso.juegoId).mundo] || ""}.`;
+  if(D.tablero){
+    const pend = D.tope - (D.tablero === "qu" ? Especiales.progresoQuimica() : Especiales.progresoGeo()).hechos;
+    notaP.textContent = `Máximo ${D.tope}: todos los ${D.cosas}. Cada ${D.uno} son 3 preguntas ` +
+      `(${D.pasos}) y salen primero los que te faltan por conquistar: ahora mismo, ${pend}.`;
     notaP.className = "";
+  }else{
+    const banco = Juegos.tamBanco(D.juego, c.base);
+    if(c.preguntas > banco && banco <= tope){
+      notaP.textContent = `⚠️ Este juego sabe hacer unas ${banco} preguntas distintas en ${M.NIVELES[c.base].nombre.toLowerCase()}: ` +
+                          `a partir de ahí alguna se repetirá. Máximo ${tope}.`;
+      notaP.className = "aviso-banco";
+    }else{
+      notaP.textContent = `Máximo ${tope} preguntas por batalla${TOPE_PORQUE[D.mundo] || ""}.`;
+      notaP.className = "";
+    }
   }
 
   $("#perso-vidas-nota").textContent = c.vidas === 1
-    ? "Una sola: el primer fallo acaba la batalla."
-    : `Fallas ${c.vidas} veces y se acabó. Los tres niveles de siempre dan 5, 3 y 2.`;
+    ? (D.tablero ? "Una sola: el primer fallo acaba la expedición." : "Una sola: el primer fallo acaba la batalla.")
+    : D.tablero
+      ? `Fallas ${c.vidas} veces y la expedición termina. Fuera de aquí, el tablero no tiene vidas.`
+      : `Fallas ${c.vidas} veces y se acabó. Los tres niveles de siempre dan 5, 3 y 2.`;
 
   $("#perso-tiempo-nota").textContent = c.tiempo
-    ? "Con cronómetro, responder rápido suma hasta un 50 % más de puntos."
-    : "Sin cronómetro: piensas lo que haga falta, pero te quedas sin el bono de rapidez.";
+    ? (D.tablero ? "Ojo: aquí las respuestas se escriben a mano, y el reloj corre en cada una de las 3 preguntas."
+                 : "Con cronómetro, responder rápido suma hasta un 50 % más de puntos.")
+    : "Sin cronómetro: piensas lo que haga falta.";
 
   /* atajos */
+  const lista = D.tablero ? PRESETS_TABLERO : PRESETS;
   const pre = $("#perso-presets");
-  pre.innerHTML = PRESETS.map((p,i) => `<button class="chip" data-preset="${i}">${p.nombre}</button>`).join("");
+  pre.innerHTML = lista.map((p,i) => `<button class="chip" data-preset="${i}">${p.nombre}</button>`).join("");
   pre.querySelectorAll("[data-preset]").forEach(b => b.addEventListener("click", () => {
     M.Sonido.clic();
-    perso.cfg = M.limpiarPerso(PRESETS[+b.dataset.preset].hacer(perso.cfg, topeActual()), topeActual());
+    perso.cfg = M.limpiarPerso(lista[+b.dataset.preset].hacer(perso.cfg, topeActual()), topeActual());
     pintarPerso();
   }));
 
-  $("#perso-resumen").innerHTML =
-    `<b>${M.NIVELES[c.base].icono} ${M.NIVELES[c.base].nombre}</b> · ${c.preguntas} preguntas · ` +
-    `${c.vidas} ${c.vidas===1?"vida":"vidas"} · ${c.tiempo ? c.tiempo+" s por pregunta" : "sin cronómetro"}.<br>` +
-    `<small style="color:var(--texto-2)">Suma XP y cuenta para la racha, pero las medallas y los récords se ganan solo en los tres niveles de siempre.</small>`;
+  const reglas = `${c.vidas} ${c.vidas===1?"vida":"vidas"} · ` +
+                 `${c.tiempo ? c.tiempo+" s por pregunta" : "sin cronómetro"}.`;
+  $("#perso-resumen").innerHTML = D.tablero
+    ? `<b>${D.emo} ${c.preguntas} ${c.preguntas===1 ? D.uno : D.unidad.toLowerCase()}</b> seguidos · ${reglas}<br>` +
+      `<small style="color:var(--texto-2)">Cada casilla que aciertes entera se conquista y suma ${M.XP_CASILLA} XP, como al tocarla a mano.</small>`
+    : `<b>${M.NIVELES[c.base].icono} ${M.NIVELES[c.base].nombre}</b> · ${c.preguntas} preguntas · ${reglas}<br>` +
+      `<small style="color:var(--texto-2)">Suma XP y cuenta para la racha, pero las medallas y los récords se ganan solo en los tres niveles de siempre.</small>`;
 }
 
 ["#perso-preguntas","#perso-vidas","#perso-tiempo"].forEach(sel => {
@@ -740,11 +792,12 @@ function pintarPerso(){
 
 $("#perso-empezar").addEventListener("click", () => {
   if(!perso) return;
+  const D = perso.D;
   const cfg = M.guardarPerso(M.limpiarPerso(perso.cfg, topeActual()));
-  const juegoId = perso.juegoId;
   M.Sonido.clic();
   cerrarPerso();
-  empezar(juegoId, cfg.base, false, cfg);
+  if(D.tablero) Especiales.expedicion(D.tablero, {casillas:cfg.preguntas, vidas:cfg.vidas, tiempo:cfg.tiempo});
+  else empezar(D.juego, cfg.base, false, cfg);
 });
 
 $("#perso-cerrar").addEventListener("click", () => { M.Sonido.clic(); cerrarPerso(); });
@@ -780,6 +833,7 @@ $("#btn-perfil-volver").addEventListener("click", () => { pintarHub(); ir("panta
 
 /* ---------- modo estudio ---------- */
 function volverAlHub(mundoId){
+  Especiales.abandonar();          // si había una expedición en marcha, se corta aquí
   pintarHub();
   ir("pantalla-inicio");
   if(mundoId){
@@ -801,7 +855,8 @@ Especiales.init({
   ir,
   brindis,
   pintarCabecera,
-  volverAlHub: () => { M.Sonido.clic(); volverAlHub(); }
+  volverAlHub: () => { M.Sonido.clic(); volverAlHub(); },
+  abrirPerso                                   // el botón "otra expedición" del final
 });
 Especiales.conectar();
 

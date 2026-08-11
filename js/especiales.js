@@ -11,7 +11,7 @@ const Especiales = (() => {
 const M = Motor;
 const $ = s => document.querySelector(s);
 
-let api = {ir(){}, brindis(){}, pintarCabecera(){}, volverAlHub(){}};
+let api = {ir(){}, brindis(){}, pintarCabecera(){}, volverAlHub(){}, abrirPerso(){}};
 function init(a){ api = Object.assign(api, a); }
 
 /* =====================================================================
@@ -124,6 +124,151 @@ function bandera(spec, clase){
   (spec.o || []).forEach(s => out += capa(s));
   out += `<rect x=".5" y=".5" width="59" height="39" fill="none" stroke="rgba(10,30,60,.35)" stroke-width="1"/>`;
   return out + `</svg>`;
+}
+
+/* =====================================================================
+   EXPEDICIÓN — el nivel «a tu medida» de los dos tableros
+   Los tableros no tienen rondas: se conquista casilla a casilla, sin vidas
+   ni reloj. Una expedición envuelve ese mismo reto en una tirada con las
+   reglas que él pone: cuántas casillas seguidas, cuántas vidas y cuánto
+   tiempo por pregunta. Cada casilla siguen siendo sus 3 preguntas y se
+   conquista igual (y da los mismos 25 XP), solo que ahora fallar cuesta.
+   ===================================================================== */
+let exp = null;
+
+function totalCasillas(tipo){
+  return tipo === "qu" ? window.QUIMICA.elementos.length : window.GEOGRAFIA.paises.length;
+}
+
+function hayExpedicion(){ return !!exp; }
+
+function expedicion(tipo, cfg){
+  const conj = tipo === "qu" ? window.QUIMICA.elementos : window.GEOGRAFIA.paises;
+  const idOf = tipo === "qu" ? (x => idQu(x.z)) : (x => idGe(x));
+  const total = Math.max(1, Math.min(cfg.casillas || cfg.preguntas || 10, conj.length));
+
+  /* primero lo que falta por conquistar; si no da para tanto, se completa
+     con casillas ya ganadas (que se pueden repasar, pero ya no dan XP) */
+  const pend = conj.filter(x => !M.conquistado(idOf(x)));
+  let lista = pend.length <= total ? M.mezclar(pend) : M.elegirPesado(pend, total, idOf);
+  lista = lista.filter((x,i) => lista.indexOf(x) === i);      // por si acaso, sin repetidos
+  if(lista.length < total){
+    const resto = M.mezclar(conj.filter(x => lista.indexOf(x) < 0));
+    lista = lista.concat(resto.slice(0, total - lista.length));
+  }
+
+  exp = {tipo, lista, total:lista.length, idx:0,
+         vidas:cfg.vidas, vidasMax:cfg.vidas, tiempo:cfg.tiempo,
+         conquistadas:0, xp:0, aciertos:0, preguntas:0, timer:null, restante:0};
+
+  if(tipo === "qu"){ quModo = "conquista"; pintarTabla("conquista"); api.ir("pantalla-tabla"); }
+  else            { geModo = "conquista"; pintarAtlas("conquista"); api.ir("pantalla-atlas"); }
+  siguienteCasilla();
+}
+
+function siguienteCasilla(){
+  if(!exp) return;
+  if(exp.vidas <= 0 || exp.idx >= exp.total){ finExpedicion(); return; }
+  const x = exp.lista[exp.idx];
+  if(exp.tipo === "qu"){ quActual = x; quPaso = 0; quFallos = 0; pintarRetoQu(); }
+  else                 { geActual = x; gePaso = 0; geFallos = 0; pintarRetoGe(); }
+}
+
+/* cabecera con vidas, avance y cronómetro, encima de la pregunta de turno */
+function hudExp(){
+  if(!exp) return "";
+  return `<div class="exp-hud">
+      <span class="exp-vidas">${"❤️".repeat(Math.min(exp.vidas,5))}${exp.vidas > 5 ? " ×"+exp.vidas : ""}</span>
+      <span class="exp-prog">${Math.min(exp.idx+1, exp.total)} / ${exp.total} ${exp.tipo === "qu" ? "elementos" : "países"}</span>
+      <span class="exp-cq">🚩 ${exp.conquistadas}</span>
+    </div>` +
+    (exp.tiempo ? `<div class="exp-crono"><i id="exp-crono-fill"></i></div>` : "");
+}
+
+function arrancarCronoExp(){
+  pararCronoExp();
+  if(!exp || !exp.tiempo) return;
+  exp.restante = exp.tiempo;
+  const fill = $("#exp-crono-fill");
+  if(fill){ fill.style.width = "100%"; fill.className = ""; }
+  exp.timer = setInterval(() => {
+    if(!exp) return;
+    exp.restante -= 0.1;
+    const pc = Math.max(0, exp.restante / exp.tiempo * 100);
+    const f = $("#exp-crono-fill");
+    if(f){ f.style.width = pc + "%"; f.className = pc < 20 ? "urgente" : pc < 45 ? "aviso-t" : ""; }
+    if(exp.restante <= 0){ pararCronoExp(); tiempoAgotadoExp(); }
+  }, 100);
+}
+
+function pararCronoExp(){ if(exp && exp.timer){ clearInterval(exp.timer); exp.timer = null; } }
+
+/* se acabó el tiempo: cuenta como fallo por la misma puerta que una respuesta */
+function tiempoAgotadoExp(){
+  if(!exp) return;
+  if(exp.tipo === "qu") comprobarQu("");
+  else if(gePaso === 2) comprobarGeBandera(-1);
+  else comprobarGe("");
+}
+
+/* apunta el resultado de una pregunta; devuelve true si quedan vidas */
+function anotarExp(ok){
+  if(!exp) return true;
+  exp.preguntas++;
+  if(ok) exp.aciertos++; else exp.vidas--;
+  return exp.vidas > 0;
+}
+
+function finExpedicion(abandonada){
+  if(!exp) return;
+  pararCronoExp();
+  const e = exp;
+  exp = null;
+
+  const prec = e.preguntas ? Math.round(e.aciertos / e.preguntas * 100) : 0;
+  const nombre = e.tipo === "qu" ? "elementos" : "países";
+  const titulo = abandonada ? "Expedición abandonada"
+               : e.vidas > 0 ? (e.conquistadas === e.total ? "¡Expedición perfecta!" : "¡Expedición completada!")
+               : "Sin vidas";
+  const sub = abandonada
+    ? "Lo conquistado se queda conquistado."
+    : e.vidas > 0
+      ? `Recorriste ${e.idx} de ${e.total} ${nombre} con ${e.vidas} ${e.vidas===1?"vida":"vidas"} de sobra.`
+      : `Te quedaste sin vidas en el ${nombre.slice(0,-1)} ${e.idx} de ${e.total}. Lo ganado no se pierde.`;
+
+  const panel = e.tipo === "qu" ? $("#qu-panel") : $("#ge-panel");
+  panel.innerHTML = `
+    <div class="exp-fin">
+      <h3>${abandonada ? "🏳️" : e.vidas > 0 ? "🏆" : "💀"} ${titulo}</h3>
+      <p class="exp-sub">${sub}</p>
+      <div class="ficha-datos">
+        <div><small>Conquistados</small><b>${e.conquistadas}</b></div>
+        <div><small>XP ganado</small><b>+${e.xp}</b></div>
+        <div><small>Aciertos</small><b>${e.aciertos}/${e.preguntas}</b></div>
+        <div><small>Precisión</small><b>${prec}%</b></div>
+      </div>
+      <div class="qu-acciones">
+        <button class="btn" id="exp-otra">⚙️ Otra expedición</button>
+        <button class="btn btn-fantasma" id="exp-cerrar">Volver al tablero</button>
+      </div>
+    </div>`;
+
+  if(!abandonada){
+    if(e.vidas > 0) M.Sonido.victoria(); else M.Sonido.derrota();
+  }
+  $("#exp-otra").addEventListener("click", () => { M.Sonido.clic(); api.abrirPerso(e.tipo); });
+  $("#exp-cerrar").addEventListener("click", () => {
+    M.Sonido.clic();
+    if(e.tipo === "qu"){ pintarTabla(); pintarPanelQu(null); }
+    else { pintarAtlas(); pintarPanelGe(null); }
+  });
+}
+
+/* al salir del tablero o cambiar de modo, la expedición se corta sin ruido */
+function abandonar(){
+  if(!exp) return;
+  pararCronoExp();
+  exp = null;
 }
 
 /* =====================================================================
@@ -248,6 +393,7 @@ const PASOS_QU = [
 ];
 
 function abrirElemento(z){
+  if(exp) return;              // durante una expedición manda la lista, no el dedo
   const el = Q().porZ(z);
   if(!el) return;
   quActual = el;
@@ -313,6 +459,7 @@ function pintarRetoQu(){
   marcarSeleccion(el.z);
   $("#qu-panel").innerHTML = `
     <div class="reto" style="--c:${cat.color}">
+      ${hudExp()}
       <div class="reto-cab">
         <div class="reto-icono">${el.s}</div>
         <div>
@@ -327,19 +474,26 @@ function pintarRetoQu(){
         <button class="btn" id="reto-ok">Comprobar</button>
       </div>
       <div id="reto-fb" class="reto-fb"></div>
-      <button class="btn btn-fantasma reto-salir" id="reto-salir">Dejarlo por ahora</button>
+      <button class="btn btn-fantasma reto-salir" id="reto-salir">${exp ? "Abandonar la expedición" : "Dejarlo por ahora"}</button>
     </div>`;
 
   const campo = $("#reto-campo");
   const enviar = () => comprobarQu(campo.value);
   $("#reto-ok").addEventListener("click", enviar);
   campo.addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); enviar(); } });
-  $("#reto-salir").addEventListener("click", () => { M.Sonido.clic(); pintarPanelQu(null); });
+  $("#reto-salir").addEventListener("click", () => {
+    M.Sonido.clic();
+    if(exp) finExpedicion(true); else pintarPanelQu(null);
+  });
   setTimeout(() => campo.focus(), 50);
+  arrancarCronoExp();
 }
 
 function comprobarQu(txt){
   const el = quActual;
+  const botonOk = $("#reto-ok");
+  if(botonOk && botonOk.disabled) return;   // ya resuelta (p. ej. el reloj se adelantó)
+  pararCronoExp();
   let ok = false, correcto = "";
   if(quPaso === 0){
     correcto = el.n;
@@ -356,19 +510,22 @@ function comprobarQu(txt){
 
   M.registrarItem(idQu(el.z) + "-" + quPaso, ok, el.n + " · " + ["nombre","número atómico","peso atómico"][quPaso], "qu-tabla");
   if(!ok) quFallos++;
+  const quedanVidas = anotarExp(ok);
 
   const fb = $("#reto-fb");
   fb.className = "reto-fb " + (ok ? "bien" : "mal");
-  fb.innerHTML = ok
+  fb.innerHTML = (ok
     ? `✅ Correcto.`
-    : `❌ Era <b>${correcto}</b>.` + (quPaso === 2 ? ` <small>(se admite ±0,5 %)</small>` : "");
+    : `❌ Era <b>${correcto}</b>.` + (quPaso === 2 ? ` <small>(se admite ±0,5 %)</small>` : "")) +
+    (exp && !ok ? ` <small>${exp.vidas > 0 ? "te quedan "+exp.vidas+(exp.vidas===1?" vida":" vidas") : "sin vidas"}</small>` : "");
   if(ok) M.Sonido.bien(1); else M.Sonido.mal();
 
   const campo = $("#reto-campo");
   if(campo){ campo.disabled = true; campo.classList.add(ok ? "correcta" : "incorrecta"); }
-  $("#reto-ok").disabled = true;
+  if(botonOk) botonOk.disabled = true;
 
   setTimeout(() => {
+    if(exp && !quedanVidas){ pintarTabla(); finExpedicion(); return; }
     quPaso++;
     if(quPaso < PASOS_QU.length){ pintarRetoQu(); return; }
     cerrarRetoQu();
@@ -379,20 +536,22 @@ function cerrarRetoQu(){
   const el = quActual;
   if(quFallos === 0){
     const nuevo = M.conquistar(idQu(el.z));
+    if(exp){ exp.conquistadas++; if(nuevo) exp.xp += M.XP_CASILLA; }
     if(nuevo){
       const subio = M.sumarXP(M.XP_CASILLA);
-      M.Sonido.victoria();
+      if(!exp) M.Sonido.victoria();
       api.pintarCabecera();
       const pr = progresoQuimica();
       api.brindis(subio
         ? `${subio.icono} ¡${el.n} conquistado y subiste a <b>${subio.nombre}</b>!`
-        : `⚗️ <b>${el.n}</b> conquistado · +${M.XP_CASILLA} XP · ${pr.hechos}/${pr.total}`, 3000);
+        : `⚗️ <b>${el.n}</b> conquistado · +${M.XP_CASILLA} XP · ${pr.hechos}/${pr.total}`, exp ? 1600 : 3000);
       if(pr.hechos === pr.total) setTimeout(() => api.brindis("🏆 ¡Tabla periódica completa! Los 118 elementos son tuyos.", 6000), 3200);
     }
-  }else{
+  }else if(!exp){
     api.brindis(`Casi. Repasa la ficha de <b>${el.n}</b> y vuelve a intentarlo.`, 2600);
   }
   pintarTabla();
+  if(exp){ exp.idx++; siguienteCasilla(); return; }
   pintarPanelQu(el, true);
 }
 
@@ -754,6 +913,7 @@ const PASOS_GE = [
 ];
 
 function abrirPais(id){
+  if(exp) return;              // durante una expedición manda la lista, no el dedo
   const p = GEO().paises.find(x => x.id === id);
   if(!p) return;
   geActual = p;
@@ -853,6 +1013,7 @@ function pintarRetoGe(){
 
   $("#ge-panel").innerHTML = `
     <div class="reto" style="--c:${cont ? cont.color : "var(--acento)"}">
+      ${hudExp()}
       <div class="reto-cab">
         <div class="reto-icono">${cont ? cont.emo : "🌐"}</div>
         <div>
@@ -864,12 +1025,12 @@ function pintarRetoGe(){
       <h3>${paso.p}</h3>
       ${cuerpo}
       <div id="reto-fb" class="reto-fb"></div>
-      <button class="btn btn-fantasma reto-salir" id="reto-salir">Dejarlo por ahora</button>
+      <button class="btn btn-fantasma reto-salir" id="reto-salir">${exp ? "Abandonar la expedición" : "Dejarlo por ahora"}</button>
     </div>`;
 
   if(paso.tipo === "bandera"){
     $("#ge-panel").querySelectorAll(".ge-op-bandera").forEach(b => {
-      b.addEventListener("click", () => comprobarGeBandera(+b.dataset.i, b));
+      b.addEventListener("click", () => comprobarGeBandera(+b.dataset.i));
     });
   }else{
     const campo = $("#reto-campo");
@@ -878,7 +1039,11 @@ function pintarRetoGe(){
     campo.addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); enviar(); } });
     setTimeout(() => campo.focus(), 50);
   }
-  $("#reto-salir").addEventListener("click", () => { M.Sonido.clic(); pintarPanelGe(null); });
+  $("#reto-salir").addEventListener("click", () => {
+    M.Sonido.clic();
+    if(exp) finExpedicion(true); else pintarPanelGe(null);
+  });
+  arrancarCronoExp();
 }
 
 /* algunos nombres admiten variantes */
@@ -925,80 +1090,101 @@ function aciertaNombre(dado, correcto){
   return !!(al && al.some(a => M.normalizar(a) === d));
 }
 
+/* aviso de vidas que se añade al feedback cuando hay expedición en marcha */
+function restoVidas(ok){
+  if(!exp || ok) return "";
+  return ` <small>${exp.vidas > 0 ? "te quedan "+exp.vidas+(exp.vidas===1?" vida":" vidas") : "sin vidas"}</small>`;
+}
+
 function comprobarGe(txt){
   const p = geActual;
+  const botonOk = $("#reto-ok");
+  if(botonOk && botonOk.disabled) return;   // ya resuelta (p. ej. el reloj se adelantó)
+  pararCronoExp();
   const correcto = gePaso === 0 ? p.n : p.cap;
   const ok = aciertaNombre(txt, correcto);
   M.registrarItem(idGe(p) + "-" + gePaso, ok, p.n + " · " + (gePaso === 0 ? "país" : "capital"), "ge-atlas");
   if(!ok) geFallos++;
+  const quedanVidas = anotarExp(ok);
 
   const fb = $("#reto-fb");
   fb.className = "reto-fb " + (ok ? "bien" : "mal");
-  fb.innerHTML = ok ? "✅ Correcto." : `❌ Era <b>${correcto}</b>.`;
+  fb.innerHTML = (ok ? "✅ Correcto." : `❌ Era <b>${correcto}</b>.`) + restoVidas(ok);
   if(ok) M.Sonido.bien(1); else M.Sonido.mal();
   const campo = $("#reto-campo");
   if(campo){ campo.disabled = true; campo.classList.add(ok ? "correcta" : "incorrecta"); }
-  $("#reto-ok").disabled = true;
+  if(botonOk) botonOk.disabled = true;
 
-  setTimeout(avanzarGe, ok ? 620 : 1500);
+  setTimeout(() => avanzarGe(quedanVidas), ok ? 620 : 1500);
 }
 
-function comprobarGeBandera(i, boton){
+function comprobarGeBandera(i){
   const p = geActual, ops = p._ops || [];
-  const ok = ops[i] && ops[i].id === p.id;
+  const botones = document.querySelectorAll(".ge-op-bandera");
+  if(botones.length && botones[0].disabled) return;   // ya resuelta
+  pararCronoExp();
+  const ok = !!(ops[i] && ops[i].id === p.id);
   M.registrarItem(idGe(p) + "-2", ok, p.n + " · bandera", "ge-atlas");
   if(!ok) geFallos++;
+  const quedanVidas = anotarExp(ok);
 
-  document.querySelectorAll(".ge-op-bandera").forEach((b,k) => {
+  botones.forEach((b,k) => {
     b.disabled = true;
     if(ops[k] && ops[k].id === p.id) b.classList.add("correcta");
     else if(k === i) b.classList.add("incorrecta");
   });
   const fb = $("#reto-fb");
   fb.className = "reto-fb " + (ok ? "bien" : "mal");
-  fb.innerHTML = ok ? "✅ Esa es." : `❌ La bandera de <b>${p.n}</b> era la marcada en verde.`;
+  fb.innerHTML = (ok ? "✅ Esa es." : `❌ La bandera de <b>${p.n}</b> era la marcada en verde.`) + restoVidas(ok);
   if(ok) M.Sonido.bien(1); else M.Sonido.mal();
-  setTimeout(avanzarGe, ok ? 700 : 1700);
+  setTimeout(() => avanzarGe(quedanVidas), ok ? 700 : 1700);
 }
 
-function avanzarGe(){
+function avanzarGe(quedanVidas){
+  if(exp && quedanVidas === false){ pintarAtlas(); finExpedicion(); return; }
   gePaso++;
   if(gePaso < PASOS_GE.length){ pintarRetoGe(); return; }
   const p = geActual;
   if(geFallos === 0){
-    if(M.conquistar(idGe(p))){
+    const nuevo = M.conquistar(idGe(p));
+    if(exp){ exp.conquistadas++; if(nuevo) exp.xp += M.XP_CASILLA; }
+    if(nuevo){
       const subio = M.sumarXP(M.XP_CASILLA);
-      M.Sonido.victoria();
+      if(!exp) M.Sonido.victoria();
       api.pintarCabecera();
       const pr = progresoGeo();
       api.brindis(subio
         ? `${subio.icono} ¡${p.n} conquistado y subiste a <b>${subio.nombre}</b>!`
-        : `🌍 <b>${p.n}</b> conquistado · +${M.XP_CASILLA} XP · ${pr.hechos}/${pr.total}`, 3000);
+        : `🌍 <b>${p.n}</b> conquistado · +${M.XP_CASILLA} XP · ${pr.hechos}/${pr.total}`, exp ? 1600 : 3000);
       if(pr.hechos === pr.total) setTimeout(() => api.brindis("🏆 ¡Atlas completo! Te sabes el mundo entero.", 6000), 3200);
     }
-  }else{
+  }else if(!exp){
     api.brindis(`Casi. Mírate la ficha de <b>${p.n}</b> y vuelve a por él.`, 2600);
   }
   pintarAtlas();
+  if(exp){ exp.idx++; siguienteCasilla(); return; }
   pintarPanelGe(p);
 }
 
 /* =====================================================================
    NAVEGACIÓN
    ===================================================================== */
-function abrirTabla(modo){ pintarTabla(modo || quModo); api.ir("pantalla-tabla"); }
-function abrirAtlas(modo){ pintarAtlas(modo || geModo); api.ir("pantalla-atlas"); }
+function abrirTabla(modo){ abandonar(); pintarTabla(modo || quModo); api.ir("pantalla-tabla"); }
+function abrirAtlas(modo){ abandonar(); pintarAtlas(modo || geModo); api.ir("pantalla-atlas"); }
 
 function conectar(){
-  $("#qu-modo-estudio").addEventListener("click", () => { M.Sonido.clic(); pintarTabla("estudio"); });
-  $("#qu-modo-conquista").addEventListener("click", () => { M.Sonido.clic(); pintarTabla("conquista"); });
+  $("#qu-modo-estudio").addEventListener("click", () => { M.Sonido.clic(); abandonar(); pintarTabla("estudio"); });
+  $("#qu-modo-conquista").addEventListener("click", () => { M.Sonido.clic(); abandonar(); pintarTabla("conquista"); });
+  $("#qu-modo-perso").addEventListener("click", () => { M.Sonido.clic(); abandonar(); api.abrirPerso("qu"); });
   $("#qu-volver").addEventListener("click", () => api.volverAlHub());
-  $("#ge-modo-estudio").addEventListener("click", () => { M.Sonido.clic(); pintarAtlas("estudio"); });
-  $("#ge-modo-conquista").addEventListener("click", () => { M.Sonido.clic(); pintarAtlas("conquista"); });
+  $("#ge-modo-estudio").addEventListener("click", () => { M.Sonido.clic(); abandonar(); pintarAtlas("estudio"); });
+  $("#ge-modo-conquista").addEventListener("click", () => { M.Sonido.clic(); abandonar(); pintarAtlas("conquista"); });
+  $("#ge-modo-perso").addEventListener("click", () => { M.Sonido.clic(); abandonar(); api.abrirPerso("ge"); });
   $("#ge-volver").addEventListener("click", () => api.volverAlHub());
 }
 
 return {init, conectar, abrirTabla, abrirAtlas, bandera,
-        progresoQuimica, progresoGeo};
+        progresoQuimica, progresoGeo,
+        expedicion, totalCasillas, hayExpedicion, abandonar};
 
 })();

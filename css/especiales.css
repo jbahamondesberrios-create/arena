@@ -141,6 +141,27 @@
 .reto-fb b{ color:var(--texto); }
 .reto-salir{ margin-top:14px; width:100%; font-size:12.5px; padding:9px; }
 
+/* ---------------- Expedición (nivel a medida de los tableros) ---------------- */
+.exp-hud{
+  display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap;
+  background:var(--fondo-2); border:1px solid var(--borde); border-radius:10px;
+  padding:8px 11px; margin-bottom:10px; font-size:12.5px; font-weight:700;
+}
+.exp-hud .exp-prog{ color:var(--texto-2); font-weight:600; }
+.exp-hud .exp-cq{ color:var(--ok); }
+.exp-crono{ height:5px; background:var(--panel); border-radius:99px; overflow:hidden; margin-bottom:12px; }
+.exp-crono i{ display:block; height:100%; width:100%; background:var(--ok); transition:width .12s linear, background .3s; }
+.exp-crono i.aviso-t{ background:var(--oro); }
+.exp-crono i.urgente{ background:var(--mal); }
+
+.exp-fin{
+  background:linear-gradient(160deg,var(--panel),var(--fondo-2));
+  border:1px solid var(--borde); border-radius:var(--r); padding:16px;
+}
+.exp-fin h3{ font-size:17px; margin-bottom:4px; }
+.exp-fin .exp-sub{ color:var(--texto-2); font-size:12.5px; line-height:1.6; margin-bottom:12px; }
+.exp-fin .ficha-datos{ margin-bottom:14px; }
+
 /* ---------------- Banderas ---------------- */
 .bandera{ width:54px; height:36px; border-radius:4px; display:block; flex:0 0 auto; }
 .bandera-g{ width:84px; height:56px; border-radius:5px; }

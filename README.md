@@ -83,9 +83,9 @@ y tipos de interés con exóticas.
 
 ## 🎖️ Juegos especiales
 
-Dos tableros grandes que se van pintando a medida que los conquistas. **Sin vidas ni cronómetro**:
-aquí se trata de llegar al 100 %. Cada casilla se conquista respondiendo bien **todo** lo que se
-pregunta de ella, y da **+25 XP** la primera vez.
+Dos tableros grandes que se van pintando a medida que los conquistas. En *estudiar* y *conquistar*
+no hay **vidas ni cronómetro**: se trata de llegar al 100 %. Cada casilla se conquista respondiendo
+bien **todo** lo que se pregunta de ella, y da **+25 XP** la primera vez.
 
 - **⚗️ Tabla periódica** — los 118 elementos en su rejilla de siempre.
   En *conquistar* solo se ve el símbolo y hay que decir **nombre, número atómico y peso atómico**
@@ -105,6 +105,19 @@ pregunta de ella, y da **+25 XP** la primera vez.
   Los contornos se regeneran con `node herramientas/generar-mapa.js datos/mapa-mundi.js`
   (necesita bajar antes `countries-50m.json`; el propio archivo explica cómo).
 
+### ⚙️ Expediciones (el tercer modo de los tableros)
+
+El botón **⚙️ A tu medida** de cada tablero abre el mismo diálogo que los juegos, pero contando
+casillas: **cuántos elementos o países seguidos** (hasta 118 y 197 — todos los que hay), **cuántas
+vidas** y **cuánto tiempo por pregunta**. Entonces el tablero deja de esperar a que toques una
+casilla y te las va sacando él, empezando por las que aún no has conquistado.
+
+Cada casilla sigue siendo lo de siempre —sus 3 preguntas, +25 XP la primera vez que se conquista—,
+solo que ahora **fallar cuesta una vida** y el reloj corre en cada pregunta (ojo: aquí las
+respuestas se escriben a mano, así que 20–30 s es lo razonable). Al quedarte sin vidas, al terminar
+la lista o al abandonar, sale un resumen con lo conquistado, el XP ganado y la precisión. Lo
+conquistado **no se pierde** aunque la expedición acabe mal.
+
 Las banderas no son imágenes: se **dibujan en SVG** a partir de una descripción compacta en
 `datos/geografia.js`, así que la app sigue sin depender de ningún archivo externo.
 
@@ -120,7 +133,8 @@ Cada juego tiene tres niveles. No cambia solo la dificultad de las preguntas: ca
 
 ### ⚙️ A tu medida (nivel personalizado)
 
-Debajo de los tres niveles, cada juego tiene el botón **⚙️ A tu medida**: ahí se eligen a mano
+Debajo de los tres niveles, cada juego tiene el botón **⚙️ A tu medida** (y los dos tableros el
+suyo, ver «Expediciones» más arriba): ahí se eligen a mano
 las **vidas** (1–10), el **tiempo por pregunta** (0 = sin cronómetro, hasta 90 s) y **cuántas
 preguntas** tiene la batalla. La dificultad base que se marque arriba sigue decidiendo de qué
 preguntas se tira, cuántas opciones tiene cada una y el XP por acierto.

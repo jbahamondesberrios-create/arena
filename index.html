@@ -178,6 +178,7 @@
     <div class="tablero-modos">
       <button class="modo-btn" id="qu-modo-estudio">📖 Estudiar</button>
       <button class="modo-btn" id="qu-modo-conquista">⚔️ Conquistar</button>
+      <button class="modo-btn" id="qu-modo-perso">⚙️ A tu medida</button>
     </div>
   </div>
 
@@ -206,6 +207,7 @@
     <div class="tablero-modos">
       <button class="modo-btn" id="ge-modo-estudio">📖 Estudiar</button>
       <button class="modo-btn" id="ge-modo-conquista">⚔️ Conquistar</button>
+      <button class="modo-btn" id="ge-modo-perso">⚙️ A tu medida</button>
     </div>
   </div>
 
@@ -264,14 +266,14 @@
       <button class="btn-icono" id="perso-cerrar" title="Cerrar">✕</button>
     </div>
 
-    <div class="perso-campo">
+    <div class="perso-campo" id="perso-campo-base">
       <label>Contenido y dificultad de las preguntas</label>
       <div id="perso-base" class="perso-chips"></div>
       <small id="perso-base-nota"></small>
     </div>
 
     <div class="perso-campo">
-      <label for="perso-preguntas">Preguntas · <b id="perso-preguntas-val">15</b></label>
+      <label for="perso-preguntas"><span id="perso-preguntas-tit">Preguntas</span> · <b id="perso-preguntas-val">15</b></label>
       <input type="range" id="perso-preguntas" min="3" max="40" step="1">
       <small id="perso-preguntas-nota"></small>
     </div>
