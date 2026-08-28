@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#12243f">
+<link rel="icon" href="../iconos/icono-192.png">
+<title>Cuaderno 15.415.1x</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --paper:#eef1f5;
+  --surface:#ffffff;
+  --surface-2:#e4e9f0;
+  --ink:#121a25;
+  --ink-2:#48586a;
+  --ink-3:#7b8998;
+  --rule:#d3dae3;
+  --rule-strong:#b2bccb;
+  --accent:#26468c;
+  --accent-soft:#e2e8f5;
+  --accent-2:#a8531f;
+  --accent-2-soft:#f6ece2;
+  --loss:#9d3326;
+  --shadow:0 1px 2px rgba(18,26,37,.06),0 8px 24px -18px rgba(18,26,37,.45);
+  --maxw:71ch;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0b1118;
+    --surface:#121a23;
+    --surface-2:#18222d;
+    --ink:#e0e6ee;
+    --ink-2:#9dabbb;
+    --ink-3:#78879a;
+    --rule:#233040;
+    --rule-strong:#374759;
+    --accent:#84a8ea;
+    --accent-soft:#16233a;
+    --accent-2:#e0964f;
+    --accent-2-soft:#2a2116;
+    --loss:#e5897a;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 26px -18px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0b1118;
+  --surface:#121a23;
+  --surface-2:#18222d;
+  --ink:#e0e6ee;
+  --ink-2:#9dabbb;
+  --ink-3:#78879a;
+  --rule:#233040;
+  --rule-strong:#374759;
+  --accent:#84a8ea;
+  --accent-soft:#16233a;
+  --accent-2:#e0964f;
+  --accent-2-soft:#2a2116;
+  --loss:#e5897a;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 26px -18px rgba(0,0,0,.9);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:Newsreader,Georgia,serif;text-wrap:balance;margin:0;line-height:1.15;font-weight:600}
+p{margin:0}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:.92em}
+
+/* ---------- shell ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.shell{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+@media(min-width:1040px){
+  .shell{grid-template-columns:212px minmax(0,1fr);gap:56px;align-items:start}
+}
+
+/* ---------- hero ---------- */
+.hero{border-bottom:1px solid var(--rule);background:var(--surface)}
+.hero-in{padding:64px 0 44px;display:flex;flex-direction:column;gap:22px}
+.eyebrow{
+  font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--accent);font-weight:500;
+}
+.hero h1{font-size:clamp(38px,6.4vw,66px);letter-spacing:-.02em;max-width:16ch}
+.hero .lede{font-size:19px;color:var(--ink-2);max-width:60ch}
+.facts{
+  display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--rule);border-radius:3px;
+  overflow:hidden;background:var(--paper);margin-top:8px;
+}
+.fact{padding:12px 20px;border-right:1px solid var(--rule);flex:1 1 auto;min-width:132px}
+.fact:last-child{border-right:0}
+.fact dt{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 3px}
+.fact dd{margin:0;font-family:Newsreader,serif;font-size:19px;font-weight:600}
+
+/* ---------- nav ---------- */
+nav.toc{display:none}
+@media(min-width:1040px){
+  nav.toc{
+    display:block;position:sticky;top:0;padding:44px 0;max-height:100vh;overflow-y:auto;
+  }
+  nav.toc h2{
+    font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink-3);font-weight:500;margin-bottom:14px;
+  }
+  nav.toc ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+  nav.toc a{
+    display:grid;grid-template-columns:26px 1fr;gap:6px;padding:5px 0;
+    font-size:13.5px;line-height:1.3;color:var(--ink-2);text-decoration:none;
+  }
+  nav.toc a span{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-3);padding-top:2px}
+  nav.toc a:hover{color:var(--accent)}
+  nav.toc a:hover span{color:var(--accent)}
+  nav.toc .blk{
+    font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-3);margin:14px 0 4px;
+  }
+}
+.chipbar{display:flex;gap:6px;overflow-x:auto;padding:14px 0;border-bottom:1px solid var(--rule);margin-bottom:8px}
+@media(min-width:1040px){.chipbar{display:none}}
+.chipbar a{
+  flex:0 0 auto;font-family:"JetBrains Mono",monospace;font-size:11.5px;
+  padding:5px 10px;border:1px solid var(--rule);border-radius:2px;
+  text-decoration:none;color:var(--ink-2);background:var(--surface);
+}
+
+/* ---------- module ---------- */
+main{padding:8px 0 96px;min-width:0}
+.module{padding:52px 0;border-bottom:1px solid var(--rule)}
+.module:last-of-type{border-bottom:0}
+.mod-head{display:flex;flex-direction:column;gap:10px;margin-bottom:26px}
+.mod-head h2{font-size:clamp(27px,3.5vw,37px);letter-spacing:-.015em}
+.mod-num{
+  font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+.mod-num b{color:var(--accent);font-weight:500}
+.prose{max-width:var(--maxw);display:flex;flex-direction:column;gap:16px}
+.prose h3{
+  font-size:19.5px;margin-top:16px;letter-spacing:-.005em;
+  display:flex;align-items:baseline;gap:9px;
+}
+.prose h3::before{
+  content:"";width:16px;height:1px;background:var(--accent);flex:0 0 auto;transform:translateY(-5px);
+}
+.prose ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:7px}
+.prose li::marker{color:var(--accent)}
+strong{font-weight:600}
+em.term{font-style:normal;font-weight:600;color:var(--accent)}
+
+/* thesis callout */
+.thesis{
+  max-width:var(--maxw);border-left:2px solid var(--accent);padding:2px 0 2px 18px;
+  font-size:18.5px;color:var(--ink);margin-bottom:26px;
+}
+.thesis span{display:block;font-family:"JetBrains Mono",monospace;font-size:10.5px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+
+/* formula */
+.formula{
+  background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+  padding:16px 18px;display:flex;flex-direction:column;gap:8px;overflow-x:auto;
+  box-shadow:var(--shadow);
+}
+.formula .f{font-family:"JetBrains Mono",monospace;font-size:13.8px;line-height:1.85;white-space:pre;color:var(--ink)}
+.formula .cap{font-size:13.5px;color:var(--ink-2);line-height:1.5}
+.formula .cap b{color:var(--ink);font-weight:600}
+
+/* worked example */
+.ex{
+  background:var(--surface);border:1px solid var(--rule-strong);border-radius:3px;
+  margin:12px 0;box-shadow:var(--shadow);overflow:hidden;
+}
+.ex > header{
+  padding:12px 20px;border-bottom:1px solid var(--rule);background:var(--accent-soft);
+  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+}
+.ex > header b{
+  font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--accent);font-weight:600;
+}
+.ex > header span{font-family:Newsreader,serif;font-weight:600;font-size:17px}
+.ex .body{padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+.ex .given{font-size:15.5px;color:var(--ink-2)}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0;counter-reset:s}
+.steps li{
+  counter-increment:s;display:grid;grid-template-columns:24px minmax(0,1fr);gap:12px;
+  padding:12px 0;border-top:1px solid var(--rule);
+}
+.steps li:first-child{border-top:0;padding-top:2px}
+.steps li::before{
+  content:counter(s);font-family:"JetBrains Mono",monospace;font-size:11px;
+  color:var(--accent);padding-top:5px;font-weight:500;
+}
+.steps .work{
+  font-family:"JetBrains Mono",monospace;font-size:13px;line-height:1.8;
+  background:var(--surface-2);border-radius:2px;padding:9px 12px;margin-top:7px;
+  overflow-x:auto;white-space:pre;color:var(--ink);
+}
+.result{
+  border-top:2px solid var(--accent);padding-top:12px;display:flex;gap:12px;
+  align-items:baseline;flex-wrap:wrap;
+}
+.result b{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--accent)}
+.result span{font-family:Newsreader,serif;font-size:19px;font-weight:600}
+
+/* trap */
+.trap{
+  max-width:var(--maxw);border:1px solid var(--rule);border-left:3px solid var(--accent-2);
+  background:var(--accent-2-soft);border-radius:3px;padding:14px 18px;
+  display:flex;flex-direction:column;gap:6px;font-size:15.5px;
+}
+.trap b{
+  font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--accent-2);
+}
+
+/* challenge */
+details.reto{
+  max-width:var(--maxw);border:1px dashed var(--rule-strong);border-radius:3px;
+  padding:14px 18px;background:var(--surface);
+}
+details.reto summary{
+  cursor:pointer;font-family:"JetBrains Mono",monospace;font-size:11px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);list-style:none;
+}
+details.reto summary::-webkit-details-marker{display:none}
+details.reto summary::before{content:"▸ ";color:var(--accent)}
+details.reto[open] summary::before{content:"▾ "}
+details.reto .q{margin-top:10px;font-size:15.5px}
+details.reto .a{
+  margin-top:12px;padding-top:12px;border-top:1px solid var(--rule);
+  font-size:15.5px;color:var(--ink-2);
+}
+details.reto .a .work{
+  font-family:"JetBrains Mono",monospace;font-size:12.6px;line-height:1.8;white-space:pre;
+  overflow-x:auto;background:var(--surface-2);padding:8px 11px;border-radius:2px;margin-top:8px;color:var(--ink);
+}
+
+/* tables */
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);border-radius:3px;background:var(--surface);box-shadow:var(--shadow);margin:2px 0}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:440px}
+th,td{padding:9px 14px;text-align:left;border-bottom:1px solid var(--rule)}
+thead th{
+  font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-3);font-weight:500;background:var(--surface-2);
+}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums}
+td.k{font-weight:600}
+
+/* closing */
+.closing{background:var(--surface);border-top:1px solid var(--rule);padding:56px 0 72px}
+.cardgrid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin-top:24px}
+.card{border:1px solid var(--rule);border-radius:3px;padding:16px 18px;background:var(--paper)}
+.card h4{font-size:16px;margin-bottom:8px}
+.card .f{font-family:"JetBrains Mono",monospace;font-size:12.4px;line-height:1.95;white-space:pre;overflow-x:auto;color:var(--ink-2)}
+footer{padding:28px 0 56px;color:var(--ink-3);font-size:13.5px;max-width:var(--maxw)}
+</style>
+
+<style id="arena-barra-estilo">
+  .arena-volver{
+    position:sticky; top:0; z-index:9999;
+    display:flex; align-items:center; gap:10px;
+    height:46px; padding:0 18px;
+    background:#12243f; color:#e6f1fd;
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+    font-size:13.5px; box-shadow:0 1px 0 rgba(0,0,0,.25);
+  }
+  .arena-volver a{
+    color:#e6f1fd; text-decoration:none; font-weight:600;
+    display:inline-flex; align-items:center; gap:7px;
+    padding:5px 12px; border-radius:99px; border:1px solid rgba(230,241,253,.28);
+    transition:.15s;
+  }
+  .arena-volver a:hover{ background:rgba(230,241,253,.14); }
+  .arena-volver .arena-curso{ color:rgba(230,241,253,.62); font-size:12.5px; }
+  @media print{ .arena-volver{ display:none; } }
+
+  /* el índice del cuaderno también es sticky: se baja para que no quede
+     tapado por la barra */
+  nav.toc{ top:46px !important; max-height:calc(100vh - 46px) !important; }
+</style>
+</head>
+<body>
+<div class="arena-volver">
+  <a href="../index.html#cuadernos">← La Arena</a>
+  <span class="arena-curso">MITx MicroMasters in Finance · 15.415.1x</span>
+</div>
+<header class="hero">
+  <div class="wrap hero-in">
+    <div class="eyebrow">MITx MicroMasters · 15.415.1x · Kogan &amp; Wang</div>
+    <h1>Cuaderno de Fundamentos I</h1>
+    <p class="lede">Los diez módulos del curso base del programa, condensados: la intuición que amarra cada uno, las fórmulas que hay que tener en la punta de los dedos, y ejemplos numéricos resueltos línea por línea. Todo el curso cuelga de una sola frase — <strong>el valor de un activo es el valor de mercado de sus flujos</strong>.</p>
+    <dl class="facts">
+      <div class="fact"><dt>Módulos</dt><dd>10</dd></div>
+      <div class="fact"><dt>Evaluación</dt><dd>50% PS · 50% final</dd></div>
+      <div class="fact"><dt>Textos</dt><dd>BMA 13e · BKM 11e</dd></div>
+      <div class="fact"><dt>Requisito de</dt><dd>415.2x y 455x</dd></div>
+    </dl>
+  </div>
+</header>
+
+<div class="wrap shell">
+
+<nav class="toc" aria-label="Índice de módulos">
+  <h2>Índice</h2>
+  <div class="blk">Valor del dinero</div>
+  <ol>
+    <li><a href="#m1"><span>01</span>Qué es finanzas</a></li>
+    <li><a href="#m2"><span>02</span>Precios de estado y VP</a></li>
+    <li><a href="#m3"><span>03</span>Descuento y capitalización</a></li>
+  </ol>
+  <div class="blk">Valoración de activos</div>
+  <ol>
+    <li><a href="#m4"><span>04</span>Renta fija</a></li>
+    <li><a href="#m5"><span>05</span>Acciones</a></li>
+  </ol>
+  <div class="blk">Riesgo</div>
+  <ol>
+    <li><a href="#m6"><span>06</span>Riesgo y diversificación</a></li>
+    <li><a href="#m7"><span>07</span>APT</a></li>
+    <li><a href="#m8"><span>08</span>Eficiencia de mercado</a></li>
+  </ol>
+  <div class="blk">Finanzas corporativas</div>
+  <ol>
+    <li><a href="#m9"><span>09</span>NPV y costo de capital</a></li>
+    <li><a href="#m10"><span>10</span>Presupuesto de capital</a></li>
+    <li><a href="#chuleta"><span>★</span>Mapa de fórmulas</a></li>
+  </ol>
+</nav>
+
+<main>
+<div class="chipbar">
+  <a href="#m1">01 Finanzas</a><a href="#m2">02 Estado/VP</a><a href="#m3">03 Descuento</a>
+  <a href="#m4">04 Bonos</a><a href="#m5">05 Acciones</a><a href="#m6">06 Riesgo</a>
+  <a href="#m7">07 APT</a><a href="#m8">08 EMH</a><a href="#m9">09 NPV</a>
+  <a href="#m10">10 Capital budgeting</a><a href="#chuleta">★ Fórmulas</a>
+</div>
+
+<!-- ============ MÓDULO 1 ============ -->
+<section class="module" id="m1">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 01 · <b>Valor del dinero en el tiempo</b></div>
+    <h2>Qué es finanzas y de dónde sale el valor</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    El valor no es una opinión: es un <em class="term">precio de mercado</em>. Para valorar un flujo, busca activos que ya se transan con el mismo <strong>timing</strong> y el mismo <strong>riesgo</strong>, y usa su retorno esperado como tasa de descuento.
+  </div>
+
+  <div class="prose">
+    <h3>El marco: toda decisión es un flujo de caja</h3>
+    <p>Una empresa (o un hogar) es una máquina de adquirir y disponer activos. Todo se reduce a dos funciones: <strong>crear valor</strong> y <strong>administrar el valor creado</strong>. Y las dos empiezan por el mismo paso: valorar. «No puedes crear ni administrar lo que no puedes medir.»</p>
+    <p>Las decisiones del gerente financiero se ordenan sobre el flujo de caja que va entre las operaciones y los inversionistas:</p>
+    <ul>
+      <li><strong>Inversión real / presupuesto de capital</strong> — ¿en qué proyectos entrar? Se valoran activos reales.</li>
+      <li><strong>Financiamiento y payout</strong> — ¿cómo pagar el proyecto y qué devolver a los accionistas? Se valoran activos financieros.</li>
+      <li><strong>Gestión de riesgo</strong> — ¿qué riesgo tomar y cuál evitar? Se valoran contratos financieros.</li>
+    </ul>
+    <p>La identidad que amarra el periodo es <strong>fuentes = usos</strong>: <code>NI + ΔD + ΔE = I + C + Div + Tax</code>.</p>
+
+    <h3>Las dos dimensiones: tiempo y riesgo</h3>
+    <p>Un flujo se describe por tres cosas: monto, <strong>cuándo</strong> llega y <strong>con qué incertidumbre</strong>. Preferir $1.000 hoy a $1.000 en un año es el <em class="term">valor del dinero en el tiempo</em>. Preferir $1.000 seguros a una lotería de $2.000/$0 al 50% es la <em class="term">aversión al riesgo</em>, y el descuento extra que exiges por ella es la <strong>prima de riesgo</strong>.</p>
+
+    <h3>Arbitraje: la única regla que no se negocia</h3>
+    <div class="formula">
+      <div class="f">Un ARBITRAJE es un conjunto de operaciones que:
+  · exige un desembolso inicial ≤ 0
+  · entrega pagos futuros ≥ 0
+  · y al menos una de las dos es estricta.</div>
+      <div class="cap">En un mercado sin fricciones no puede existir. De ahí sale la <b>Ley de un solo precio (LOP)</b>: dos activos con el mismo pago valen lo mismo. Todo el curso es esta regla aplicada a activos cada vez más complicados.</div>
+    </div>
+    <div class="formula">
+      <div class="f">P = E[CF] / (1 + r)
+
+  r = retorno esperado de activos transados
+      con el MISMO timing y el MISMO riesgo
+    = costo de oportunidad del capital (COC)</div>
+      <div class="cap">La tasa no es «la tasa de la empresa»: es la del <b>proyecto</b>. Corrige por tiempo <em>y</em> por riesgo a la vez.</div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>El mismo flujo, seguro y riesgoso</span></header>
+    <div class="body">
+      <p class="given">Un activo paga $1.000 en un año. (a) El pago es seguro y los bonos del Tesoro a un año rinden 5%. (b) El pago es riesgoso, $1.000 es sólo el valor <em>esperado</em>, y acciones de riesgo similar rinden 10% esperado.</p>
+      <ol class="steps">
+        <li><div><strong>Caso seguro.</strong> El comprador exige el mismo 5% que le ofrece el mercado por un flujo idéntico.
+          <div class="work">P · (1 + 0,05) = 1.000
+P = 1.000 / 1,05 = 952,38</div></div></li>
+        <li><div><strong>¿Y si se transara a $960?</strong> Compras $952,38 de bonos del Tesoro (que pagarán $1.000) y vendes ese flujo por $960. Te embolsas $7,62 hoy y quedas plano en el futuro. Free lunch, el precio no se sostiene.
+          <div class="work">t=0:  −952,38 (bono)  + 960 (venta) = +7,62
+t=1:  +1.000 (bono)  − 1.000 (entrega) =  0,00</div></div></li>
+        <li><div><strong>Caso riesgoso.</strong> Mismo razonamiento, otra tasa:
+          <div class="work">P = 1.000 / 1,10 = 909,09</div>
+          La diferencia de $43,29 entre ambos precios <em>es</em> el precio de mercado del riesgo de ese flujo.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>$952,38 seguro · $909,09 riesgoso</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Arbitraje entre dos bancos</span></header>
+    <div class="body">
+      <p class="given">Citi presta a 12 meses al 1%. Chase vende un depósito a plazo (CD) a 12 meses que paga 1,125%. Sin fricciones ni límites de crédito.</p>
+      <ol class="steps">
+        <li><div><strong>Montar la operación.</strong> Pide $100 a Citi al 1% y compra $100 de CD de Chase al 1,125%.</div></li>
+        <li><div><strong>Flujos.</strong>
+          <div class="work">              t = 0        t = 1
+Préstamo    +100,000    −101,000
+CD          −100,000    +101,125
+------------------------------------
+Neto           0,000      +0,125</div></div></li>
+        <li><div><strong>Diagnóstico.</strong> Inversión inicial cero y ganancia segura de $0,125. Arbitraje puro. En un mercado real, la avalancha de operaciones sube la tasa de Citi o baja la de Chase hasta cerrar la brecha.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>$0,125 seguros por cada $100, sin capital</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>La tasa de descuento correcta depende del <strong>proyecto</strong>, no de quién lo hace. Un proyecto seguro dentro de una empresa riesgosa se descuenta a la tasa libre de riesgo. Usar «el costo de capital de la empresa» para todos los proyectos es el error que el curso repite en cada módulo, y aparece explícitamente como verdadero/falso en el examen de muestra.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">IBM cotiza a <strong>$195</strong> en Nueva York y a <strong>£120</strong> en Londres. El tipo de cambio es <strong>$1,50/£</strong>. ¿Hay arbitraje? Arma la operación y calcula la ganancia por acción.</div>
+    <div class="a">
+      Sí. Lleva ambos precios a la misma moneda: £120 × 1,50 = <strong>$180</strong> en Londres contra <strong>$195</strong> en Nueva York. La acción está barata en Londres.
+      <div class="work">1) Vender 1 acción en NYSE      +$195
+2) Convertir $195 a libras      +£130   (195 / 1,50)
+3) Comprar 1 acción en LSE      −£120
+------------------------------------------------
+   Neto hoy                     +£10  ( = $15 )
+   Neto en el futuro               0   (posición cerrada)</div>
+      Ganancia inicial positiva, cero riesgo futuro: arbitraje. Ojo con un detalle práctico: las tres patas deben ejecutarse <em>simultáneamente</em>. Si hay retardo entre ellas, ya no es arbitraje sino especulación.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 2 ============ -->
+<section class="module" id="m2">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 02 · <b>Valor del dinero en el tiempo</b></div>
+    <h2>Precios de estado y valor presente</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    Si conoces el precio de hoy de «$1 si pasa el estado <em>s</em>», puedes valorar cualquier flujo: descomponlo en esos ladrillos y suma. Es el <em class="term">valor presente</em> antes de que lo llamemos así.
+  </div>
+
+  <div class="prose">
+    <h3>El modelo estado-espacio</h3>
+    <p>Dos fechas (<code>t = 0, 1</code>) y <code>S</code> estados posibles del mundo en t=1, con probabilidades conocidas. Un activo es un vector de pagos: <code>[(x₁,…,x_S); (p₁,…,p_S)]</code>.</p>
+    <p>Los ladrillos son los <em class="term">títulos de Arrow-Debreu</em>: pagan $1 en un estado y $0 en el resto. Su precio <code>φ_s</code> es el <strong>precio de estado</strong>. No arbitraje exige <code>φ_s &gt; 0</code> para todo <em>s</em>. Si se pueden replicar todos los A-D, el mercado es <strong>completo</strong>.</p>
+
+    <div class="formula">
+      <div class="f">P = Σ_s  φ_s · x_s          ← precio por replicación
+
+r_f  :  1 = (1 + r_f) · Σ_s φ_s
+     ⇒  Σ_s φ_s = 1 / (1 + r_f)</div>
+      <div class="cap">La <b>suma de los precios de estado</b> es el factor de descuento libre de riesgo. Es la relación más útil del módulo y la que más se pregunta.</div>
+    </div>
+
+    <h3>De ahí sale el valor presente</h3>
+    <div class="formula">
+      <div class="f">PV = E[CF] / (1 + r)        r = COC
+
+PV(C₁,…,C_T) = C₁/(1+r) + C₂/(1+r)² + … + C_T/(1+r)^T
+
+FV = PV · (1 + r)^T</div>
+      <div class="cap">El descuento hace <b>dos</b> ajustes a la vez: por tiempo (el exponente) y por riesgo (el nivel de <b>r</b>). Con una tasa distinta por plazo: <code>PV = Σ E[C_t]/(1+r_t)^t</code>.</div>
+    </div>
+
+    <h3>Nominal contra real: no los mezcles</h3>
+    <div class="formula">
+      <div class="f">CF real  = CF nominal / (1 + i)^t
+
+1 + r_real = (1 + r_nominal) / (1 + i)
+r_real ≈ r_nominal − i        (sólo aproximación)</div>
+      <div class="cap"><b>Regla de oro:</b> flujos nominales con tasas nominales; flujos reales con tasas reales. Las dos rutas dan exactamente el mismo VP. Si no coinciden, hay un error de consistencia, no de redondeo.</div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Extraer precios de estado de dos activos transados</span></header>
+    <div class="body">
+      <p class="given">Dos estados el próximo año. Un bono del gobierno seguro rinde 5%. Una acción vale hoy $100 y pagará ($90, $120). ¿Cuáles son los precios de estado implícitos?</p>
+      <ol class="steps">
+        <li><div><strong>Ecuación del bono.</strong> $100 invertidos pagan $105 pase lo que pase.
+          <div class="work">100 = 105·φ₁ + 105·φ₂
+⇒ φ₁ + φ₂ = 100/105 = 0,952381</div></div></li>
+        <li><div><strong>Ecuación de la acción.</strong>
+          <div class="work">100 = 90·φ₁ + 120·φ₂</div></div></li>
+        <li><div><strong>Resolver el sistema 2×2.</strong> Sustituye φ₁ = 0,952381 − φ₂:
+          <div class="work">90(0,952381 − φ₂) + 120φ₂ = 100
+85,7143 + 30φ₂ = 100
+φ₂ = 14,2857/30 = 0,476190 = 10/21
+φ₁ = 0,952381 − 0,476190 = 0,476190 = 10/21</div></div></li>
+        <li><div><strong>Lectura.</strong> Los dos precios de estado salen iguales aunque las probabilidades no tienen por qué serlo: el precio de estado mezcla probabilidad <em>y</em> aversión al riesgo. Con estos φ ya puedes valorar cualquier activo de esta economía.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>φ₁ = φ₂ = 10/21 ≈ 0,4762</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Precio y retorno esperado desde los φ</span></header>
+    <div class="body">
+      <p class="given">Una acción paga ($90, $110) con probabilidades (0,4 · 0,6). Los precios de estado son (φ₁, φ₂) = (0,5 · 0,4). Precio hoy y retorno esperado.</p>
+      <ol class="steps">
+        <li><div><strong>Precio por replicación.</strong>
+          <div class="work">P = 0,5 × 90 + 0,4 × 110
+  = 45 + 44 = 89</div></div></li>
+        <li><div><strong>Pago esperado</strong> (aquí sí entran las probabilidades):
+          <div class="work">E[x] = 0,4 × 90 + 0,6 × 110
+     = 36 + 66 = 102</div></div></li>
+        <li><div><strong>Retorno esperado.</strong>
+          <div class="work">r̄ = E[x]/P − 1 = 102/89 − 1
+   = 13/89 = 14,61%</div>
+          Comprueba la consistencia: <code>P = E[x]/(1+r̄) = 102/1,1461 = 89</code> ✓</div></li>
+        <li><div><strong>Tasa libre de riesgo implícita.</strong> <code>Σφ = 0,9 ⇒ r_f = 1/0,9 − 1 = 11,11%</code>. La prima de riesgo de esta acción es 14,61% − 11,11% = <strong>3,50%</strong>.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>P = $89 · r̄ = 14,61% · prima 3,50%</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Nominal y real dan el mismo número</span></header>
+    <div class="body">
+      <p class="given">Las ventas de este año son $1M y se espera un crecimiento <strong>real</strong> de 2%. La inflación esperada es 4% y la tasa de descuento <strong>nominal</strong> apropiada es 5%. ¿Cuál es el VP de las ventas del próximo año?</p>
+      <ol class="steps">
+        <li><div><strong>Ruta nominal.</strong> Aplica los dos crecimientos y descuenta a la tasa nominal.
+          <div class="work">Ventas nominales = 1,00 × 1,02 × 1,04 = 1,0608
+PV = 1,0608 / 1,05 = 1,0103</div></div></li>
+        <li><div><strong>Ruta real.</strong> Deja las ventas en poder adquisitivo de hoy y convierte la tasa.
+          <div class="work">Ventas reales = 1,00 × 1,02 = 1,0200
+r_real = 1,05/1,04 − 1 = 0,961538%
+PV = 1,0200 / 1,00961538 = 1,0103</div></div></li>
+        <li><div><strong>Coinciden hasta el último decimal.</strong> El error clásico es descontar $1,02M (real) al 5% (nominal): daría 0,9714, un 3,8% por debajo. Es exactamente el tamaño de la inflación que te olvidaste de quitar.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>PV = $1,0103M por las dos rutas</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>Los precios de estado <strong>no</strong> son probabilidades. Suman <code>1/(1+r_f)</code>, no 1. Y si divides cada φ por esa suma obtienes las <em>probabilidades neutrales al riesgo</em>, el mismo objeto que reaparece en el árbol binomial de 415.2x y en todo 15.435x. Vale la pena verlo desde ahora.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Tres estados en t=1, todos <strong>igualmente probables</strong>. Los precios de estado son φ₁ = 0,4 · φ₂ = 0,3 · φ₃ = 0,2. (a) ¿Cuál es la tasa libre de riesgo? (b) Un flujo paga $1, $2 y $4 según el estado: ¿cuál es su valor esperado? (c) ¿Y su valor de mercado hoy? <em>(Examen de muestra, pregunta 2.)</em></div>
+    <div class="a">
+      <div class="work">(a) Σφ = 0,4 + 0,3 + 0,2 = 0,9
+    r_f = 1/0,9 − 1 = 0,1111 → 11,11%
+
+(b) E[C₁] = (1 + 2 + 4)/3 = 2,3333
+
+(c) PV = 1(0,4) + 2(0,3) + 4(0,2)
+       = 0,40 + 0,60 + 0,80 = 1,80</div>
+      Fíjate en lo que dice el resultado: <code>PV = 1,80</code>, pero <code>E[C]/(1+r_f) = 2,3333/1,1111 = 2,10</code>. El flujo vale <strong>menos</strong> que su valor esperado descontado a la tasa libre de riesgo porque paga mucho justo en el estado más barato (φ₃ = 0,2), es decir, en el estado donde el dinero vale poco. Ese descuento adicional <em>es</em> la prima de riesgo, y el retorno esperado implícito es 2,3333/1,80 − 1 = <strong>29,6%</strong>.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 3 ============ -->
+<section class="module" id="m3">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 03 · <b>Valor del dinero en el tiempo</b></div>
+    <h2>Descuento, capitalización y las cuatro fórmulas</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    Anualidades y perpetuidades no son fórmulas nuevas: son la <em class="term">suma de una serie geométrica</em>. Si te acuerdas de cómo se deduce, no necesitas memorizar ninguna de las cuatro.
+  </div>
+
+  <div class="prose">
+    <h3>De dónde salen los retornos que usas para descontar</h3>
+    <p>El retorno de un activo en un periodo es <code>r = (P₁ + D₁ − P₀)/P₀</code>. El retorno del activo sin riesgo, <code>r_f</code>, recoge el puro valor del tiempo; el exceso <code>r − r_f</code> es el retorno en exceso, y su esperanza es la <strong>prima de riesgo</strong>. Los promedios históricos son el punto de partida para estimar tasas de descuento:</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Activo (EE.UU., 1926-2018, nominal)</th><th class="num">Media</th><th class="num">Desv. est.</th><th class="num">Prima</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Letras del Tesoro</td><td class="num">3,4%</td><td class="num">3,1%</td><td class="num">—</td></tr>
+          <tr><td class="k">Bonos del Tesoro largos</td><td class="num">5,9%</td><td class="num">9,8%</td><td class="num">2,5%</td></tr>
+          <tr><td class="k">Bonos corporativos largos</td><td class="num">6,3%</td><td class="num">8,4%</td><td class="num">2,9%</td></tr>
+          <tr><td class="k">Acciones grandes</td><td class="num">11,9%</td><td class="num">19,8%</td><td class="num">8,5%</td></tr>
+          <tr><td class="k">Acciones pequeñas</td><td class="num">16,2%</td><td class="num">31,6%</td><td class="num">12,8%</td></tr>
+          <tr><td class="k">Inflación</td><td class="num">3,0%</td><td class="num">4,0%</td><td class="num">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Más riesgo, más retorno promedio: el orden de la tabla es el mismo por media y por desviación estándar. Ese ordenamiento es el hecho empírico que los módulos 6 y 7 van a explicar.</p>
+
+    <h3>Las cuatro fórmulas de flujos especiales</h3>
+    <div class="formula">
+      <div class="f">Anualidad (C por T periodos, primer pago en t=1)
+    PV = (C/r) · [1 − 1/(1+r)^T]
+
+Anualidad creciente a g
+    PV = C/(r−g) · [1 − ((1+g)/(1+r))^T]      si r ≠ g
+    PV = C·T/(1+r)                            si r = g
+
+Perpetuidad
+    PV = C / r
+
+Perpetuidad creciente a g  (exige g < r)
+    PV = C / (r − g)</div>
+      <div class="cap">Las cuatro salen de la misma serie geométrica. <b>El resultado siempre queda fechado un periodo antes del primer pago</b>: si el primer flujo es en t=5, la fórmula te da el valor en t=4 y todavía falta descontarlo cuatro periodos.</div>
+    </div>
+
+    <h3>APR y EAR</h3>
+    <div class="formula">
+      <div class="f">Tasa por periodo = APR / k        (k = periodos de capitalización)
+
+EAR = (1 + APR/k)^k − 1
+
+k → ∞   ⇒   EAR = e^APR − 1</div>
+      <div class="cap">La APR es una <b>convención de cotización</b>, no una tasa. Con APR = 5%: anual 5,0000% · semestral 5,0625% · mensual 5,1162% · diaria 5,1267% · continua 5,1271%.</div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>La hipoteca a 30 años</span></header>
+    <div class="body">
+      <p class="given">Casa de $500.000 con 20% de pie. Se financian $400.000 a 30 años, tasa fija <strong>8,5% APR con capitalización mensual</strong>. ¿Cuál es la cuota y cuál la tasa efectiva anual?</p>
+      <ol class="steps">
+        <li><div><strong>Tasa mensual.</strong> La APR sólo sirve para esto:
+          <div class="work">i = 0,085 / 12 = 0,00708333  (0,708333% mensual)
+n = 30 × 12 = 360 pagos</div></div></li>
+        <li><div><strong>La cuota sale de invertir la anualidad.</strong> El saldo prestado es el VP de las 360 cuotas:
+          <div class="work">400.000 = (C/i)·[1 − (1+i)^−360]
+
+(1+i)^360 = 12,6925   ⇒  (1+i)^−360 = 0,078787
+[1 − 0,078787] = 0,921213
+
+C = 400.000 × 0,00708333 / 0,921213
+  = 2.833,33 / 0,921213
+  = 3.075,65 USD al mes</div></div></li>
+        <li><div><strong>Tasa efectiva anual.</strong>
+          <div class="work">EAR = (1 + 0,00708333)^12 − 1
+    = 1,088391 − 1 = 8,839%</div>
+          Es <strong>34 puntos base por encima</strong> del 8,5% cotizado. Esa brecha es el interés sobre el interés dentro del año.</div></li>
+        <li><div><strong>Cómo se reparte la cuota.</strong> El primer mes, el interés es 400.000 × 0,00708333 = $2.833,33 y sólo $242,32 amortizan capital. En el mes 240 la proporción ya se invirtió: $1.766,40 de interés contra $1.309,25 de capital. La cuota es constante; su composición no.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>Cuota $3.075,65 · EAR 8,839%</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Ahorro para la jubilación (anualidad creciente)</span></header>
+    <div class="body">
+      <p class="given">Tienes 30 años y necesitas <strong>$2.000.000</strong> a los 65. Puedes ahorrar al final de cada año un monto que crece 5% anual. La tasa es 8%. ¿Cuánto tienes que ahorrar el primer año?</p>
+      <ol class="steps">
+        <li><div><strong>Traer la meta al presente.</strong> Son 35 años.
+          <div class="work">1,08^35 = 14,7853
+PV(meta) = 2.000.000 / 14,7853 = 135.269,09</div></div></li>
+        <li><div><strong>Factor de la anualidad creciente</strong> con r = 8%, g = 5%, T = 35:
+          <div class="work">(1,05/1,08)^35 = 0,972222^35 = 0,373086
+factor = [1 − 0,373086] / (0,08 − 0,05)
+       = 0,626914 / 0,03 = 20,8971</div></div></li>
+        <li><div><strong>Despejar el primer aporte.</strong>
+          <div class="work">C = 135.269,09 / 20,8971 = 6.472,96</div></div></li>
+        <li><div><strong>Verificación de escala.</strong> Si el ahorro fuera constante (g = 0) el factor sería 11,6546 y harían falta $11.606 el primer año. El crecimiento del 5% te permite empezar con casi la mitad — a cambio de ahorrar $34.005 el último año.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>$6.472,96 el primer año, creciendo 5% anual</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>Dos errores gemelos. <strong>(1)</strong> La fórmula de anualidad devuelve el valor <em>un periodo antes</em> del primer pago; si el flujo empieza en t=3, todavía hay que dividir por (1+r)². <strong>(2)</strong> Los periodos de la fórmula tienen que coincidir con los de la tasa: si los pagos son mensuales, <code>r</code> es mensual y <code>T</code> se cuenta en meses. Nunca mezcles una tasa anual con un número de pagos mensual.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Alicia necesita pedir <strong>$50.000</strong> y compara dos créditos: (A) 10 años al 6% APR con capitalización mensual; (B) 5 años al 6,7% APR con capitalización mensual. La tasa de mercado es 4% EAR para todos los plazos. Calcula la EAR de cada crédito, la cuota mensual y el <strong>valor presente de los pagos</strong>. ¿Es mejor el crédito a 10 años? <em>(Examen de muestra, pregunta 3.)</em></div>
+    <div class="a">
+      <div class="work">EAR
+  A: (1 + 0,06/12)^12  − 1 = 6,1678%
+  B: (1 + 0,067/12)^12 − 1 = 6,9096%
+
+CUOTAS   i_A = 0,005      n = 120
+         i_B = 0,00558333  n = 60
+  C_A = 50.000 × 0,005 / [1 − 1,005^−120]     = 555,10
+  C_B = 50.000 × 0,00558333 / [1 − 1,0055833^−60] = 983,00
+
+DESCUENTO AL MERCADO
+  mensual de mercado = 1,04^(1/12) − 1 = 0,32737%
+  PV_A = 555,10 × 99,104 = 55.012,05
+  PV_B = 983,00 × 54,395 = 53.469,53</div>
+      <strong>No.</strong> El crédito a 10 años tiene cuota mucho más baja ($555 contra $983), pero en valor presente cuesta <strong>$1.542 más</strong>. La razón: ambos créditos cobran por encima de la tasa de mercado (6,17% y 6,91% contra 4%), y el de 10 años mantiene ese sobrecosto durante el doble de tiempo. Cuota baja no es lo mismo que crédito barato — el examen usa exactamente esta confusión.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 4 ============ -->
+<section class="module" id="m4">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 04 · <b>Valoración de activos</b></div>
+    <h2>Renta fija: curva, duración y convexidad</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    Un bono con cupones no es un instrumento: es una <em class="term">cartera de bonos cero cupón</em>. Todo lo demás del módulo (YTM, duración, arbitraje entre bonos) sale de tomarse esa frase en serio.
+  </div>
+
+  <div class="prose">
+    <h3>La curva y los factores de descuento</h3>
+    <div class="formula">
+      <div class="f">B_t = 1 / (1 + r_t)^t        ← precio de un cero de $1 a t años
+r_t = (1/B_t)^(1/t) − 1      ← tasa spot implícita
+
+Bono con cupón:
+    P = Σ_t  C·B_t  +  F·B_T
+      = C/(1+r₁) + C/(1+r₂)² + … + (C+F)/(1+r_T)^T</div>
+      <div class="cap">La <b>curva de rendimientos</b> es el conjunto de las <code>r_t</code>. Cada flujo se descuenta a la tasa de <em>su</em> plazo — no todos a la misma.</div>
+    </div>
+
+    <h3>Yield to maturity: una convención, no un retorno</h3>
+    <div class="formula">
+      <div class="f">P = Σ_t  C/(1+y)^t  +  F/(1+y)^T
+
+c = y   ⇒  P = par
+c < y   ⇒  P < par  (descuento)
+c > y   ⇒  P > par  (premio)</div>
+      <div class="cap">La YTM es <b>la tasa única</b> que reproduce el precio. Sólo coincide con el retorno esperado de mantener a vencimiento si la curva es plana y los cupones se reinvierten a esa misma tasa.</div>
+    </div>
+
+    <h3>Dinámica: expectativas y prima de liquidez</h3>
+    <div class="formula">
+      <div class="f">Hipótesis de expectativas
+    E₀[r₁(t)] = [(1+r_{t+1}(0))^(t+1) / (1+r_t(0))^t] − 1
+
+Preferencia por liquidez
+    E₀[r₁(t)] + prima = mismo lado derecho</div>
+      <div class="cap">Bajo expectativas puras, la <b>pendiente de la curva predice</b> las tasas cortas futuras. La versión con prima explica por qué los bonos largos rindieron 5,9% contra 3,4% de las letras: compensan riesgo de tasa y de inflación.</div>
+    </div>
+
+    <h3>Duración y convexidad</h3>
+    <div class="formula">
+      <div class="f">Duración de Macaulay (media ponderada de plazos)
+    D = Σ_t  t · [CF_t/(1+y)^t] / P
+
+Duración modificada
+    MD = −(1/P)·dP/dy = D / (1 + y)
+
+Aproximación de primer y segundo orden
+    ΔP/P ≈ −MD·Δy + ½·C·(Δy)²      C = (1/P)·d²P/dy²</div>
+      <div class="cap">Para un <b>cero</b>, D = T exactamente y MD = T/(1+y). La duración da la <b>pendiente</b>, la convexidad la <b>curvatura</b>. Como el precio es convexo, la duración sola siempre <em>subestima</em> el precio ante movimientos grandes en cualquier dirección.</div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Arbitraje entre cuatro bonos</span></header>
+    <div class="body">
+      <p class="given">Tres bonos con valor par $100 y cupón anual: <strong>A</strong> cero a 1 año, $96,00; <strong>B</strong> a 2 años con cupón 5%, $99,30; <strong>C</strong> a 3 años con cupón 10%, $108,80. Aparece un cero <strong>D</strong> a 3 años que se transa a $84,00. ¿Está bien valorado?</p>
+      <ol class="steps">
+        <li><div><strong>Escribir el sistema de precios.</strong> Con B₁, B₂, B₃ los precios de ceros de $1:
+          <div class="work">100·B₁                  = 96,00
+  5·B₁ + 105·B₂         = 99,30
+ 10·B₁ +  10·B₂ + 110·B₃ = 108,80</div></div></li>
+        <li><div><strong>Resolver por sustitución hacia adelante.</strong>
+          <div class="work">B₁ = 0,96
+B₂ = (99,30 − 4,80)/105 = 94,50/105 = 0,90
+B₃ = (108,80 − 9,60 − 9,00)/110 = 90,20/110 = 0,82</div>
+          Las tasas spot implícitas: r₁ = 4,17%, r₂ = 5,41%, r₃ = 6,84%.</div></li>
+        <li><div><strong>Valorar D.</strong> Un cero de $100 a 3 años debería valer <code>100 × 0,82 = $82,00</code>. Se transa a $84,00: está <strong>caro en $2</strong>.</div></li>
+        <li><div><strong>Montar el arbitraje.</strong> Vende D y replícalo con A, B y C. Busca la cartera (x_A, x_B, x_C, x_D) que paga $1 hoy y nada después:
+          <div class="work">x_D = −0,5000   (vende medio bono D → paga −50 en t=3)
+x_C = +0,4545   (0,4545 × 110 = 50 en t=3, cierra)
+                 pero deja +4,545 en t=1 y t=2
+x_B = −0,0433   (−0,0433 × 105 = −4,545 en t=2 ✓)
+x_A = −0,0433   (compensa lo que queda en t=1 ✓)
+
+Caja hoy = −[(−0,0433)(96) + (−0,0433)(99,3)
+             + (0,4545)(108,8) + (−0,5)(84)]
+         = +1,00</div></div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>$1 hoy, cero riesgo después</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Duración de un T-note a 4 años</span></header>
+    <div class="body">
+      <p class="given">T-note a 4 años, valor par $100, cupón <strong>7% anual pagado semestralmente</strong> ($3,50 cada semestre), precio $103,50. Yield semestral 3%.</p>
+      <ol class="steps">
+        <li><div><strong>Tabla de valores presentes.</strong> La unidad de tiempo es el <em>semestre</em>: 8 periodos.
+          <div class="work"> t   CF      PV      t·PV
+ 1   3,50    3,398    3,398
+ 2   3,50    3,299    6,597
+ 3   3,50    3,203    9,609
+ 4   3,50    3,110   12,439
+ 5   3,50    3,019   15,096
+ 6   3,50    2,931   17,585
+ 7   3,50    2,846   19,921
+ 8 103,50   81,704  653,634
+        ------  --------
+        103,51   738,28</div></div></li>
+        <li><div><strong>Duración de Macaulay.</strong>
+          <div class="work">D = 738,28 / 103,51 = 7,132 semestres
+  = 3,57 años</div></div></li>
+        <li><div><strong>Duración modificada.</strong>
+          <div class="work">MD = D / (1 + y) = 7,132 / 1,03 = 6,925</div></div></li>
+        <li><div><strong>Interpretar.</strong> Si el yield <em>semestral</em> sube 0,1%, el precio cae aproximadamente 0,6925%, es decir, unos $0,72. Para movimientos grandes la aproximación falla por la convexidad: con un alza de 100 pb el error ya es de $0,32 sobre $110.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>D = 7,13 semestres · MD = 6,92</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>La duración sale <strong>en las unidades de tiempo de la tabla</strong>. Si armaste la tabla en semestres, D = 7,13 son <em>semestres</em> (3,57 años) y la MD de 6,92 responde a cambios del yield <em>semestral</em>. Confundir semestres con años duplica el resultado y es el error más frecuente de este módulo. Segundo detalle: la duración siempre subestima el precio ante movimientos grandes de tasa, en las dos direcciones — la convexidad es un regalo para el tenedor del bono.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Tres bonos del Tesoro con valor par $100 y cupón anual: <strong>A</strong> a 1 año, cupón 0%, YTM 3%; <strong>B</strong> a 2 años, cupón 6%, YTM 4%; <strong>C</strong> a 3 años, cupón 3%, YTM 5%. Calcula las tasas spot a 1, 2 y 3 años. Después aparece un cero a 3 años que se transa con YTM de 4%: ¿está bien valorado? <em>(Examen de muestra, pregunta 4.)</em></div>
+    <div class="a">
+      Primero convierte cada YTM en precio, y luego «pela» la curva plazo por plazo (<em>bootstrapping</em>).
+      <div class="work">PRECIOS
+  P_A = 100/1,03            = 97,0874
+  P_B = 6/1,04 + 106/1,04²  = 103,7722
+  P_C = 3/1,05 + 3/1,05² + 103/1,05³ = 94,5535
+
+BOOTSTRAP
+  r₁ = 3,0000%   (A es un cero: spot = YTM)
+
+  103,7722 = 6/1,03 + 106/(1+r₂)²
+  106/(1+r₂)² = 103,7722 − 5,8252 = 97,9470
+  (1+r₂)² = 1,082222  ⇒  r₂ = 4,0299%
+
+  94,5535 = 3/1,03 + 3/(1,040299)² + 103/(1+r₃)³
+  103/(1+r₃)³ = 94,5535 − 2,9126 − 2,7719 = 88,8690
+  (1+r₃)³ = 1,158982  ⇒  r₃ = 5,0419%
+
+EL CERO NUEVO
+  precio de mercado  = 100/1,04³        = 88,8996
+  precio justo       = 100/1,050419³    = 86,2804
+  ⇒ está CARO en 2,62</div>
+      Está sobrevalorado. El arbitraje: <strong>vende en corto el cero nuevo</strong> a $88,90 y compra la cartera de A, B y C que replica $100 en t=3 por $86,28. Te embolsas $2,62 por unidad hoy y quedas perfectamente cubierto en los tres años. Nota la señal de alerta que había desde el principio: un bono a 3 años no puede rendir 4% cuando la curva spot a 3 años va en 5,04%.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 5 ============ -->
+<section class="module" id="m5">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 05 · <b>Valoración de activos</b></div>
+    <h2>Acciones: Gordon, crecimiento y PVGO</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    Crecer no crea valor. Sólo lo crea invertir a un retorno <strong>mayor que el costo de capital</strong>. Todo el módulo se reduce a separar el precio en dos: lo que ya está en marcha y el <em class="term">PVGO</em>.
+  </div>
+
+  <div class="prose">
+    <h3>El modelo de descuento de dividendos</h3>
+    <div class="formula">
+      <div class="f">Identidad contable:  r = (D₁ + P₁ − P₀)/P₀
+
+⇒  P₀ = (D₁ + P₁)/(1 + r)
+
+Iterando hacia adelante y con lim P_T/(1+r)^T = 0:
+
+    P₀ = Σ_{t=1..∞}  D_t / (1 + r)^t</div>
+      <div class="cap">Nota el punto lógico: el factor de descuento <b>es</b> el retorno esperado. No son dos cosas distintas que hay que estimar por separado.</div>
+    </div>
+
+    <h3>Gordon y el modelo multietapa</h3>
+    <div class="formula">
+      <div class="f">Gordon (g constante, g < r):
+    P₀ = D₁ / (r − g)
+    r  = D₁/P₀ + g       ← rendimiento por dividendo + crecimiento
+    g  = r − D₁/P₀
+
+Multietapa: descuenta explícitamente hasta T,
+y pega un valor terminal con Gordon:
+    P₀ = Σ_{t=1..T} D_t/(1+r)^t  +  P_T/(1+r)^T
+    P_T = D_{T+1} / (r − g_∞)</div>
+      <div class="cap">Gordon aplicado en T da el precio <b>en</b> T; hay que descontarlo T periodos más. Y el numerador es siempre el dividendo del año <b>siguiente</b>.</div>
+    </div>
+
+    <h3>De utilidades a dividendos: payout, plowback y g</h3>
+    <div class="formula">
+      <div class="f">D_t = p · E_t              p = payout ratio
+b = 1 − p                  b = plowback (reinversión)
+
+Si cada $1 invertido rinde ROE a perpetuidad:
+    E_{t+1} = E_t · (1 + b·ROE)
+    g = b · ROE</div>
+      <div class="cap">Aquí está la trampa central del módulo: <b>g = b·ROE</b>. Si ROE = r, subir b sube g y baja D₁ en la misma proporción, y el precio no se mueve ni un centavo.</div>
+    </div>
+
+    <h3>PVGO y el P/E</h3>
+    <div class="formula">
+      <div class="f">P₀ = E₁/r  +  PVGO
+
+    E₁/r   = valor si repartiera todo y no invirtiera
+    PVGO   = VP de los NPV de todas las inversiones futuras
+
+P/E = P₀/E₁ = 1/r + PVGO/E₁
+
+PVGO = 0  ⇒  P/E = 1/r</div>
+      <div class="cap">Un P/E alto no significa «cara»: significa que el mercado le atribuye <b>PVGO</b>. Y PVGO puede ser negativo si la empresa invierte en proyectos con NPV &lt; 0.</div>
+    </div>
+
+    <h3>Valorar el negocio completo</h3>
+    <p>La misma maquinaria vale para una empresa entera, cambiando dividendos por <strong>flujo de caja libre</strong>: <code>FCF = Utilidad − Inversión neta</code>, con <code>Inversión neta = CAPEX − Depreciación</code>. Proyectas T años y pegas un valor horizonte por múltiplos (P/E, P/B) o por DCF puro eligiendo T tal que PVGO ya sea cero.</p>
+    <p>El curso muestra el mismo negocio valorado tres veces: con múltiplo P/E de 6,0 da <strong>$4,58</strong>; con P/B de 1,2 da <strong>$6,64</strong>; con DCF puro da <strong>$5,29</strong>. Un rango de 45% entre el mínimo y el máximo con los mismos flujos. La lección no es cuál elegir, sino que hay que reportar el rango y analizar la sensibilidad.</p>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Descomponer el precio en PVGO</span></header>
+    <div class="body">
+      <p class="given">ABC Software: EPS esperado el próximo año <strong>$8,33</strong>, payout <strong>0,6</strong>, cada $1 invertido genera $0,25 perpetuos, tasa de descuento <strong>15%</strong>. ¿Qué parte del precio son las oportunidades de crecimiento?</p>
+      <ol class="steps">
+        <li><div><strong>Dividendo y crecimiento.</strong>
+          <div class="work">D₁ = p·E₁ = 0,6 × 8,33 = 5,00
+b  = 1 − 0,6 = 0,4
+g  = b·ROE = 0,4 × 0,25 = 10%</div>
+          Verificación por utilidades: se reinvierten 0,4 × 8,33 = $3,33, que generan 0,25 × 3,33 = $0,83 extra ⇒ E₂ = 8,33 + 0,83 = 9,16, o sea +10% ✓</div></li>
+        <li><div><strong>Precio con crecimiento (Gordon).</strong>
+          <div class="work">P₀ = 5,00 / (0,15 − 0,10) = $100,00</div></div></li>
+        <li><div><strong>Precio sin crecimiento</strong> (payout 100%, no invierte, utilidades planas):
+          <div class="work">P_sin = E₁/r = 8,33 / 0,15 = $55,53</div></div></li>
+        <li><div><strong>PVGO por diferencia.</strong>
+          <div class="work">PVGO = 100,00 − 55,53 = $44,47   (44% del precio)</div></div></li>
+        <li><div><strong>Comprobarlo por la vía larga.</strong> El NPV de la inversión del año 1 es −3,33 + 0,83/0,15 = $2,22. Ese NPV crece 10% cada año, así que el VP de todos ellos es 2,22/(0,15 − 0,10) = <strong>$44,4</strong> ✓ Las dos rutas cierran.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>P₀ = $100 · PVGO = $44,47</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Crecimiento en dos etapas</span></header>
+    <div class="body">
+      <p class="given">Northern Co. pagará <strong>$1,00</strong> de dividendo el próximo año, que crecerá <strong>10% durante los 5 años siguientes</strong>. Después el crecimiento cae a <strong>2%</strong> para siempre. Costo de capital <strong>8%</strong>.</p>
+      <ol class="steps">
+        <li><div><strong>Proyectar los dividendos explícitos</strong> (t = 1 a 6):
+          <div class="work"> t     1      2      3      4      5      6      7
+ D   1,000  1,100  1,210  1,331  1,464  1,611  1,643
+                                              ↑ ya al 2%</div></div></li>
+        <li><div><strong>Valor terminal en t = 6</strong> con Gordon, usando D₇:
+          <div class="work">P₆ = D₇/(r − g∞) = 1,6427 / (0,08 − 0,02)
+   = 1,6427 / 0,06 = 27,379</div></div></li>
+        <li><div><strong>Descontar todo a hoy.</strong>
+          <div class="work">Σ D_t/1,08^t  (t=1..6)   =  5,819
+P₆/1,08^6 = 27,379/1,58687 = 17,253
+                              --------
+P₀                          =  23,07</div></div></li>
+        <li><div><strong>Dónde está el valor.</strong> El 75% del precio ($17,25 de $23,07) está en el valor terminal, es decir, en lo que pase <em>después</em> del horizonte que proyectaste explícitamente. Por eso la hipótesis de g∞ importa más que el detalle de los primeros años: subir g∞ de 2% a 3% eleva P₀ a $26,73, un +16%.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>P₀ = $23,07 · 75% en el valor terminal</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>Que los dividendos crezcan <strong>no</strong> implica PVGO positivo. Si ROE = r, la empresa puede crecer al 8% para siempre y el PVGO es exactamente cero: cada peso reinvertido rinde justo lo que costaba, y el precio es idéntico al de repartir todo. «Acción de crecimiento» significa <em>NPV positivo por delante</em>, no ventas, activos ni dividendos crecientes.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">La empresa XYZ es 100% patrimonio. Utilidades del año 0: <strong>$100M</strong>; payout 0% en los años 0 y 1, y <strong>60% desde el año 2</strong>. Sin nuevas inversiones las utilidades se quedarían en $100M a perpetuidad. Las inversiones de los años 0 y 1 rinden <strong>$0,20 anuales perpetuos por cada $1</strong>, empezando el año siguiente; las del año 2 en adelante rinden sólo <strong>$0,10</strong>. Costo de capital <strong>10%</strong>. Calcula E₁, E₂, el valor de mercado en el año 0 y el PVGO (sin contar el NPV de la inversión del año 0). <em>(Examen de muestra, pregunta 6.)</em></div>
+    <div class="a">
+      <div class="work">UTILIDADES
+  año 0: payout 0 ⇒ invierte los 100 ⇒ +0,20×100 = 20/año desde t=1
+  E₁ = 100 + 20 = 120
+  año 1: payout 0 ⇒ invierte los 120 ⇒ +0,20×120 = 24/año desde t=2
+  E₂ = 120 + 24 = 144
+
+DESDE EL AÑO 2   payout 60%, plowback 40%, ROE 10%
+  g = 0,40 × 0,10 = 4%
+  D₂ = 0,6 × 144 = 86,40
+
+VALOR
+  P₂ = D₃/(r−g) = 86,40×1,04 / 0,06 = 89,856/0,06 = 1.497,60
+  V₀ = (D₂ + P₂)/1,1² = (86,40 + 1.497,60)/1,21
+     = 1.584/1,21 = 1.309,09
+
+PVGO
+  valor sin más crecimiento = E₁/r = 120/0,10 = 1.200
+  PVGO = 1.309,09 − 1.200 = 109,09</div>
+      La comprobación es lo bonito del problema: el PVGO tiene que ser <em>exactamente</em> el NPV de la inversión del año 1 traído a hoy. Esa inversión es de $120 y genera $24 perpetuos: NPV en t=1 = −120 + 24/0,10 = <strong>+$120</strong>, y 120/1,1 = <strong>$109,09</strong> ✓. Las inversiones del año 2 en adelante aportan cero al PVGO porque su ROE (10%) es igual al costo de capital — crecen al 4% anual sin crear un peso de valor.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 6 ============ -->
+<section class="module" id="m6">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 06 · <b>Riesgo</b></div>
+    <h2>Riesgo, utilidad esperada y diversificación</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    La diversificación es «el único almuerzo gratis de los mercados»: baja la varianza sin bajar el retorno esperado. Pero tiene un piso — la <em class="term">covarianza promedio</em>, que ninguna cartera puede eliminar.
+  </div>
+
+  <div class="prose">
+    <h3>Decidir bajo incertidumbre: utilidad esperada</h3>
+    <p>No se comparan pagos esperados sino <strong>utilidades esperadas</strong>. La función <code>u(·)</code> transforma el pago de forma no lineal y las probabilidades entran linealmente como pesos.</p>
+    <div class="formula">
+      <div class="f">X preferido a Y   ⇔   E[u(X)] > E[u(Y)]
+
+u′ > 0     más es mejor (no saciedad)
+u″ < 0     aversión al riesgo  ⇔  u(E[x]) > E[u(x)]</div>
+      <div class="cap">La concavidad <b>es</b> la aversión al riesgo. La distancia vertical entre <code>u(E[x])</code> y <code>E[u(x)]</code> es lo que estás dispuesto a pagar por eliminar la incertidumbre.</div>
+    </div>
+
+    <div class="formula">
+      <div class="f">Prima de riesgo (aproximación de Taylor):
+
+    π = ½ · γ · σ²        con  γ = −x·u″(x)/u′(x)
+
+Utilidad potencia:  u(x) = x^(1−γ)/(1−γ)   ⇒  γ constante
+Utilidad lineal:    γ = 0  (neutral al riesgo)</div>
+      <div class="cap">Con γ = 3 y σ = 20%: π = ½ × 3 × 0,04 = <b>6%</b> de la riqueza. La prima crece con el <b>cuadrado</b> de la volatilidad: duplicar σ la cuadruplica.</div>
+    </div>
+
+    <h3>Media-varianza</h3>
+    <p>Si los retornos son normales, la utilidad esperada depende sólo de <code>(μ, σ²)</code>: más media es mejor, más varianza es peor, y la desviación estándar se convierte en <em>la</em> medida de riesgo. Es una simplificación fuerte — los retornos reales tienen <strong>colas gruesas</strong> (el retorno de diciembre de 2008 del ETF de bonos AGG estuvo a 5,8 desviaciones estándar de su media: bajo normalidad eso ocurre una vez cada 10 millones de años) y <strong>volatilidad cambiante</strong>.</p>
+
+    <h3>Aritmética de carteras</h3>
+    <div class="formula">
+      <div class="f">Pesos:  w_i = n_i·P_i / V ,   Σ w_i = 1
+
+Retorno esperado (siempre lineal):
+    r̄_p = Σ w_i · r̄_i
+
+Varianza (NO lineal):
+    σ²_p = Σ_i Σ_j w_i w_j σ_ij
+
+Dos activos:
+    σ²_p = w₁²σ₁² + w₂²σ₂² + 2w₁w₂ρσ₁σ₂
+
+Apalancamiento:
+    ratio = valor del activo / inversión neta</div>
+      <div class="cap">La media es una media ponderada; la <b>volatilidad no</b>. Ahí vive todo el beneficio de diversificar. Y ojo: <code>w_i</code> puede ser negativo (venta en corto, deuda) y aun así suman 1.</div>
+    </div>
+
+    <h3>El límite de la diversificación</h3>
+    <div class="formula">
+      <div class="f">Cartera equiponderada de n activos:
+
+    σ²_p = (1/n)·σ̄²  +  (1 − 1/n)·cov‾
+
+    n → ∞   ⇒   σ²_p → cov‾   (covarianza promedio)</div>
+      <div class="cap">Con n activos hay <b>n</b> varianzas y <b>n²−n</b> covarianzas. Con 100 activos: 100 contra 9.900. Por eso la covarianza domina y la varianza individual se diluye.</div>
+    </div>
+    <p>El riesgo que sobrevive es el <strong>sistemático</strong> (ciclo económico, inflación, liquidez); el que se va es el <strong>idiosincrático</strong> (un juicio, una huelga, un producto nuevo). Esta separación es la puerta de entrada al módulo 7.</p>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Cartera de dos ETFs</span></header>
+    <div class="body">
+      <p class="given">Retornos mensuales 2008-2018. SPY (acciones): media 0,68%, σ = 4,34%. AGG (bonos): media 0,90%, σ = 1,10%. Correlación <strong>0,04</strong>. Cartera 50/50.</p>
+      <ol class="steps">
+        <li><div><strong>Media: promedio ponderado, sin sorpresa.</strong>
+          <div class="work">r̄_p = 0,5 × 0,68% + 0,5 × 0,90% = 0,79%</div></div></li>
+        <li><div><strong>Varianza: aquí sí hay que trabajar.</strong>
+          <div class="work">σ₁² = 0,0434² = 0,00188
+σ₂² = 0,0110² = 0,00012
+σ₁₂ = 0,04 × 0,0434 × 0,0110 = 0,00002
+
+σ²_p = 0,25(0,00188) + 0,25(0,00012) + 2(0,25)(0,00002)
+     = 0,00047 + 0,00003 + 0,00001 = 0,00051</div></div></li>
+        <li><div><strong>Volatilidad de la cartera.</strong>
+          <div class="work">σ_p = √0,00051 = 2,26%</div></div></li>
+        <li><div><strong>Compararla con el promedio ponderado.</strong> Éste sería 0,5(4,34%) + 0,5(1,10%) = <strong>2,72%</strong>. La cartera tiene 2,26%: <strong>46 puntos base menos de riesgo, gratis</strong>. Ese descuento es exactamente lo que aporta la correlación baja.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>μ = 0,79% · σ = 2,26% (vs 2,72% ponderado)</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>La volatilidad de una cartera <strong>nunca</strong> es el promedio ponderado de las volatilidades, salvo en el caso extremo ρ = 1. Y al revés: si un enunciado te da desviaciones estándar y te pide la de la cartera, tienes que pasar por la <em>varianza</em> (sumar), y recién ahí sacar la raíz. Sumar desviaciones estándar directamente es el error número uno de este módulo.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">La acción estadounidense promedio tiene una volatilidad anual del <strong>30%</strong> y la correlación promedio entre dos acciones es <strong>0,25</strong>. (a) ¿Cuál es el piso de volatilidad de una cartera equiponderada enorme? (b) ¿Cuántas acciones necesitas para quedar a menos de 1 punto porcentual de ese piso?</div>
+    <div class="a">
+      <div class="work">(a) covarianza promedio
+    cov‾ = ρ·σ·σ = 0,25 × 0,30 × 0,30 = 0,0225
+    piso = √0,0225 = 15,0%
+
+(b) σ²_n = (1/n)(0,09) + (1 − 1/n)(0,0225)
+         = 0,0225 + 0,0675/n
+
+    quiero σ_n ≤ 16%  ⇒  σ²_n ≤ 0,0256
+    0,0675/n ≤ 0,0031  ⇒  n ≥ 21,8  ⇒  n = 22
+
+    comprobación:  n=22 → σ = 15,99%
+                   n=10 → σ = 17,10%
+                   n=50 → σ = 15,44%</div>
+      <strong>Piso 15%, y bastan 22 acciones</strong> para quedar a un punto. El resultado dice dos cosas incómodas para la intuición: (1) la mitad de la volatilidad individual (30% → 15%) es irreducible y no te la paga nadie por soportarla; (2) los rendimientos decrecientes son brutales — pasar de 22 a 50 acciones sólo te ahorra 55 puntos base. La diversificación <em>barata</em> se agota rápido.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 7 ============ -->
+<section class="module" id="m7">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 07 · <b>Riesgo</b></div>
+    <h2>Modelos de factores y APT</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    Si el riesgo diversificable se puede eliminar gratis, el mercado no puede pagarte por soportarlo. Sólo remunera las <em class="term">exposiciones a factores</em>. Eso es toda la APT, y se demuestra con un arbitraje de tres líneas.</div>
+
+  <div class="prose">
+    <h3>El modelo de factores</h3>
+    <div class="formula">
+      <div class="f">Un factor:
+    r̃_i = r̄_i + b_i·f̃ + ũ_i        E[f̃] = E[ũ_i] = 0
+
+    Var(r_i) = b_i²·Var(f) + Var(u_i)
+               ↑ sistemático   ↑ idiosincrático
+
+    Cov(r_i, r_j) = b_i·b_j·Var(f)
+
+K factores:
+    r̃_i = r̄_i + b_i1·f̃₁ + … + b_iK·f̃_K + ũ_i</div>
+      <div class="cap">Supuesto clave: los <b>ũ están incorrelacionados entre activos</b>. Toda la comovilidad pasa por los factores; las betas explican por qué las acciones se mueven juntas.</div>
+    </div>
+
+    <h3>Carteras bien diversificadas</h3>
+    <div class="formula">
+      <div class="f">Cartera equiponderada, σ̄²_u = varianza idiosincrática media:
+
+    Var(ũ_p) = σ̄²_u / n   →   0
+
+⇒  r̃_p ≈ r̄_p + b_p1·f̃₁ + … + b_pK·f̃_K
+    (sólo riesgo de factores)
+
+    b_pk = Σ_i w_i · b_ik      ← las betas son lineales</div>
+      <div class="cap">No hace falta que los pesos sean iguales: basta con que estén <b>repartidos</b>, sin que un activo domine.</div>
+    </div>
+
+    <h3>La relación de precios de la APT</h3>
+    <div class="formula">
+      <div class="f">    r̄_p − r_f = b_p1·λ₁ + b_p2·λ₂ + … + b_pK·λ_K
+
+    prima de riesgo = Σ (cantidad de riesgo) × (precio del riesgo)
+
+λ_k = prima de riesgo del factor k
+    = retorno en exceso esperado de una cartera
+      con b=1 en el factor k y b=0 en los demás
+      (cartera réplica del factor)</div>
+      <div class="cap">Vale exactamente para carteras diversificadas y «para casi todos» los activos individuales: si <em>muchos</em> tuvieran alfa, se podría armar una cartera diversificada con alfa, y eso es arbitraje.</div>
+    </div>
+
+    <h3>Cómo se implementa</h3>
+    <ul>
+      <li><strong>Elegir factores.</strong> La debilidad de la teoría: la APT no dice cuáles son. Es una pregunta empírica.</li>
+      <li><strong>Estimar betas</strong> con regresiones de <em>series de tiempo</em> de retornos de carteras sobre los factores.</li>
+      <li><strong>Estimar primas</strong> con regresiones de <em>corte transversal</em> de retornos sobre las betas estimadas.</li>
+    </ul>
+    <p>Dos implementaciones canónicas. <strong>Chen, Roll y Ross (1986)</strong> usan factores macro: producción industrial (MP), cambios en inflación esperada (DEI), inflación no anticipada (UI), cambios en la prima de riesgo crediticio (UPR) y en la prima de plazo (UTS). Resultado: todos los factores económicos están valorados y <em>el factor mercado deja de estarlo</em> una vez que están los demás.</p>
+    <p><strong>Fama y French (1993)</strong> muestran que los factores no tienen que ser variables macro: basta con que correlacionen con ellas. Construyen carteras réplica ordenando por tamaño y por book-to-market: <code>R_M − r_f</code>, <code>SMB</code> (pequeñas menos grandes) y <code>HML</code> (value menos growth), con primas mensuales de 0,43%, 0,27% y 0,40%. Los alfas de las 25 carteras quedan estadísticamente indistinguibles de cero.</p>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>El arbitraje que demuestra la APT</span></header>
+    <div class="body">
+      <p class="given">Un solo factor. Cartera <strong>A</strong>: retorno en exceso esperado 5%, beta 1,0. Cartera <strong>B</strong>: retorno en exceso esperado 8%, beta 2,0. Ambas bien diversificadas.</p>
+      <ol class="steps">
+        <li><div><strong>Detectar la inconsistencia.</strong> B tiene el doble de riesgo de factor que A pero no el doble de premio: 8% en vez de 10%. B está cara.</div></li>
+        <li><div><strong>Montar la operación.</strong> Vende $1 de B, compra $2 de A, y pide prestado $1 para financiarlo.
+          <div class="work">Exposición al factor:  2 × 1,0 − 1 × 2,0 = 0
+Inversión neta:        +2 − 1 − 1 = 0</div></div></li>
+        <li><div><strong>Calcular el pago.</strong>
+          <div class="work">+2 × (r_f + 5% + 1,0·f̃)      largo en A
+−1 × (r_f + 8% + 2,0·f̃)      corto en B
+−1 × (r_f)                    préstamo
+--------------------------------------------
+= 2(5%) − 1(8%) + 0·f̃  =  +2%  →  $0,02</div></div></li>
+        <li><div><strong>Conclusión general.</strong> Sin riesgo, sin capital, ganancia positiva. Para que esto no exista, el premio tiene que ser <em>proporcional</em> a la beta: <code>r̄ − r_f = b·λ</code>. Aquí λ = 5% obliga a que B pague 10%.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>$0,02 sin riesgo ⇒ la relación lineal es obligatoria</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Recuperar los precios de riesgo y armar la cartera réplica</span></header>
+    <div class="body">
+      <p class="given">Dos factores: crecimiento económico (GR) y precio de la energía (EN). Tasa libre de riesgo <strong>2%</strong>.
+      <br>Cartera A: retorno esperado 12%, b_GR = 1,00, b_EN = 1,25.
+      <br>Cartera B: retorno esperado 10%, b_GR = 2,00, b_EN = −0,50.</p>
+      <ol class="steps">
+        <li><div><strong>Plantear una ecuación por cartera.</strong>
+          <div class="work">A:  12% − 2% = 1,00·λ_GR + 1,25·λ_EN   →  10 = λ_GR + 1,25λ_EN
+B:  10% − 2% = 2,00·λ_GR − 0,50·λ_EN   →   8 = 2λ_GR − 0,50λ_EN</div></div></li>
+        <li><div><strong>Resolver el 2×2.</strong>
+          <div class="work">De B:  λ_GR = 4 + 0,25·λ_EN
+Sustituyendo en A:
+  10 = 4 + 0,25λ_EN + 1,25λ_EN = 4 + 1,5λ_EN
+  λ_EN = 4%      λ_GR = 5%</div></div></li>
+        <li><div><strong>Usarlos para valorar cualquier otra cartera.</strong> Una cartera C con b_GR = 1,0 y b_EN = 0,5:
+          <div class="work">r̄_C − r_f = 1,0(5%) + 0,5(4%) = 7%
+r̄_C = 9%</div>
+          Si se transara ofreciendo 11%, habría arbitraje contra A y B.</div></li>
+        <li><div><strong>Cartera réplica del factor EN</strong> (beta 1 en EN, 0 en GR):
+          <div class="work">  w_A + 2,0·w_B = 0        ⇒ w_A = −2w_B
+1,25w_A − 0,5w_B = 1
+
+1,25(−2w_B) − 0,5w_B = −3w_B = 1
+  w_B = −1/3     w_A = +2/3
+  resto en el activo libre de riesgo
+
+Premio =  (2/3)(10%) + (−1/3)(8%) = 4%  =  λ_EN ✓</div></div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>λ_GR = 5% · λ_EN = 4%</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>Las betas de una cartera son <strong>promedios ponderados de las betas</strong> (eso sí es lineal), pero las varianzas no. Y cuidado con el signo: una beta negativa a un factor <em>reduce</em> la prima exigida, porque ese activo sirve de cobertura. Si el enunciado te da primas de factor y betas negativas, el retorno esperado puede quedar <em>por debajo</em> de la tasa libre de riesgo — y está bien.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Modelo APT de dos factores que se cumple exactamente. Los factores tienen <strong>varianza unitaria</strong> y están incorrelacionados. Primas: λ₁ = 20%, λ₂ = 30%. Tasa libre de riesgo 2%. Acción 1: b₁₁ = 0,2, b₁₂ = 0,1, DE(u₁) = 0,20. Acción 2: b₂₁ = 0,1, b₂₂ = 0,4, DE(u₂) = 0,25. (a) Retorno esperado de la acción 1. (b) Correlación entre las dos acciones. (c) Pesos de una cartera con las dos cuyo retorno esperado sea la tasa libre de riesgo. <em>(Examen de muestra, pregunta 7.)</em></div>
+    <div class="a">
+      <div class="work">(a) PRIMA DE CADA ACCIÓN
+    acción 1: 0,2(20%) + 0,1(30%) = 4% + 3% =  7%
+    acción 2: 0,1(20%) + 0,4(30%) = 2% + 12% = 14%
+    r̄₁ = 2% + 7% = 9%
+
+(b) CON VARIANZAS UNITARIAS Y FACTORES ORTOGONALES
+    Cov(r₁,r₂) = b₁₁b₂₁ + b₁₂b₂₂
+               = 0,2(0,1) + 0,1(0,4) = 0,02 + 0,04 = 0,06
+    Var(r₁) = 0,2² + 0,1² + 0,20² = 0,04+0,01+0,04 = 0,09
+              σ₁ = 0,30
+    Var(r₂) = 0,1² + 0,4² + 0,25² = 0,01+0,16+0,0625 = 0,2325
+              σ₂ = 0,4822
+    ρ = 0,06 / (0,30 × 0,4822) = 0,4148
+
+(c) PRIMA DE LA CARTERA = 0
+    w₁(7%) + (1 − w₁)(14%) = 0
+    14 − 7w₁ = 0   ⇒   w₁ = 2,  w₂ = −1</div>
+      La parte (c) es la que hay que entender, no memorizar: <strong>w₁ = 2 y w₂ = −1</strong>. Como las dos primas son positivas, la única forma de que la cartera no gane prima es <em>vender en corto</em> la acción de prima alta y apalancarse en la de prima baja. La cartera resultante rinde la tasa libre de riesgo pero <strong>no es libre de riesgo</strong>: conserva exposición a los factores (b₁ = 2(0,2) − 1(0,1) = 0,3; b₂ = 2(0,1) − 1(0,4) = −0,2) y todo el riesgo idiosincrático. Retorno de activo seguro con riesgo de acción: la peor cartera posible.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 8 ============ -->
+<section class="module" id="m8">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 08 · <b>Riesgo</b></div>
+    <h2>Eficiencia de mercado</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    La eficiencia no supone que los inversionistas sean racionales. Basta con que existan unos pocos <em class="term">tiburones</em> sin restricciones financieras para que la información entre en los precios. Es una teoría de tiburones, no del inversionista promedio.
+  </div>
+
+  <div class="prose">
+    <h3>Definición operativa</h3>
+    <div class="formula">
+      <div class="f">Un mercado es eficiente respecto a la información I_t si:
+
+    E[ P_{t+1} + D_{t+1} | I_t ] = (1 + r) · P_t
+
+es decir: no se puede obtener beneficio en exceso
+operando con la información contenida en I_t.</div>
+      <div class="cap">Todo depende de qué metas en <b>I_t</b>: precios pasados (débil), información pública (semi-fuerte), toda la información incluida la privada (fuerte).</div>
+    </div>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Forma</th><th>La información es…</th><th>Lo que queda inútil</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Débil</td><td>precios y retornos pasados</td><td>análisis técnico</td></tr>
+          <tr><td class="k">Semi-fuerte</td><td>toda la información pública</td><td>análisis fundamental</td></tr>
+          <tr><td class="k">Fuerte</td><td>también la privada</td><td>información privilegiada</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>El problema de la hipótesis conjunta</h3>
+    <p>Para saber si un retorno es «en exceso» necesitas un modelo de riesgo que diga cuánto retorno estaba justificado. Por lo tanto <strong>toda prueba de la EMH es una prueba conjunta de EMH + modelo de riesgo</strong>. Si rechazas, no sabes cuál de los dos falló. Es la limitación estructural del módulo y aparece siempre en las preguntas conceptuales.</p>
+
+    <h3>La evidencia, en orden</h3>
+    <ul>
+      <li><strong>Forma débil.</strong> Las correlaciones seriales de retornos diarios son prácticamente cero (Fama 1965: 0,03 a un día; −0,05 a nueve días). Pero hay dos anomalías robustas: <em>momentum</em> a 6-12 meses (Jegadeesh-Titman 1993) y <em>reversión</em> a 36 meses (De Bondt-Thaler 1985).</li>
+      <li><strong>Forma semi-fuerte.</strong> Los estudios de eventos muestran que el precio salta en el día del anuncio y no deriva después: adquisiciones, omisiones de dividendo. La excepción incómoda es el <em>post-earnings-announcement drift</em> (Bernard-Thomas 1989): el precio sigue derivando en la dirección de la sorpresa durante semanas.</li>
+      <li><strong>Gestión activa.</strong> Los fondos mutuos rinden por debajo del índice en 60-70% de los años. Antes de comisiones van parejos con el benchmark; después, por debajo. Goyal y Wahal (2008), con 8.755 decisiones de contratación de 3.400 planes de pensiones: los gestores contratados brillan <em>antes</em> de ser contratados y son del montón <em>después</em>.</li>
+      <li><strong>Forma fuerte.</strong> Casi nadie la sostiene: los <em>insiders</em> obtienen retornos anormales. De ahí la legislación (Securities Exchange Act de 1934) y las murallas chinas dentro de los bancos.</li>
+    </ul>
+
+    <h3>Estudios de eventos: el procedimiento</h3>
+    <div class="formula">
+      <div class="f">1. Día 0 = día de la publicación de la noticia
+2. Retorno anormal:   AR_t = r_t − r_benchmark,t
+3. Promedio entre los N eventos:
+       AAR_t = (1/N)·Σ_n AR_{n,t}
+4. Acumular desde el inicio de la ventana:
+       CAAR_τ = Σ_{t=−30..τ} AAR_t</div>
+      <div class="cap">Se lee por la <b>forma</b> de la curva: escalón limpio en 0 y plano después = eficiente. Rampa que sigue subiendo = infrarreacción. Pico que se devuelve = sobrerreacción.</div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Leer un estudio de eventos</span></header>
+    <div class="body">
+      <p class="given">Retornos diarios de una empresa objetivo de una OPA y del mercado, en torno al anuncio (día 0).</p>
+      <ol class="steps">
+        <li><div><strong>Calcular el retorno anormal día por día.</strong>
+          <div class="work"> día   r_i     r_mkt    AR = r_i − r_mkt   CAAR
+ −2   +0,4%   +0,3%       +0,1%          +0,1%
+ −1   +1,2%   +0,2%       +1,0%          +1,1%
+  0  +18,0%   +0,5%      +17,5%         +18,6%
+ +1   +0,3%   +0,4%       −0,1%         +18,5%
+ +2   −0,2%   −0,3%       +0,1%         +18,6%
+ +3   +0,1%   +0,2%       −0,1%         +18,5%</div></div></li>
+        <li><div><strong>Interpretar la forma.</strong> Escalón de +17,5% concentrado en el día 0 y una CAAR plana después (oscila entre 18,5% y 18,6%). Ése es el patrón <strong>eficiente</strong>.</div></li>
+        <li><div><strong>La consecuencia práctica.</strong> Comprar el día +1, cuando ya leíste la noticia en el diario, te deja un retorno anormal acumulado de −0,1%. La información ya está en el precio: llegar después del salto no paga.</div></li>
+        <li><div><strong>El matiz del caso OPA.</strong> El precio salta pero típicamente <em>no</em> hasta el precio ofrecido. La brecha no es ineficiencia: es la probabilidad de que el trato se caiga, se renegocie o aparezca un tercero. Cerrar esa brecha es el negocio del <em>merger arbitrage</em>, y es un negocio con riesgo.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>CAAR +18,5% · sin deriva posterior ⇒ reacción eficiente</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>¿Un fondo que gana al índice tiene alfa?</span></header>
+    <div class="body">
+      <p class="given">Un fondo rindió <strong>12%</strong> el año pasado; su índice de referencia rindió <strong>10%</strong>. Su beta de mercado es <strong>1,15</strong>, la tasa libre de riesgo <strong>3%</strong> y cobra <strong>1,2%</strong> anual de comisión.</p>
+      <ol class="steps">
+        <li><div><strong>La comparación ingenua.</strong> 12% contra 10%: «le ganó al mercado por 200 puntos base». Ésta es la comparación que hace la industria, y es la que el curso desarma.</div></li>
+        <li><div><strong>Ajustar por riesgo.</strong> Con beta 1,15 el fondo <em>debía</em> rendir más que el índice, porque tomó más riesgo:
+          <div class="work">retorno justificado = r_f + β(r_mkt − r_f)
+                   = 3% + 1,15 × (10% − 3%)
+                   = 3% + 8,05% = 11,05%</div></div></li>
+        <li><div><strong>Alfa antes de comisiones.</strong>
+          <div class="work">α = 12,00% − 11,05% = +0,95%</div>
+          De los 200 pb de «sobre-rendimiento», 105 pb eran simplemente beta.</div></li>
+        <li><div><strong>Alfa que llega al inversionista.</strong>
+          <div class="work">α neto = 0,95% − 1,20% = −0,25%</div>
+          Éste es el hallazgo central del módulo: el valor agregado, si existe, se lo lleva el gestor vía comisiones, no el inversionista.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>α bruto +0,95% · α neto −0,25%</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>«Retorno mayor que el mercado» no es evidencia contra la EMH. Sin ajuste por riesgo, no hay afirmación que hacer. Y al revés: un alfa positivo tampoco <em>refuta</em> la eficiencia, porque siempre queda la salida de que al modelo de riesgo le falta un factor. Ésa es la hipótesis conjunta, y saber nombrarla vale puntos.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Una estrategia de <em>momentum</em> rindió <strong>14%</strong> anual en el backtest. Sus cargas estimadas son: β_mercado = 0,9, β_SMB = +0,8, β_HML = −0,4. Con r_f = 2%, prima de mercado 6%, λ_SMB = 3% y λ_HML = 4%: ¿queda alfa después del modelo de tres factores? ¿Qué concluyes?</div>
+    <div class="a">
+      <div class="work">Retorno justificado por Fama-French:
+   2% + 0,9(6%) + 0,8(3%) − 0,4(4%)
+ = 2% + 5,4% + 2,4% − 1,6%
+ = 8,2%
+
+α = 14% − 8,2% = +5,8%</div>
+      Queda un alfa grande. Y aquí es donde el módulo pide honestidad intelectual en vez de una conclusión: <strong>5,8% de alfa admite tres lecturas y ninguna se puede descartar con estos datos.</strong>
+      <div class="work">(1) El mercado es ineficiente en forma débil
+    (momentum usa sólo precios pasados).
+(2) Falta un factor de riesgo en el modelo,
+    y momentum lo está cobrando.
+(3) Es un artefacto del backtest: costos de
+    transacción, sesgo de supervivencia, o
+    data mining sobre miles de estrategias.</div>
+      El curso se inclina por una mezcla de (2) y (3), y aporta un argumento fuerte: las estrategias de momentum son <em>públicas y conocidas desde 1993</em>, y su rentabilidad no ha sido arbitrada del todo. En un mercado con tiburones, que algo sobreviva 30 años a la vista de todos sugiere que <strong>es riesgoso</strong>, no que sea gratis. El desafío para explicarlo con riesgo también es real: las acciones entran y salen de las carteras de momentum cada seis meses, así que su riesgo sistemático tendría que cambiar igual de rápido.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 9 ============ -->
+<section class="module" id="m9">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 09 · <b>Finanzas corporativas</b></div>
+    <h2>NPV y el costo de oportunidad del capital</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    El objetivo del gerente financiero es <strong>maximizar el valor de mercado actual</strong>. No porque el dinero sea lo único que importe, sino porque es el único objetivo en el que todos los accionistas — el impaciente, el averso al riesgo y el optimista — coinciden.
+  </div>
+
+  <div class="prose">
+    <h3>Costo de oportunidad del capital</h3>
+    <p>La empresa siempre puede devolverle la plata al accionista, y el accionista siempre puede invertirla en el mercado. Por lo tanto la vara de un proyecto es <strong>lo que ofrecen inversiones equivalentes en tiempo y riesgo</strong>. Eso es el COC, y por eso es una tasa <em>del proyecto</em>, no <em>de la empresa</em>.</p>
+    <div class="formula">
+      <div class="f">NPV = −I  +  E[C₁]/(1 + r)
+
+Regla: tomar el proyecto sólo si NPV > 0.
+
+r = COC = retorno esperado de activos transados
+          con el mismo timing y el mismo riesgo</div>
+      <div class="cap">El NPV es literalmente <b>cuánto sube el valor de mercado de la empresa</b> por tomar el proyecto. No es una métrica contable: es el aumento de riqueza del accionista.</div>
+    </div>
+
+    <h3>Por qué maximizar valor de mercado, y no otra cosa</h3>
+    <ol style="margin:0;padding-left:22px;display:flex;flex-direction:column;gap:7px">
+      <li>Los accionistas quieren tres cosas: más riqueza, el patrón temporal de consumo que prefieren y el perfil de riesgo que prefieren.</li>
+      <li>Las dos últimas se las pueden dar <strong>ellos mismos</strong> en el mercado financiero: prestando, endeudándose, comprando o vendiendo acciones.</li>
+      <li>El gerente sólo puede ayudar con la primera. Luego su único trabajo es <strong>maximizar el valor de mercado</strong>.</li>
+    </ol>
+    <p>Ésta es la <em class="term">separación entre propiedad y gestión</em>: con mercados perfectos, el gerente no necesita conocer las preferencias de sus accionistas. La abuela de 80 años que no verá el proyecto madurar no necesita que la empresa cambie de plan: vende sus acciones, que ya incorporan el valor futuro.</p>
+
+    <h3>Las salvedades prácticas</h3>
+    <ul>
+      <li><strong>Otros grupos de interés</strong> — trabajadores, comunidades, acreedores.</li>
+      <li><strong>Problemas de agencia</strong> — la gerencia puede poner su interés primero.</li>
+      <li><strong>Imperfecciones del mercado</strong> — costos de transacción, información asimétrica, impuestos.</li>
+    </ul>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>La mina de oro del rey Salomón</span></header>
+    <div class="body">
+      <p class="given">Tang Associates reabre una mina: <strong>0,11M de onzas</strong> de oro, un año de producción, inversión inicial <strong>$86M</strong>, oro hoy a <strong>$800/oz</strong>, costo de capital 10%. Los accionistas están divididos: la mitad optimistas (esperan el oro a +20%), la mitad pesimistas (+5%).</p>
+      <ol class="steps">
+        <li><div><strong>NPV según los optimistas.</strong>
+          <div class="work">precio esperado = 800 × 1,20 = 960
+NPV = −86 + (0,11 × 960)/1,10
+    = −86 + 105,6/1,10 = −86 + 96 = +$10M</div></div></li>
+        <li><div><strong>NPV según los pesimistas.</strong>
+          <div class="work">precio esperado = 800 × 1,05 = 840
+NPV = −86 + (0,11 × 840)/1,10
+    = −86 + 92,4/1,10 = −86 + 84 = −$2M</div>
+          Uno dice que sí y el otro que no. ¿Vota el directorio?</div></li>
+        <li><div><strong>Ninguno de los dos tiene razón: pregúntale al mercado.</strong> ¿Cuánto vale <em>hoy</em> una onza de oro entregada en un año? El oro se guarda como inversión de largo plazo, no paga flujos intermedios y casi no cuesta almacenarlo. Entonces una onza dentro de un año es equivalente a una onza hoy:
+          <div class="work">PV(1 oz en un año) = $800</div>
+          El descuento y el crecimiento esperado ya están dentro del precio spot. Descontar un precio esperado a una tasa inventada es contarlos dos veces.</div></li>
+        <li><div><strong>El NPV correcto.</strong>
+          <div class="work">NPV = −86 + 0,11 × 800 = −86 + 88 = +$2M</div>
+          El proyecto se hace. Y nadie tiene que ceder: el valor de mercado subió $2M para <em>todos</em> los accionistas, opinen lo que opinen sobre el oro. Quien quiera apostar contra el oro puede hacerlo por su cuenta en el mercado.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>NPV = +$2M, con precios de mercado y no con pronósticos</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>Cuando el activo del proyecto <strong>se transa</strong>, usa su precio de mercado y no tu pronóstico. Descontar tu propio pronóstico del precio a una tasa ajustada por riesgo duplica el ajuste: el mercado ya descontó tanto la expectativa como el riesgo al fijar el spot. Este error aparece disfrazado de «análisis de sensibilidad» y es la mitad del ejemplo de la mina.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Una minera puede extraer <strong>10 millones de libras de cobre</strong> dentro de un año. La inversión hoy es <strong>$38M</strong>. El cobre spot está en <strong>$4,00/lb</strong>, el forward a un año se cotiza en <strong>$4,15/lb</strong>, y el equipo comercial de la empresa pronostica <strong>$4,50/lb</strong>. La tasa libre de riesgo es 3% y el costo de capital de la empresa es 8%. ¿Cuál es el NPV?</div>
+    <div class="a">
+      <div class="work">RUTA CORRECTA — usar el precio de mercado del cobre a un año
+  El forward YA está ajustado por riesgo: fijar hoy ese precio
+  convierte el ingreso en un flujo SEGURO.
+  ⇒ se descuenta a la tasa LIBRE DE RIESGO.
+
+  ingreso asegurado = 10M × 4,15 = $41,5M
+  PV = 41,5 / 1,03 = $40,29M
+  NPV = −38 + 40,29 = +$2,29M
+
+RUTA EQUIVOCADA — usar el pronóstico propio
+  PV = (10M × 4,50) / 1,08 = 45/1,08 = $41,67M
+  NPV = −38 + 41,67 = +$3,67M   ← inflado en $1,38M</div>
+      El proyecto se hace en los dos casos, pero por <strong>$2,29M</strong>, no por $3,67M. Dos cosas que vale la pena fijar. Primera: el 8% de la empresa no pinta nada acá — una vez que vendes la producción forward, el flujo dejó de ser riesgoso y la tasa correcta es el 3%. Segunda: la brecha entre $4,15 y $4,50 no es «el mercado equivocado»; si de verdad crees que el cobre irá a $4,50, ésa es una <em>apuesta de trading</em> separada, y hay que decidirla por su cuenta y no colarla dentro del NPV de la mina.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 10 ============ -->
+<section class="module" id="m10">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 10 · <b>Finanzas corporativas</b></div>
+    <h2>Presupuesto de capital</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    El 90% de los puntos de este módulo no está en la fórmula del NPV, sino en armar bien el <strong>flujo de caja</strong>: incremental, después de impuestos, con capital de trabajo, sin costos hundidos y con canibalización.
+  </div>
+
+  <div class="prose">
+    <h3>Las cinco reglas del flujo de caja</h3>
+    <ul>
+      <li><strong>Caja, no utilidad contable.</strong> La contabilidad devenga; el NPV se paga con plata.</li>
+      <li><strong>Después de impuestos.</strong> Siempre.</li>
+      <li><strong>Incremental.</strong> Compara la empresa con y sin el proyecto.</li>
+      <li><strong>Los costos hundidos no cuentan.</strong> El I+D ya gastado no se recupera decidiendo que no.</li>
+      <li><strong>Incluye capital de trabajo y costos de oportunidad.</strong> Usar un activo que ya tienes no es gratis si tenía otro uso; si no lo tenía (capacidad ociosa con costo fijo), sí es gratis.</li>
+    </ul>
+
+    <div class="formula">
+      <div class="f">CF = (1 − τ)·(Ingresos − Gastos operativos sin depreciación)
+     + τ·Depreciación
+     − CAPEX
+     − ΔCapital de trabajo
+
+Capital de trabajo = Inventario + CxC − CxP
+
+τ·Depreciación  =  ESCUDO FISCAL
+  (la depreciación no es caja, pero baja el impuesto)</div>
+      <div class="cap">La depreciación entra al flujo <b>sólo</b> por el escudo fiscal. Si τ = 0, la depreciación desaparece por completo del cálculo.</div>
+    </div>
+
+    <h3>Las alternativas al NPV, y por qué pierden</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Regla</th><th>Qué mide</th><th>Dónde falla</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Payback</td><td>periodos hasta recuperar la inversión</td><td>ignora el descuento y todo lo que ocurre después del corte</td></tr>
+          <tr><td class="k">IRR</td><td>tasa que anula el NPV</td><td>puede no existir, puede haber varias, y ordena mal proyectos de distinta escala</td></tr>
+          <tr><td class="k">Índice de rentabilidad</td><td>PV(flujos)/inversión</td><td>escala por el desembolso inicial: rompe con proyectos mutuamente excluyentes</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>La IRR coincide con el NPV sólo si: hay un único desembolso y es en t=0, se evalúa un solo proyecto, el COC es el mismo en todos los periodos, y el umbral es igual al COC. En cuanto falla una de las cuatro, hay que volver al NPV.</p>
+    <p>El caso clásico de escala: Proyecto 1 invierte $10.000 y devuelve $20.000 (IRR 100%, NPV a 10% = $8.182); Proyecto 2 invierte $20.000 y devuelve $36.000 (IRR 80%, NPV = $12.727). La IRR elige el 1; el NPV elige el 2, y el NPV tiene razón: <strong>lo que se lleva al banco son pesos, no porcentajes</strong>.</p>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>El escudo fiscal de la depreciación</span></header>
+    <div class="body">
+      <p class="given">Inversión de <strong>$500</strong> en t=0, depreciada linealmente en 5 años. Flujo operativo: 0, 100, 300, 300, 300 en los años 1 a 5. Tasa de impuesto <strong>50%</strong>, descuento <strong>10%</strong>.</p>
+      <ol class="steps">
+        <li><div><strong>Construir la tabla.</strong> La depreciación es 500/5 = 100 por año.
+          <div class="work">Año             1      2      3      4      5
+Flujo oper.     0    100    300    300    300
+Depreciación  100    100    100    100    100
+Renta imponible −100   0    200    200    200
+Impuesto (50%)  −50    0    100    100    100
+CF después imp.  50   100    200    200    200</div>
+          Nota el año 1: pérdida contable de 100 que genera un crédito fiscal de 50, así que el flujo de caja es <strong>positivo</strong> aunque el resultado operativo sea cero.</div></li>
+        <li><div><strong>Descontar.</strong>
+          <div class="work">50/1,10    =  45,45
+100/1,10²  =  82,64
+200/1,10³  = 150,26
+200/1,10⁴  = 136,60
+200/1,10⁵  = 124,18
+             ------
+               539,13</div></div></li>
+        <li><div><strong>NPV.</strong>
+          <div class="work">NPV = −500 + 539,13 = +$39,13</div></div></li>
+        <li><div><strong>Cuánto pesa el escudo.</strong> El escudo fiscal vale τ×Dep = 50 por año durante 5 años, cuyo VP es 50 × 3,7908 = <strong>$189,54</strong>. Sin él, el proyecto tendría un NPV de −$150,39 y no se haría. El régimen tributario no es un detalle: aquí es la decisión completa.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>NPV = +$39,13 · escudo fiscal $189,54</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>MSW y los Turbo-Widgets: el caso con todas las trampas</span></header>
+    <div class="body">
+      <p class="given">MSW evalúa un producto nuevo. I+D ya gastado en 3 años: <strong>$1M</strong>. Máquina nueva: <strong>$2M</strong>, dura 15 años, valor residual $50.000, depreciable linealmente a $0 en 10 años. La pintura se hace con capacidad ociosa de una máquina que ya cuesta $30.000 corra o no corra. Costo operativo: $40.000 al año. Ventas: $400.000, pero canibaliza $20.000 de ventas de widgets normales. Capital de trabajo: $250.000 durante toda la vida del proyecto. Impuesto <strong>34%</strong>, COC <strong>10%</strong>.</p>
+      <ol class="steps">
+        <li><div><strong>Depurar el enunciado antes de calcular.</strong>
+          <div class="work">I+D de $1M          → HUNDIDO, no entra
+Pintura $30.000     → costo fijo que existe igual,
+                      NO se le carga al proyecto
+Canibalización      → SÍ entra: resta $20.000 de ventas
+Capital de trabajo  → sale en t=0, VUELVE en t=15
+Valor residual      → totalmente gravable (valor
+                      libro = 0 después del año 10)</div></div></li>
+        <li><div><strong>Ventas incrementales y depreciación.</strong>
+          <div class="work">Margen operativo = 400 − 40 − 20 = $340 (miles)
+Depreciación = 2.000/10 = $200 al año, años 1 a 10</div></div></li>
+        <li><div><strong>Los cuatro tramos del flujo</strong> (en miles):
+          <div class="work">t = 0      −(2.000 + 250)                     = −2.250,0
+t = 1-10   340(1 − 0,34) + 200(0,34)
+           = 224,4 + 68,0                       =   292,4
+t = 11-14  340(1 − 0,34)                        =   224,4
+                        ↑ se acabó la depreciación
+t = 15     224,4 + 50(1 − 0,34) + 250
+           = 224,4 + 33,0 + 250,0               =   507,4
+                        ↑ residual   ↑ recupero del WC</div></div></li>
+        <li><div><strong>Descontar cada tramo al 10%.</strong>
+          <div class="work">años 1-10:   292,4 × 6,14457              = 1.796,68
+años 11-14:  224,4 × (7,36669 − 6,14457) =   274,24
+año 15:      507,4 / 1,10^15 = 507,4/4,17725 = 121,47
+                                            ----------
+suma de los VP                              = 2.192,39
+NPV = −2.250,0 + 2.192,39                   =   −57,62</div></div></li>
+        <li><div><strong>Decisión y lectura.</strong> NPV = <strong>−$57.617</strong>: no se hace. Y fíjate en lo ajustado que quedó: si hubieras cargado mal cualquiera de las trampas, el signo cambia. Cargar el I+D hundido lo hunde más ($−1.057.617); no restar la canibalización lo salva (+$42.783); olvidar el escudo fiscal lo mata (−$475.448).</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>NPV = −$57.617 ⇒ rechazar</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>El <strong>valor residual es gravable sobre la ganancia respecto al valor libro</strong>, no sobre cero. Si la máquina ya está totalmente depreciada, el valor libro es $0 y todo el residual paga impuesto: entran <code>V(1−τ)</code>. Si aún queda valor libro <code>B</code>, entran <code>V − τ(V − B)</code>. Y el capital de trabajo <strong>vuelve</strong> al final del proyecto: olvidar ese ingreso es el error que más NPV destruye por descuido.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Una empresa de semiconductores evalúa un sistema de medición de silicio de <strong>$500.000</strong>, más <strong>$25.000</strong> de instalación. Ahorra <strong>$100.000</strong> anuales en materia prima y elimina <strong>40 horas semanales</strong> de un servicio externo que cobra <strong>$40/hora</strong>. En 3 años renuevan la planta y venderán el equipo en <strong>$25.000</strong>. Depreciación lineal a 3 años, descuento <strong>10%</strong>. Calcula los flujos de los años 0, 1 y 3 y el NPV, primero <strong>sin impuestos</strong> y luego con una tasa de <strong>35%</strong>. <em>(Examen de muestra, pregunta 8.)</em></div>
+    <div class="a">
+      <div class="work">PREPARACIÓN
+  inversión = 500.000 + 25.000 = 525.000  (la instalación
+              se capitaliza, no se gasta)
+  ahorro de mano de obra = 40 h × $40 × 52 sem = 83.200
+  ahorro total anual = 100.000 + 83.200 = 183.200
+  depreciación = 525.000 / 3 = 175.000
+
+SIN IMPUESTOS
+  CF₀ = −525.000
+  CF₁ = 183.200
+  CF₃ = 183.200 + 25.000 = 208.200
+  NPV = −525.000 + 183.200(2,48685) + 25.000/1,331
+      = −525.000 + 455.591 + 18.783
+      = −$50.626
+
+CON IMPUESTO DEL 35%
+  CF₀ = −525.000            (sin efecto tributario en t=0)
+  CF₁ = 183.200(0,65) + 175.000(0,35)
+      = 119.080 + 61.250 = 180.330
+  residual neto = 25.000(0,65) = 16.250
+      (valor libro = 0 al final del año 3)
+  CF₃ = 180.330 + 16.250 = 196.580
+  NPV = −525.000 + 180.330(2,48685) + 16.250/1,331
+      = −525.000 + 448.444 + 12.209
+      = −$64.337</div>
+      Se rechaza en los dos casos. Lo interesante es que <strong>los impuestos empeoran el proyecto</strong> (de −$50.626 a −$64.337), lo que parece contraintuitivo si uno piensa «el escudo fiscal ayuda». No hay contradicción: éste es un proyecto de <em>ahorro de costos</em>, así que el 35% se lleva parte del beneficio ($64.120 de VP) y el escudo fiscal sólo devuelve una porción ($52.348 de VP). El escudo compensa, no revierte. Dos detalles que el examen castiga: la instalación se <strong>capitaliza</strong> (no es gasto del año 0), y hay que anualizar bien las 40 horas semanales — usar 40 h × $40 × 12 en vez de × 52 es el error clásico.
+    </div>
+  </details>
+</section>
+
+<!-- ============ CHULETA ============ -->
+<section class="module closing" id="chuleta">
+  <div class="mod-head">
+    <div class="mod-num">Repaso</div>
+    <h2>Mapa de fórmulas</h2>
+  </div>
+  <div class="prose">
+    <p>Para la víspera del examen: todo lo que hay que poder escribir de memoria, agrupado como aparece en el curso.</p>
+  </div>
+
+  <div class="cardgrid">
+    <div class="card">
+      <h4>Valor presente</h4>
+      <div class="f">PV = E[CF]/(1+r)
+PV = Σ E[C_t]/(1+r_t)^t
+FV = PV(1+r)^T
+P = Σ φ_s · x_s
+Σ φ_s = 1/(1+r_f)</div>
+    </div>
+    <div class="card">
+      <h4>Flujos especiales</h4>
+      <div class="f">Anualidad (C/r)[1−(1+r)^−T]
+Anual. g  C/(r−g)[1−((1+g)/(1+r))^T]
+Perpetuidad      C/r
+Perpetuidad g    C/(r−g)
+OJO: valor fechado en t = primer pago − 1</div>
+    </div>
+    <div class="card">
+      <h4>Tasas</h4>
+      <div class="f">EAR = (1 + APR/k)^k − 1
+continua: EAR = e^APR − 1
+1+r_real = (1+r_nom)/(1+i)
+CF real = CF nom/(1+i)^t
+nominal con nominal, real con real</div>
+    </div>
+    <div class="card">
+      <h4>Bonos</h4>
+      <div class="f">B_t = 1/(1+r_t)^t
+P = Σ C·B_t + F·B_T
+P = Σ C/(1+y)^t + F/(1+y)^T
+c = y ⇔ P = par
+E[r₁(t)] = (1+r_{t+1})^{t+1}/(1+r_t)^t − 1</div>
+    </div>
+    <div class="card">
+      <h4>Duración</h4>
+      <div class="f">D = Σ t·[CF_t/(1+y)^t]/P
+MD = D/(1+y) = −(1/P)dP/dy
+ΔP/P ≈ −MD·Δy + ½C(Δy)²
+cero: D = T exacto
+unidades de D = unidades de la tabla</div>
+    </div>
+    <div class="card">
+      <h4>Acciones</h4>
+      <div class="f">P₀ = Σ D_t/(1+r)^t
+Gordon P₀ = D₁/(r−g)
+r = D₁/P₀ + g
+D = p·E ,  b = 1−p ,  g = b·ROE
+P₀ = E₁/r + PVGO
+P/E = 1/r + PVGO/E₁</div>
+    </div>
+    <div class="card">
+      <h4>Riesgo</h4>
+      <div class="f">π = ½·γ·σ²   γ = −x u″/u′
+r̄_p = Σ w_i r̄_i
+σ²_p = Σ Σ w_i w_j σ_ij
+2 activos: w₁²σ₁²+w₂²σ₂²+2w₁w₂ρσ₁σ₂
+σ²_p → cov‾ cuando n → ∞</div>
+    </div>
+    <div class="card">
+      <h4>APT</h4>
+      <div class="f">r̃_i = r̄_i + Σ b_ik f̃_k + ũ_i
+r̄_p − r_f = Σ b_pk · λ_k
+Var = Σ b²Var(f) + Var(u)
+Cov(i,j) = b_i b_j Var(f)   (1 factor)
+b_p = Σ w_i b_i   (lineal)</div>
+    </div>
+    <div class="card">
+      <h4>Eficiencia</h4>
+      <div class="f">E[P_{t+1}+D_{t+1}|I_t] = (1+r)P_t
+débil / semi-fuerte / fuerte
+AR = r_i − r_bench
+CAAR = Σ AAR
+α = r − [r_f + β(r_m − r_f)]</div>
+    </div>
+    <div class="card">
+      <h4>Presupuesto de capital</h4>
+      <div class="f">CF = (1−τ)(Ing − Gastos)
+     + τ·Dep − CAPEX − ΔWC
+residual: V − τ(V − Libro)
+WC vuelve al final
+NPV &gt; 0 ⇒ tomar</div>
+    </div>
+    <div class="card">
+      <h4>Reglas alternativas</h4>
+      <div class="f">IRR: NPV(IRR) = 0
+  falla con escala, múltiples IRR
+PI = PV(flujos)/I₀ &gt; 1
+  falla con proyectos excluyentes
+Payback: ignora descuento y la cola</div>
+    </div>
+    <div class="card">
+      <h4>Sanidad mental</h4>
+      <div class="f">La tasa es del PROYECTO, no de la empresa
+Crecer ≠ crear valor (mira ROE vs r)
+Vol. de cartera ≠ promedio de vol.
+Costos hundidos: fuera, siempre
+Si el activo se transa, usa su precio</div>
+    </div>
+  </div>
+
+  <footer>
+    Resumen elaborado a partir de las diapositivas de clase, las recitaciones y el examen de muestra de <strong>15.415.1x Foundations of Modern Finance I</strong> (MITx MicroMasters in Finance, Profs. Leonid Kogan y Jiang Wang). Los ejemplos numéricos están recalculados de principio a fin; los que provienen directamente del curso conservan sus cifras originales. Textos de apoyo: Brealey-Myers-Allen, <em>Principles of Corporate Finance</em> 13e, y Bodie-Kane-Marcus, <em>Investments</em> 11e.
+  </footer>
+</section>
+
+</main>
+</div>
+</body>
+</html>

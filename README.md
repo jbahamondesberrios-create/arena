@@ -56,6 +56,7 @@ Es para repasar antes de pelear.
 - Cada uno lleva índice de apartados y navegación al anterior / siguiente.
 - Al terminar de leer, **«Marcar como repasado» da +40 XP** (una sola vez) y deja un ✓ en el índice.
 - Desde cualquier apunte hay un botón directo a los juegos de ese mismo mundo.
+- Arriba del todo hay un enlace a los **cuadernos del MicroMasters**, que son otra cosa: cursos enteros, no apartados sueltos.
 
 ### ✍️ Ejercicios resueltos
 
@@ -80,6 +81,47 @@ las cuentas y el resultado destacado — más un aviso con el error clásico de 
 Y otros cinco apuntes **amplían la teoría** de cada bloque: los porqués de las reglas de derivación,
 integración avanzada, sistemas de EDO y Laplace, los dos teoremas fundamentales de la valoración,
 y tipos de interés con exóticas.
+
+## 📕 Cuadernos del MicroMasters
+
+Aparte de los apuntes cortos, la Arena lleva **los cinco cursos del MITx MicroMasters in Finance
+resumidos enteros**, uno por cuaderno. Se abren desde la banda del inicio o desde la sala de estudio.
+
+| # | Curso | Módulos | Ejemplos | Retos |
+|---|---|---|---|---|
+| 1 | **15.516x** Contabilidad financiera · John Core | 10 | 24 | 10 |
+| 2 | **15.415.1x** Fundamentos de finanzas modernas I · Kogan y Wang | 10 | 19 | 10 |
+| 3 | **15.415.2x** Fundamentos de finanzas modernas II · Kogan y Wang | 10 | 16 | 10 |
+| 4 | **15.455x** Métodos matemáticos · Paul Mende | 9 | 11 | 9 |
+| 5 | **15.435x** Mercados de derivados · Deborah Lucas | 10 | 23 | 10 |
+
+Están en el orden de estudio recomendado del programa, que no es el de la numeración: Contabilidad
+no tiene prerrequisitos y va primero. Cada módulo trae la idea en una frase, las fórmulas, ejemplos
+numéricos resueltos línea por línea, la trampa que cae en el examen y un reto con la solución
+escondida — casi todos sacados del examen de muestra del propio curso. Al final, un mapa de fórmulas
+para la víspera.
+
+**Marcar un cuaderno como repasado da +120 XP** (una sola vez), igual que los apuntes pero acorde a
+lo que son: un curso entero, no un apartado.
+
+### De dónde salen y cómo se actualizan
+
+No se escriben aquí. La fuente de verdad es el archivo de cada curso en
+`Desktop/Joaquín/Finanzas/estudios/MIT program/`, que es también lo que se publica como Artifact.
+Lo de `cuadernos/` son copias envueltas: los originales son **fragmentos** sin `<html>` ni `<head>`
+(el Artifact los envuelve al publicar), así que sin `<meta charset>` el navegador los abriría con la
+codificación del sistema y **se romperían todas las tildes**. La envoltura añade eso, la barra de
+«← La Arena» y una línea de CSS que baja el índice lateral del cuaderno, que también es sticky.
+
+```bash
+node herramientas/generar-cuadernos.js
+```
+
+Después hay que **subir `VERSION` en `sw.js`**, como con cualquier otro archivo.
+
+La ficha que se ve en el índice (título, profesor, temas, minutos) está en `datos/cuadernos.js`.
+El `id` de cada uno es la clave de leído en `Motor.leidos` — la misma tabla que los apuntes, así que
+la copia del progreso entre dispositivos ya se los lleva sin tocar nada. **No cambiar esos `id`.**
 
 ## 🎖️ Juegos especiales
 
@@ -266,6 +308,7 @@ un concepto es agregar una línea al array correspondiente — la lógica del ju
 - `datos/geografia.js` → tabla `CRUDO` de países (`[nombre, capital, continente, lat, lon, bandera]`), `conceptos` y `vf`
 - `datos/mapa-mundi.js` → contornos de los países en SVG, generados desde Natural Earth 1:50m
   (dominio público) en proyección equirectangular 720×360, con `areas` y `cajas` de cada uno
+- `datos/cuadernos.js` → la ficha de los cinco cuadernos del MicroMasters (el texto vive en `cuadernos/`, no aquí)
 
 El campo `n` de cada entrada es su nivel (1 fácil, 2 intermedio, 3 difícil).
 Los problemas de cálculo son generadores en `js/juegos.js` (objetos `PROBLEMAS` y `PROB_MAT`).

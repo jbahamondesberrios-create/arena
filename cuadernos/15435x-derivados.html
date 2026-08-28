@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#12243f">
+<link rel="icon" href="../iconos/icono-192.png">
+<title>Cuaderno 15.435x</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap">
+
+<style>
+:root{
+  --paper:#f3f5f2;
+  --surface:#ffffff;
+  --surface-2:#e9ede9;
+  --ink:#131c22;
+  --ink-2:#4a5a63;
+  --ink-3:#7c8a90;
+  --rule:#d5dbd6;
+  --rule-strong:#b6c0b9;
+  --accent:#0d6e5c;
+  --accent-soft:#e0efe9;
+  --accent-2:#a86a12;
+  --accent-2-soft:#f6eddc;
+  --loss:#a13a2c;
+  --shadow:0 1px 2px rgba(19,28,34,.06),0 8px 24px -18px rgba(19,28,34,.4);
+  --maxw:71ch;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0d1418;
+    --surface:#141d22;
+    --surface-2:#1a252b;
+    --ink:#e2e8e5;
+    --ink-2:#9db0b6;
+    --ink-3:#7a8b91;
+    --rule:#26333a;
+    --rule-strong:#3a4a52;
+    --accent:#59c4a7;
+    --accent-soft:#122a26;
+    --accent-2:#dfa54a;
+    --accent-2-soft:#2a2317;
+    --loss:#e58c7a;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 26px -18px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0d1418;
+  --surface:#141d22;
+  --surface-2:#1a252b;
+  --ink:#e2e8e5;
+  --ink-2:#9db0b6;
+  --ink-3:#7a8b91;
+  --rule:#26333a;
+  --rule-strong:#3a4a52;
+  --accent:#59c4a7;
+  --accent-soft:#122a26;
+  --accent-2:#dfa54a;
+  --accent-2-soft:#2a2317;
+  --loss:#e58c7a;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 26px -18px rgba(0,0,0,.9);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+  font-size:17px;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:Fraunces,Georgia,serif;text-wrap:balance;margin:0;line-height:1.15;font-weight:600}
+p{margin:0}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+/* ---------- shell ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.shell{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+@media(min-width:1040px){
+  .shell{grid-template-columns:212px minmax(0,1fr);gap:56px;align-items:start}
+}
+
+/* ---------- hero ---------- */
+.hero{border-bottom:1px solid var(--rule);background:var(--surface)}
+.hero-in{padding:64px 0 44px;display:flex;flex-direction:column;gap:22px}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--accent);font-weight:500;
+}
+.hero h1{font-size:clamp(38px,6.4vw,66px);letter-spacing:-.02em;max-width:16ch}
+.hero .lede{font-size:19px;color:var(--ink-2);max-width:60ch}
+.facts{
+  display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--rule);border-radius:3px;
+  overflow:hidden;background:var(--paper);margin-top:8px;
+}
+.fact{padding:12px 20px;border-right:1px solid var(--rule);flex:1 1 auto;min-width:132px}
+.fact:last-child{border-right:0}
+.fact dt{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 3px}
+.fact dd{margin:0;font-family:Fraunces,serif;font-size:19px;font-weight:600}
+
+/* ---------- nav ---------- */
+nav.toc{display:none}
+@media(min-width:1040px){
+  nav.toc{
+    display:block;position:sticky;top:0;padding:44px 0;max-height:100vh;overflow-y:auto;
+  }
+  nav.toc h2{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink-3);font-weight:500;margin-bottom:14px;
+  }
+  nav.toc ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;counter-reset:m}
+  nav.toc a{
+    display:grid;grid-template-columns:26px 1fr;gap:6px;padding:5px 0;
+    font-size:13.5px;line-height:1.3;color:var(--ink-2);text-decoration:none;
+  }
+  nav.toc a span{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3);padding-top:2px}
+  nav.toc a:hover{color:var(--accent)}
+  nav.toc a:hover span{color:var(--accent)}
+}
+.chipbar{display:flex;gap:6px;overflow-x:auto;padding:14px 0;border-bottom:1px solid var(--rule);margin-bottom:8px}
+@media(min-width:1040px){.chipbar{display:none}}
+.chipbar a{
+  flex:0 0 auto;font-family:"IBM Plex Mono",monospace;font-size:11.5px;
+  padding:5px 10px;border:1px solid var(--rule);border-radius:2px;
+  text-decoration:none;color:var(--ink-2);background:var(--surface);
+}
+
+/* ---------- module ---------- */
+main{padding:8px 0 96px;min-width:0}
+.module{padding:52px 0;border-bottom:1px solid var(--rule)}
+.module:last-of-type{border-bottom:0}
+.mod-head{display:flex;flex-direction:column;gap:10px;margin-bottom:26px}
+.mod-head h2{font-size:clamp(27px,3.5vw,37px);letter-spacing:-.015em}
+.mod-num{
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+.prose{max-width:var(--maxw);display:flex;flex-direction:column;gap:16px}
+.prose h3{
+  font-size:19.5px;margin-top:16px;letter-spacing:-.005em;
+  display:flex;align-items:baseline;gap:9px;
+}
+.prose h3::before{
+  content:"";width:16px;height:1px;background:var(--accent);flex:0 0 auto;transform:translateY(-5px);
+}
+.prose ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:7px}
+.prose li::marker{color:var(--accent)}
+strong{font-weight:600}
+em.term{font-style:normal;font-weight:600;color:var(--accent)}
+
+/* thesis callout */
+.thesis{
+  max-width:var(--maxw);border-left:2px solid var(--accent);padding:2px 0 2px 18px;
+  font-size:18.5px;color:var(--ink);margin-bottom:26px;
+}
+.thesis span{display:block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+
+/* formula */
+.formula{
+  background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+  padding:16px 18px;display:flex;flex-direction:column;gap:8px;overflow-x:auto;
+  box-shadow:var(--shadow);
+}
+.formula .f{font-family:"IBM Plex Mono",monospace;font-size:14.5px;line-height:1.85;white-space:pre;color:var(--ink)}
+.formula .cap{font-size:13.5px;color:var(--ink-2);line-height:1.5}
+.formula .cap b{color:var(--ink);font-weight:600}
+
+/* worked example */
+.ex{
+  background:var(--surface);border:1px solid var(--rule-strong);border-radius:3px;
+  margin:12px 0;box-shadow:var(--shadow);overflow:hidden;
+}
+.ex > header{
+  padding:12px 20px;border-bottom:1px solid var(--rule);background:var(--accent-soft);
+  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+}
+.ex > header b{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--accent);font-weight:600;
+}
+.ex > header span{font-family:Fraunces,serif;font-weight:600;font-size:17px}
+.ex .body{padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+.ex .given{font-size:15.5px;color:var(--ink-2)}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0;counter-reset:s}
+.steps li{
+  counter-increment:s;display:grid;grid-template-columns:24px minmax(0,1fr);gap:12px;
+  padding:12px 0;border-top:1px solid var(--rule);
+}
+.steps li:first-child{border-top:0;padding-top:2px}
+.steps li::before{
+  content:counter(s);font-family:"IBM Plex Mono",monospace;font-size:11px;
+  color:var(--accent);padding-top:5px;font-weight:500;
+}
+.steps .work{
+  font-family:"IBM Plex Mono",monospace;font-size:13.5px;line-height:1.8;
+  background:var(--surface-2);border-radius:2px;padding:9px 12px;margin-top:7px;
+  overflow-x:auto;white-space:pre;color:var(--ink);
+}
+.result{
+  border-top:2px solid var(--accent);padding-top:12px;display:flex;gap:12px;
+  align-items:baseline;flex-wrap:wrap;
+}
+.result b{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--accent)}
+.result span{font-family:Fraunces,serif;font-size:19px;font-weight:600}
+
+/* trap */
+.trap{
+  max-width:var(--maxw);border:1px solid var(--rule);border-left:3px solid var(--accent-2);
+  background:var(--accent-2-soft);border-radius:3px;padding:14px 18px;
+  display:flex;flex-direction:column;gap:6px;font-size:15.5px;
+}
+.trap b{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--accent-2);
+}
+
+/* challenge */
+details.reto{
+  max-width:var(--maxw);border:1px dashed var(--rule-strong);border-radius:3px;
+  padding:14px 18px;background:var(--surface);
+}
+details.reto summary{
+  cursor:pointer;font-family:"IBM Plex Mono",monospace;font-size:11px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);list-style:none;
+}
+details.reto summary::-webkit-details-marker{display:none}
+details.reto summary::before{content:"▸ ";color:var(--accent)}
+details.reto[open] summary::before{content:"▾ "}
+details.reto .q{margin-top:10px;font-size:15.5px}
+details.reto .a{
+  margin-top:12px;padding-top:12px;border-top:1px solid var(--rule);
+  font-size:15.5px;color:var(--ink-2);
+}
+details.reto .a .work{
+  font-family:"IBM Plex Mono",monospace;font-size:13px;line-height:1.8;white-space:pre;
+  overflow-x:auto;background:var(--surface-2);padding:8px 11px;border-radius:2px;margin-top:8px;color:var(--ink);
+}
+
+/* tables */
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);border-radius:3px;background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:440px}
+th,td{padding:9px 14px;text-align:left;border-bottom:1px solid var(--rule)}
+thead th{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-3);font-weight:500;background:var(--surface-2);
+}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+td.k{font-weight:600}
+
+/* closing */
+.closing{background:var(--surface);border-top:1px solid var(--rule);padding:56px 0 72px;margin-top:0}
+.cardgrid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin-top:24px}
+.card{border:1px solid var(--rule);border-radius:3px;padding:16px 18px;background:var(--paper)}
+.card h4{font-size:16px;margin-bottom:8px}
+.card .f{font-family:"IBM Plex Mono",monospace;font-size:12.8px;line-height:1.95;white-space:pre;overflow-x:auto;color:var(--ink-2)}
+footer{padding:28px 0 56px;color:var(--ink-3);font-size:13.5px;max-width:var(--maxw)}
+</style>
+
+<style id="arena-barra-estilo">
+  .arena-volver{
+    position:sticky; top:0; z-index:9999;
+    display:flex; align-items:center; gap:10px;
+    height:46px; padding:0 18px;
+    background:#12243f; color:#e6f1fd;
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+    font-size:13.5px; box-shadow:0 1px 0 rgba(0,0,0,.25);
+  }
+  .arena-volver a{
+    color:#e6f1fd; text-decoration:none; font-weight:600;
+    display:inline-flex; align-items:center; gap:7px;
+    padding:5px 12px; border-radius:99px; border:1px solid rgba(230,241,253,.28);
+    transition:.15s;
+  }
+  .arena-volver a:hover{ background:rgba(230,241,253,.14); }
+  .arena-volver .arena-curso{ color:rgba(230,241,253,.62); font-size:12.5px; }
+  @media print{ .arena-volver{ display:none; } }
+
+  /* el índice del cuaderno también es sticky: se baja para que no quede
+     tapado por la barra */
+  nav.toc{ top:46px !important; max-height:calc(100vh - 46px) !important; }
+</style>
+</head>
+<body>
+<div class="arena-volver">
+  <a href="../index.html#cuadernos">← La Arena</a>
+  <span class="arena-curso">MITx MicroMasters in Finance · 15.435x</span>
+</div>
+<header class="hero">
+  <div class="wrap hero-in">
+    <div class="eyebrow">MITx MicroMasters · 15.435x · Prof. Deborah Lucas</div>
+    <h1>Cuaderno de Derivados</h1>
+    <p class="lede">Los diez módulos del curso condensados: la intuición de cada modelo, las fórmulas que sí hay que memorizar, y un ejemplo numérico resuelto paso a paso en cada uno. Todo lo que se valora sale de una sola idea — <strong>no arbitraje</strong>.</p>
+    <dl class="facts">
+      <div class="fact"><dt>Módulos</dt><dd>10</dd></div>
+      <div class="fact"><dt>Evaluación</dt><dd>50% PS · 50% final</dd></div>
+      <div class="fact"><dt>Texto base</dt><dd>Hull, 10ª ed.</dd></div>
+      <div class="fact"><dt>Herramienta</dt><dd>Excel / VBA</dd></div>
+    </dl>
+  </div>
+</header>
+
+<div class="wrap shell">
+
+<nav class="toc" aria-label="Índice de módulos">
+  <h2>Índice</h2>
+  <ol>
+    <li><a href="#m1"><span>01</span>Contratos forward</a></li>
+    <li><a href="#m2"><span>02</span>Futuros y swaps</a></li>
+    <li><a href="#m3"><span>03</span>Duración y convexidad</a></li>
+    <li><a href="#m4"><span>04</span>Opciones y árbol binomial</a></li>
+    <li><a href="#m5"><span>05</span>Black-Scholes y las griegas</a></li>
+    <li><a href="#m6"><span>06</span>Volatilidad y otros modelos</a></li>
+    <li><a href="#m7"><span>07</span>Exóticas y Monte Carlo</a></li>
+    <li><a href="#m8"><span>08</span>Opciones sobre tasas</a></li>
+    <li><a href="#m9"><span>09</span>Riesgo de crédito</a></li>
+    <li><a href="#m10"><span>10</span>Titulización</a></li>
+    <li><a href="#chuleta"><span>★</span>Mapa de fórmulas</a></li>
+  </ol>
+</nav>
+
+<main>
+<div class="chipbar">
+  <a href="#m1">01 Forwards</a><a href="#m2">02 Swaps</a><a href="#m3">03 Duración</a>
+  <a href="#m4">04 Binomial</a><a href="#m5">05 BSM</a><a href="#m6">06 Volatilidad</a>
+  <a href="#m7">07 Exóticas</a><a href="#m8">08 Tasas</a><a href="#m9">09 Crédito</a>
+  <a href="#m10">10 ABS/MBS</a><a href="#chuleta">★ Fórmulas</a>
+</div>
+
+<!-- ============ MÓDULO 1 ============ -->
+<section class="module" id="m1">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 01</div>
+    <h2>Contratos forward</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    El precio forward no contiene información sobre el futuro: está atado por <em class="term">cash-and-carry</em> al precio spot de hoy, la tasa libre de riesgo y los flujos intermedios. Nada más.
+  </div>
+
+  <div class="prose">
+    <h3>Qué es y cómo paga</h3>
+    <p>Un forward es un acuerdo bilateral (OTC) para intercambiar un activo en <code>T</code> a un precio <code>F₀</code> fijado hoy. Entrar cuesta cero: <code>F₀</code> se elige precisamente para que el valor inicial del contrato sea nulo para ambas partes. Es un juego de suma cero.</p>
+    <div class="formula">
+      <div class="f">P/L largo  = N · (S_T − F₀)
+P/L corto  = N · (F₀ − S_T)</div>
+      <div class="cap"><b>N</b> = tamaño del contrato, <b>S_T</b> = precio spot en vencimiento. Es lineal en ambas direcciones: sin límite de ganancia ni de pérdida.</div>
+    </div>
+    <p>La cobertura funciona porque la suma es constante: si tienes el activo (largo spot) y vendes forward, tu pago total es <code>N·S_T + N·(F₀ − S_T) = N·F₀</code>, sea cual sea el spot.</p>
+
+    <h3>Forward = posición apalancada</h3>
+    <p>Un forward largo es equivalente a <strong>pedir prestado y comprar el activo</strong>; un forward corto, a <strong>prestar y vender en corto</strong>. De ahí sus dos usos reales: exposición grande sin desembolso (salvo colateral) y acceso a posiciones cortas cuando el activo no se puede tomar prestado.</p>
+
+    <h3>Las fórmulas de precio (todas son la misma)</h3>
+    <div class="formula">
+      <div class="f">Acción sin dividendos      F₀ = S₀ · e^(rT)
+Acción con dividendo D en t  F₀ = (S₀ − D·e^(−rt)) · e^(rT)
+Acción con yield q          F₀ = S₀ · e^((r−q)T)
+Bono con cupón C en t       F₀ = (P_B,0 − C·e^(−rt)) · e^(rT)
+Divisa (USD por EUR)        F₀ = S₀ · e^((r$ − r€)T)
+Materia prima               F₀ = (S₀ + U)·e^(rT)  ó  S₀·e^((r+u−y)T)</div>
+      <div class="cap">Patrón único: <b>capitalizas el spot y descuentas todo lo que el tenedor del activo cobra</b> (dividendos, cupones, tasa extranjera, <em>convenience yield</em>) y sumas lo que le cuesta (almacenaje <b>U</b> o <b>u</b>).</div>
+    </div>
+
+    <h3>Valor del contrato después del inicio</h3>
+    <div class="formula">
+      <div class="f">f_t (largo) = (F_t − K) · e^(−r(T−t))
+f_t (corto) = (K − F_t) · e^(−r(T−t))</div>
+      <div class="cap"><b>K</b> = precio de entrega pactado originalmente; <b>F_t</b> = precio forward que se cotizaría hoy para el mismo vencimiento.</div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Cobertura cambiaria y precio de no arbitraje</span></header>
+    <div class="body">
+      <p class="given">Una empresa estadounidense cobrará <strong>5 M EUR</strong> en 6 meses. Hoy S₀ = 1,2673 USD/EUR. Tasa USD a 6 meses = 5%, tasa EUR = 3% (continuas). ¿Cuál es el forward justo y cuánto queda asegurado?</p>
+      <ol class="steps">
+        <li><div><strong>Identificar el riesgo.</strong> El pago sin cubrir es 5 M × S_T. Si el euro se deprecia (S_T baja), la empresa recibe menos dólares. Es una posición <em>larga</em> en euros → hay que <strong>vender euros forward</strong>.</div></li>
+        <li><div><strong>Calcular F₀ por no arbitraje.</strong> El euro paga un "dividendo" implícito: la tasa libre de riesgo europea.
+          <div class="work">F₀ = 1,2673 · e^((0,05 − 0,03) × 0,5)
+   = 1,2673 · e^0,01
+   = 1,2673 × 1,010050
+   = 1,2800 USD/EUR</div></div></li>
+        <li><div><strong>Verificar el pago total.</strong>
+          <div class="work">Pago = 5M · S_T  +  5M · (F₀ − S_T)
+     = 5M · 1,28
+     = 6.400.000 USD</div>
+          El S_T se cancela: la exposición desapareció por completo.</div></li>
+        <li><div><strong>¿Por qué 1,28 y no otro número?</strong> Si F₀ &gt; 1,28, el arbitrajista pide dólares prestados al 5%, compra euros spot, los invierte al 3% y vende forward: beneficio seguro. Si F₀ &lt; 1,28, hace la operación inversa (<em>reverse cash-and-carry</em>).</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>F₀ = 1,2800 · Cobrado seguro = $6,4 M</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Valorar un forward vivo sobre una acción con dividendos</span></header>
+    <div class="body">
+      <p class="given">Acción a $50. Dividendos de $1 a los 2 y a los 5 meses. r = 8% continua. Se abre hoy una posición <strong>corta</strong> en un forward a 6 meses. Tres meses después la acción cotiza a $48.</p>
+      <ol class="steps">
+        <li><div><strong>VP de los dividendos hoy.</strong>
+          <div class="work">I = 1·e^(−0,08×2/12) + 1·e^(−0,08×5/12)
+  = 0,986755 + 0,967216 = 1,9540</div></div></li>
+        <li><div><strong>Precio forward inicial.</strong>
+          <div class="work">F₀ = (50 − 1,9540) · e^(0,08×0,5)
+   = 48,0460 × 1,040811 = 50,01</div>
+          Valor inicial del contrato: <strong>cero</strong> (siempre, por construcción).</div></li>
+        <li><div><strong>A los 3 meses.</strong> Ya se pagó el primer dividendo; sólo queda el de los 5 meses, que está a 2 meses vista.
+          <div class="work">I' = 1·e^(−0,08×2/12) = 0,9868
+F_0,25 = (48 − 0,9868) · e^(0,08×0,25)
+       = 47,0132 × 1,020201 = 47,96</div></div></li>
+        <li><div><strong>Valor de la posición corta.</strong>
+          <div class="work">f = (F₀ − F_t) · e^(−r(T−t))
+  = (50,01 − 47,96) × e^(−0,08×0,25)
+  = 2,05 × 0,980199 = 2,01</div></div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>El corto vale +$2,01 (la acción cayó, como apostaba)</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>El <em>basis</em> (spot − forward) tiende a cero en vencimiento por no arbitraje. Pero si cubres con un contrato distinto al activo real (<em>cross hedge</em>) el basis <strong>no</strong> se anula: ahí es donde entra el <em>hedge ratio</em> N_S/N_F = E(dF)/E(dS), y por eso una cobertura con futuros "perfecta" en el papel casi nunca lo es en la práctica.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">El petróleo cotiza a $80. r = 4%, almacenaje proporcional u = 3% anual, <em>convenience yield</em> y = 9% anual. ¿Cuál es el forward a 1 año? ¿La curva está en contango o backwardation?</div>
+    <div class="a">
+      F₀ = 80 · e^((0,04 + 0,03 − 0,09)×1) = 80 · e^(−0,02) = 80 × 0,980199 = <strong>$78,42</strong>.
+      <div class="work">r + u − y = 0,04 + 0,03 − 0,09 = −0,02 < 0
+⇒ F₀ < S₀  ⇒  BACKWARDATION</div>
+      El <em>convenience yield</em> alto (escasez física, quien tiene el barril lo valora) domina al coste de financiar y almacenar. Es la firma típica de un mercado tensionado.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 2 ============ -->
+<section class="module" id="m2">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 02</div>
+    <h2>Futuros y swaps</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    Un swap no es un producto nuevo: es una <em class="term">cartera de forwards</em> reempaquetada para pagar lo mismo cada periodo. Su precio se deduce imponiendo que el VP de ambas patas sea igual.
+  </div>
+
+  <div class="prose">
+    <h3>Futuro vs. forward</h3>
+    <ul>
+      <li><strong>Bolsa y cámara de compensación (CCP)</strong> en vez de OTC → riesgo de crédito casi eliminado.</li>
+      <li><strong>Estandarizado</strong> (activo, tamaño, vencimiento, entrega) → liquidez alta, pero <em>basis risk</em> porque casi nunca calza exacto con tu exposición.</li>
+      <li><strong>Mark-to-market diario</strong> contra una cuenta de margen. Si el saldo cae bajo el margen de mantenimiento, hay <em>margin call</em> y hay que reponer hasta el margen inicial.</li>
+      <li>En teoría F_futuro = F_forward si las tasas son constantes. Difieren un poco porque la cuenta de margen devenga intereses: si el saldo del largo tiende a ser mayor cuando las tasas son altas, el futuro le conviene más → precio del futuro algo más alto.</li>
+    </ul>
+
+    <h3>El swap de tasas "plain vanilla"</h3>
+    <p>Fijo contra flotante sobre un <strong>principal nocional que nunca se intercambia</strong>. El pagador fijo "compra el swap" (está largo). Para el pagador flotante, el swap equivale a estar <strong>largo un bono fijo a la par y corto un bono flotante a la par</strong>.</p>
+    <div class="formula">
+      <div class="f">Un bono flotante vale siempre par en cada fecha de reset.
+⇒ VP(pata flotante) = F
+⇒ VP(pata fija) debe ser F también
+
+        1 − 1/(1+Y_N)^N
+c = ───────────────────────────────
+    Σ_{i=1..N}  1/(1+Y_i)^i</div>
+      <div class="cap">La tasa fija del swap <b>c</b> es el cupón que pone el bono fijo a la par según la curva spot. Es decir: el swap está automáticamente alineado con la curva, con los FRA y con los futuros de tasa.</div>
+    </div>
+
+    <h3>Aplicación: cubrir el balance de un banco</h3>
+    <p>Un banco que financia hipotecas a 10 años al 10% fijo con depósitos a 3 meses al 8% tiene 2% de margen bloqueado sólo el primer trimestre; después queda expuesto a que suban las tasas. Puede vender una <em>tira de futuros</em> (un contrato por trimestre) o entrar en un swap pagando fijo. El swap gana: un solo contrato, cubre los 10 años, evita futuros ilíquidos a largo plazo y es más flexible en fechas. Aun así no es perfecto — las hipotecas se amortizan, pagan mensual y se prepagan, y el depósito a 3 meses no calza con el LIBOR a 6 meses.</p>
+
+    <h3>Otras familias de swaps</h3>
+    <ul>
+      <li><strong>De divisas:</strong> pagos periódicos en dos monedas. La tasa swap K = S₀ × (ratio de factores de descuento de ambas monedas).</li>
+      <li><strong>De materias primas:</strong> pago fijo por pago ligado al precio spot; casi siempre liquidación financiera.</li>
+      <li><strong>Total Rate of Return (TROR):</strong> se intercambia el retorno total de un activo de referencia (cupones + cambio de valor) por LIBOR + spread. Es la herramienta de apalancamiento por excelencia de los hedge funds: exposición al activo sin comprarlo ni ponerlo en balance.</li>
+    </ul>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Precio de un swap de commodities y su préstamo implícito</span></header>
+    <div class="body">
+      <p class="given">Una empresa necesita 100.000 barriles dentro de 1 y de 2 años. Forwards: $110 (1a) y $111 (2a). Tasas cupón cero: 6% (1a) y 6,5% (2a). ¿Cuál es el precio swap de 2 años por barril?</p>
+      <ol class="steps">
+        <li><div><strong>VP del coste con forwards.</strong> Esto define el presupuesto total: cualquier estructura de pagos con este VP es justa.
+          <div class="work">VP = 110/1,06 + 111/(1,065)²
+   = 103,7736 + 97,8642
+   = 201,6378  $/barril</div></div></li>
+        <li><div><strong>Imponer pagos iguales x cada año.</strong>
+          <div class="work">x/1,06 + x/(1,065)² = 201,6378
+x · (0,943396 + 0,881659) = 201,6378
+x · 1,825055 = 201,6378
+x = 110,4832  $/barril</div></div></li>
+        <li><div><strong>Leer el préstamo escondido.</strong> Frente a la curva forward, el año 1 se paga de más y el año 2 de menos:
+          <div class="work">Año 1:  110,483 − 110 = +0,483  (prestas)
+Año 2:  111 − 110,483 = +0,517  (te devuelven)
+Tasa implícita = 0,517/0,483 − 1 = 7,0%</div></div></li>
+        <li><div><strong>Comprobar que ese 7% no es casualidad.</strong> Es exactamente la tasa forward 1→2 de la curva:
+          <div class="work">(1,065)² / 1,06 − 1 = 1,134225/1,06 − 1 = 7,00%</div>
+          <strong>Un swap = forwards + un préstamo a las tasas forward de la curva.</strong> Esa es la lección del módulo.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>Swap = $110,483/barril · préstamo implícito al 7%</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Flujo neto de un TROR swap</span></header>
+    <div class="body">
+      <p class="given">TROR swap, nocional $10 M, vendido a "LIBOR flat". El activo de referencia rinde <strong>−10%</strong> en el periodo (cupones + minusvalía). LIBOR del periodo: 4,5%. ¿Cuánto se mueve en la fecha de pago?</p>
+      <ol class="steps">
+        <li><div><strong>Quién paga qué.</strong> El <em>receptor</em> del TROR recibe el retorno total del activo y paga LIBOR. Aquí el retorno total es negativo, así que <strong>también lo paga</strong>.</div></li>
+        <li><div><strong>Sumar ambas patas desde el lado del receptor.</strong>
+          <div class="work">Retorno total   = −10,0%  →  paga 10,0%
+LIBOR           =  +4,5%  →  paga  4,5%
+Total          = −14,5% × 10.000.000
+               = −1.450.000</div></div></li>
+        <li><div><strong>Interpretar.</strong> El receptor sintetizó una posición larga apalancada: sin haber comprado nada, sufre la caída íntegra del activo <em>más</em> el coste de financiación. Ese es el precio del apalancamiento.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>El receptor paga $1,45 M al pagador del TROR</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>En la cuenta de margen, cuando el saldo cae bajo el <strong>mantenimiento</strong> hay que reponer hasta el <strong>margen inicial</strong>, no hasta el de mantenimiento. En el ejemplo del oro de clase: saldo 7.980 con inicial 12.000 → el margin call es de 4.020, no de 1.020.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Con S₀ = 1,2673 USD/EUR, r$ = 5% y r€ = 3% planos, ¿cuál es la tasa de un currency swap que paga 1 M EUR cada 6 meses durante 2,5 años? ¿Por qué queda entre 1,28 y 1,3323?</div>
+    <div class="a">
+      K = S₀ · [Σ e^(−r€·T_i)] / [Σ e^(−r$·T_i)], con T = 0,5 … 2,5. El resultado del curso es <strong>K ≈ 1,306</strong>.
+      <div class="work">Forwards individuales: 1,2800 · 1,2929 · 1,3059 · 1,3190 · 1,3323</div>
+      El swap es un <strong>promedio ponderado por factores de descuento</strong> de esos cinco forwards; por eso cae en medio. Cubrir con cinco forwards o con el swap elimina el riesgo igual de bien y tienen idéntico VP — sólo cambia el perfil temporal del cobro (creciente vs. plano).
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 3 ============ -->
+<section class="module" id="m3">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 03</div>
+    <h2>Duración y convexidad</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    Duración y convexidad son simplemente los <em class="term">dos primeros términos de un Taylor</em> del precio del bono respecto de su TIR. Todo el <em>delta-gamma hedging</em> de renta fija es igualar esos dos términos entre activo y cobertura.
+  </div>
+
+  <div class="prose">
+    <h3>Las tres duraciones que hay que distinguir</h3>
+    <div class="formula">
+      <div class="f">Macaulay        D  = Σ_t [ (t/k) · PVCF_t / PVTCF ]
+Modificada      D_M = D / (1 + y/k)
+Dólar           D_$ = D_M · P
+
+Aproximación de 1er orden:   dP/P ≈ − D_M · dy
+Aproximación de 2º orden:    dP/P ≈ − D_M·dy + ½·C₀·(dy)²</div>
+      <div class="cap"><b>Macaulay</b> = vencimiento medio ponderado de los flujos (en años). <b>Modificada</b> = elasticidad precio-TIR. <b>Dólar</b> = lo que realmente se usa para coberturas, porque se <strong>suma</strong> entre posiciones y una posición corta aporta duración negativa.</div>
+    </div>
+    <ul>
+      <li>D de un cupón cero = su vencimiento. D de un bono con cupón &lt; vencimiento.</li>
+      <li>Cupón más alto → duración más corta. TIR más alta → duración más corta.</li>
+      <li><strong>Duración efectiva</strong>: la sensibilidad real cuando los flujos son inciertos (MBS, bonos con riesgo de crédito, opciones incorporadas). Es la única correcta ahí; las fórmulas estándar mienten.</li>
+      <li><strong>Duraciones parciales / key rate durations</strong>: descomponen la sensibilidad por tramo de la curva en lugar de asumir desplazamiento paralelo. Son el input de un VaR de renta fija.</li>
+    </ul>
+
+    <h3>Convexidad: por qué el largo la quiere</h3>
+    <p>Convexidad positiva significa que la duración <strong>subestima</strong> la subida de precio cuando la TIR cae y <strong>sobreestima</strong> la caída cuando sube. Es un regalo asimétrico. Los MBS tienen convexidad <em>negativa</em> (cuando las tasas bajan, el prepago acorta el bono y te roba la subida) — de ahí que sean tan incómodos de cubrir.</p>
+
+    <h3>Duración de derivados</h3>
+    <div class="formula">
+      <div class="f">Forward/futuro sobre bono:
+  D_$ = D(del bono del contrato) × precio forward prepagado
+
+Bono flotante puro:
+  D_efectiva = (tiempo al próximo reset) / (1 + y/k)
+
+Swap, desde el receptor fijo:
+  D_$ = P_fijo · D_M(fijo)  −  P_flotante · D_ef(flotante)</div>
+      <div class="cap">El <b>precio forward prepagado</b> es simplemente el VP del precio forward. Un swap tiene duración porque es largo un bono fijo y corto uno flotante — y el flotante casi no tiene duración.</div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Duración sola vs. duración + convexidad</span></header>
+    <div class="body">
+      <p class="given">Bono a 25 años, cupón 6%, valorado al 9% de TIR. D_M = 10,62 · C₀ = 182,92. La TIR sube 200 pb. ¿Cuánto cae el precio?</p>
+      <ol class="steps">
+        <li><div><strong>Sólo con duración.</strong>
+          <div class="work">dP/P ≈ −10,62 × 0,02 = −21,24%</div>
+          Estimación fea: la línea tangente se aleja mucho de la curva para un movimiento de 200 pb.</div></li>
+        <li><div><strong>Añadir la corrección de convexidad.</strong>
+          <div class="work">½ · C₀ · (dy)² = 0,5 × 182,92 × (0,02)²
+                = 0,5 × 182,92 × 0,0004
+                = +3,66%</div></div></li>
+        <li><div><strong>Sumar.</strong>
+          <div class="work">−21,24% + 3,66% = −17,58%
+Cambio real                    = −18,03%
+Error con duración sola        = 3,2 pp
+Error con duración + convexidad = 0,45 pp</div></div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>−17,58% estimado vs. −18,03% real</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Duración en dólares de un swap</span></header>
+    <div class="body">
+      <p class="given">Swap nuevo a 5 años, fijo 6% s.a., flotante LIBOR 6M (hoy también 6%), nocional $1 M. ¿Cuál es la duración en dólares para el receptor fijo?</p>
+      <ol class="steps">
+        <li><div><strong>Pata fija.</strong> Un bono a 5 años, cupón 6% s.a., cotizando a la par tiene D_M = 4,265 años.</div></li>
+        <li><div><strong>Pata flotante.</strong> Sólo tiene riesgo hasta el próximo reset, dentro de 6 meses.
+          <div class="work">D_ef = 0,5 / (1 + 0,06/2) = 0,5/1,03 = 0,485 años</div></div></li>
+        <li><div><strong>Restar (largo fijo, corto flotante).</strong>
+          <div class="work">4,265 − 0,485 = 3,78 años
+D_$ = 3,78 × $1.000.000 = $3,78 M</div></div></li>
+        <li><div><strong>El pagador fijo tiene exactamente lo contrario:</strong> D_$ = −$3,78 M. Por eso un banco que quiere <em>reducir</em> la duración de su activo paga fijo.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>D_$ = +$3,78 M (receptor fijo) / −$3,78 M (pagador fijo)</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Delta hedge con futuros: cuántos contratos</span></header>
+    <div class="body">
+      <p class="given">Cartera de $10 M en bonos con D_M = 6,0. El futuro disponible tiene D_F = 8,0 sobre un precio forward prepagado de $100.000 por contrato. ¿Cuánto hay que vender?</p>
+      <ol class="steps">
+        <li><div><strong>La condición del delta hedge</strong> es igualar duraciones en dólares, no duraciones a secas:
+          <div class="work">P · D_M = F · D_F</div></div></li>
+        <li><div><strong>Nocional de futuros requerido.</strong>
+          <div class="work">F = 10.000.000 × 6,0 / 8,0 = $7.500.000</div></div></li>
+        <li><div><strong>Número de contratos.</strong>
+          <div class="work">7.500.000 / 100.000 = 75 contratos en corto</div></div></li>
+        <li><div><strong>Chequeo de signo.</strong> Si las tasas suben, la cartera pierde y el corto en futuros gana. Correcto: largo en spot ⇒ corto en futuros.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>Vender 75 contratos ($7,5 M nocional)</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>Para hacer un hedge <strong>gamma-neutral</strong> necesitas <em>dos</em> instrumentos de cobertura y resolver un sistema 2×2: una ecuación igualando duraciones en dólares y otra igualando convexidades en dólares (P·C₀). Con un solo instrumento sólo puedes ser delta-neutral.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Cartera de dos bonos: $8.000 con D_M = 4,3 y $12.000 con D_M = 3,6. ¿Duración modificada de la cartera? ¿Y si además vendes en corto $5.000 de un bono con D_M = 6,0?</div>
+    <div class="a">
+      <div class="work">Cartera original (media ponderada por valor):
+D_M = (8/20)(4,3) + (12/20)(3,6) = 1,72 + 2,16 = 3,88
+
+Con el corto — usa duración en DÓLARES, que se suma:
+D_$ = 8.000(4,3) + 12.000(3,6) − 5.000(6,0)
+    = 34.400 + 43.200 − 30.000 = 47.600
+Valor de la cartera = 20.000 − 5.000 = 15.000
+D_M = 47.600 / 15.000 = 3,17</div>
+      La posición corta aporta duración negativa. Ojo: si el valor neto de la cartera fuera cero, la duración modificada ni siquiera está definida — sólo existe la duración en dólares.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 4 ============ -->
+<section class="module" id="m4">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 04</div>
+    <h2>Opciones: estrategias y árbol binomial</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    No podemos descontar una opción porque su apalancamiento (y por tanto su coste de capital) cambia a cada instante. La salida es <em class="term">replicarla</em> con acción + bono; de ahí sale el precio y, gratis, el mundo neutral al riesgo.
+  </div>
+
+  <div class="prose">
+    <h3>Pagos y paridad</h3>
+    <div class="formula">
+      <div class="f">Call comprada  →  max(S_T − K, 0)
+Put comprada   →  max(K − S_T, 0)
+
+Paridad put-call (SÓLO europeas):
+  Put − Call = e^(−rT) · (K − F₀,T)
+Sin dividendos:
+  Put = Call + K·e^(−rT) − S₀</div>
+      <div class="cap">La paridad no es un modelo: es una identidad de no arbitraje. "Put larga + call corta" replica exactamente un forward corto a precio de entrega K.</div>
+    </div>
+
+    <h3>Las estrategias que salen en el examen</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Estrategia</th><th>Construcción</th><th>Apuesta</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Protective put</td><td>Acción + put larga</td><td>Seguro de cartera: piso en K, mantienes la subida</td></tr>
+          <tr><td class="k">Covered call</td><td>Acción + call vendida</td><td>Ingresas prima; techas la subida en K</td></tr>
+          <tr><td class="k">Bull spread</td><td>Call larga K₁ + call corta K₂ (K₂&gt;K₁)</td><td>Sube, pero con ganancia limitada y prima neta menor</td></tr>
+          <tr><td class="k">Bear spread</td><td>Put larga K₂ + put corta K₁</td><td>Baja, con pérdida y ganancia acotadas</td></tr>
+          <tr><td class="k">Butterfly</td><td>Larga K₀, corta 2× K₁, larga K₂</td><td>Baja volatilidad: máximo si acaba en K₁</td></tr>
+          <tr><td class="k">Straddle / strangle</td><td>Call + put (mismo / distinto strike)</td><td>Alta volatilidad, sin dirección</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Pregunta clásica: ¿cubrir con forward o con put? El forward <strong>fija</strong> el resultado en K y no cuesta nada. La put es un <strong>seguro</strong>: pone un piso pero deja la subida — y por eso hay que pagar prima. No hay una mejor; depende de si quieres eliminar la varianza o sólo la cola izquierda.</p>
+
+    <h3>Cartera replicante y probabilidades neutrales al riesgo</h3>
+    <div class="formula">
+      <div class="f">Δ = (c_u − c_d) / (S_u − S_d)
+B₀ = e^(−r) · (c_u − Δ·S_u)
+c₀ = Δ·S₀ + B₀
+
+Equivalente (más rápido):
+q* = (S₀·e^(rΔt) − S_d) / (S_u − S_d)
+c₀ = e^(−rΔt) · [ q*·c_u + (1−q*)·c_d ]</div>
+      <div class="cap">La probabilidad real <b>q</b> no aparece por ningún lado. Por eso podemos inventar una <b>q*</b> que hace que todo activo rinda la tasa libre de riesgo, y valorar cualquier derivado como valor esperado descontado. Es un truco de cálculo, no una afirmación sobre el mundo.</div>
+    </div>
+
+    <h3>Opciones americanas</h3>
+    <p>En cada nodo se compara <strong>valor de ejercer ya</strong> contra <strong>valor de esperar</strong> (el valor europeo en ese nodo) y se toma el máximo, hacia atrás. Una call americana sobre una acción sin dividendos <strong>nunca</strong> se ejerce antes (mejor venderla: conservas el valor temporal y difieres el pago de K). Con dividendos sí puede convenir. Una put americana sí se ejerce anticipadamente con frecuencia: recibes K antes y lo inviertes.</p>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Un paso: replicación y neutralidad al riesgo dan lo mismo</span></header>
+    <div class="body">
+      <p class="given">S₀ = 50. En un año: S_u = 70 o S_d = 35. r = 11% continua. Call europea con K = 50, T = 1.</p>
+      <ol class="steps">
+        <li><div><strong>Pagos en T.</strong>
+          <div class="work">c_u = max(70 − 50, 0) = 20
+c_d = max(35 − 50, 0) = 0</div></div></li>
+        <li><div><strong>Vía A — cartera replicante.</strong>
+          <div class="work">Δ  = (20 − 0)/(70 − 35) = 0,571429
+B₀ = e^(−0,11)·(20 − 0,571429×70)
+   = 0,895834 × (20 − 40) = −17,9167
+c₀ = 0,571429×50 − 17,9167
+   = 28,5714 − 17,9167 = 10,6547</div>
+          Léelo así: comprar la call ≡ comprar 0,5714 acciones financiando $17,92 con deuda.</div></li>
+        <li><div><strong>Vía B — probabilidad neutral al riesgo.</strong>
+          <div class="work">q* = (50·e^0,11 − 35)/(70 − 35)
+   = (55,8139 − 35)/35 = 0,594683
+c₀ = e^(−0,11) × [0,594683×20 + 0,405317×0]
+   = 0,895834 × 11,8937 = 10,6547</div>
+          Idéntico, y sin resolver un sistema.</div></li>
+        <li><div><strong>La put, gratis, por paridad.</strong>
+          <div class="work">p₀ = e^(−0,11) × [0,405317 × 15] = 5,4463
+Comprobación: c − p = 10,6547 − 5,4463 = 5,2084
+              S₀ − K·e^(−rT) = 50 − 44,7917 = 5,2083 ✓</div></div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>Call = $10,65 · Put = $5,45 · Δ = 0,571</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Árbol de dos pasos y un bear spread (formato examen)</span></header>
+    <div class="body">
+      <p class="given">Acción sin dividendos a $80. r = 3% continua, σ = 16% anual. Árbol de 2 pasos de 6 meses. Valorar puts europeas K = 77 y K = 83, y el bear spread largo.</p>
+      <ol class="steps">
+        <li><div><strong>Calibrar el árbol al proceso log-normal.</strong>
+          <div class="work">u = e^(σ√Δt) = e^(0,16×0,70711) = 1,119785
+d = 1/u                        = 0,893028
+q* = (e^(rΔt) − d)/(u − d)
+   = (1,015113 − 0,893028)/0,226757 = 0,538403</div></div></li>
+        <li><div><strong>Rellenar precios.</strong>
+          <div class="work">        S_uu = 100,31
+   S_u = 89,58
+S₀ = 80          S_ud = 80,00
+   S_d = 71,44
+        S_dd = 63,80</div></div></li>
+        <li><div><strong>Put K = 83.</strong>
+          <div class="work">Pagos:  uu = 0 ; ud = 3,00 ; dd = 19,20
+Nodo u = e^(−0,015)[0,4616×3,00]        = 1,364
+Nodo d = e^(−0,015)[0,5384×3,00
+                    + 0,4616×19,20]     = 10,322
+t=0    = e^(−0,015)[0,5384×1,364
+                    + 0,4616×10,322]    = 5,42</div></div></li>
+        <li><div><strong>Put K = 77.</strong>
+          <div class="work">Pagos:  uu = 0 ; ud = 0 ; dd = 13,20
+Nodo u = 0
+Nodo d = e^(−0,015)[0,4616×13,20]       = 6,002
+t=0    = e^(−0,015)[0,4616×6,002]       = 2,73</div></div></li>
+        <li><div><strong>Bear spread = put alta larga − put baja corta.</strong>
+          <div class="work">5,42 − 2,73 = 2,69</div>
+          Pago máximo K₂ − K₁ = $6 si la acción cae por debajo de 77; pérdida máxima la prima, $2,69.</div></li>
+        <li><div><strong>¿Y si pagara $0,80 de dividendo a los 6 meses?</strong> El árbol se desplaza hacia abajo → las puts valen más. Pero <strong>ambas</strong> suben y el spread es una diferencia: el efecto neto es <strong>indeterminado</strong> sin recalcular.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>P(83) = $5,42 · P(77) = $2,73 · Bear spread = $2,69</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>En el árbol de una americana, en el nodo de abajo <em>no</em> uses el valor europeo directamente: compara <code>K − S</code> contra el valor de continuación y quédate con el mayor. Si ejerces, ese nodo pasa a valer el intrínseco y el nodo raíz cambia. El caso clásico de clase: 19,114 (ejercer) &gt; 18,119 (esperar) ⇒ la americana vale más que la europea.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Con el árbol de dos pasos del ejemplo anterior (S₀=80, u=1,1198, d=0,8930, q*=0,5384, r=3%), ¿vale más una put <em>americana</em> con K = 83 que la europea de $5,42?</div>
+    <div class="a">
+      <div class="work">Nodo u: S = 89,58 → intrínseco = 0 ; continuación 1,364 → NO ejercer
+Nodo d: S = 71,44 → intrínseco = 83 − 71,44 = 11,56
+        continuación = 10,322
+        11,56 > 10,322  ⇒  EJERCER
+
+t=0 = e^(−0,015)[0,5384×1,364 + 0,4616×11,56]
+    = e^(−0,015)[0,7345 + 5,3362] = 5,98</div>
+      Americana = <strong>$5,98</strong> vs. europea $5,42. La prima de ejercicio anticipado es $0,56 y viene íntegra del nodo bajista.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 5 ============ -->
+<section class="module" id="m5">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 05</div>
+    <h2>Black-Scholes-Merton y las griegas</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    BSM es el límite del árbol binomial cuando el paso tiende a cero. Su contenido económico es la <em class="term">réplica dinámica</em>: rebalanceando continuamente Δ acciones y deuda se reproduce el pago de la opción — y por tanto su precio.
+  </div>
+
+  <div class="prose">
+    <h3>Supuestos (y dónde se rompen)</h3>
+    <ul>
+      <li>Mercados sin fricción: sin impuestos, sin costes de transacción, activos divisibles, cortos libres.</li>
+      <li>Tasa libre de riesgo <strong>constante</strong> e igual para prestar y pedir prestado.</li>
+      <li>Sin dividendos durante la vida de la opción (relajable con q).</li>
+      <li>Precios log-normales: <strong>trayectoria continua</strong>, media y varianza del log-retorno constantes, retornos independientes.</li>
+    </ul>
+    <p>Los dos supuestos que fallan de verdad en los datos: la <strong>volatilidad no es constante</strong> y los precios <strong>saltan</strong>. Ambos rompen la réplica dinámica y por eso los precios de mercado llevan prima de riesgo.</p>
+
+    <div class="formula">
+      <div class="f">c = S₀·N(d₁) − K·e^(−rT)·N(d₂)
+p = K·e^(−rT)·N(−d₂) − S₀·N(−d₁)
+
+d₁ = [ ln(S₀/K) + (r + σ²/2)·T ] / (σ√T)
+d₂ = d₁ − σ√T
+
+Con dividend yield q (índices):
+c = S₀·e^(−qT)·N(d₁) − K·e^(−rT)·N(d₂)
+  y en d₁ se usa (r − q + σ²/2)</div>
+      <div class="cap">Lectura: <b>N(d₂)</b> es la probabilidad neutral al riesgo de acabar in-the-money; <b>N(d₁)</b> es la delta, la fracción de acción en la cartera replicante.</div>
+    </div>
+
+    <h3>Las griegas</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Griega</th><th>Mide</th><th>Call (sin div.)</th><th>Intuición</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Delta ∂V/∂S</td><td>Sensibilidad al subyacente</td><td>N(d₁) ∈ (0,1)</td><td>Nº de acciones de la réplica; ratio de cobertura</td></tr>
+          <tr><td class="k">Gamma ∂²V/∂S²</td><td>Cómo cambia la delta</td><td>N′(d₁)/(S σ√T)</td><td>Máxima at-the-money y cerca del vencimiento: donde más hay que rebalancear</td></tr>
+          <tr><td class="k">Theta ∂V/∂t</td><td>Paso del tiempo</td><td>Normalmente negativa</td><td>El valor temporal se derrite</td></tr>
+          <tr><td class="k">Vega ∂V/∂σ</td><td>Volatilidad</td><td>S·N′(d₁)·√T &gt; 0</td><td>Más incertidumbre = más valor de opcionalidad, calls y puts por igual</td></tr>
+          <tr><td class="k">Rho ∂V/∂r</td><td>Tasa</td><td>K·T·e^(−rT)·N(d₂) &gt; 0</td><td>r ↑ baja el VP de K: bueno para el que paga K (call), malo para el que lo recibe (put)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>BSM completo con todas las griegas</span></header>
+    <div class="body">
+      <p class="given">S₀ = 100, K = 100, T = 1 año, r = 5% continua, σ = 20%, sin dividendos.</p>
+      <ol class="steps">
+        <li><div><strong>d₁ y d₂.</strong>
+          <div class="work">d₁ = [ln(1) + (0,05 + 0,02)×1] / (0,20×1)
+   = 0,07/0,20 = 0,35
+d₂ = 0,35 − 0,20 = 0,15
+N(d₁) = 0,63683    N(d₂) = 0,55962</div></div></li>
+        <li><div><strong>Precio de la call.</strong>
+          <div class="work">c = 100×0,63683 − 100×e^(−0,05)×0,55962
+  = 63,683 − 95,1229×0,55962
+  = 63,683 − 53,233 = 10,45</div></div></li>
+        <li><div><strong>La put, por paridad (nunca la calcules dos veces).</strong>
+          <div class="work">p = c + K·e^(−rT) − S₀
+  = 10,4506 + 95,1229 − 100 = 5,57</div></div></li>
+        <li><div><strong>Griegas de la call.</strong> Con N′(0,35) = 0,375243:
+          <div class="work">Delta = N(d₁)                    = 0,6368
+Gamma = 0,375243/(100×0,20)     = 0,01876
+Vega  = 100×0,375243×1          = 37,52  (0,375 por punto de vol)
+Rho   = 100×1×0,951229×0,55962  = 53,23  (0,532 por 1% de tasa)
+Theta = −(100×0,375243×0,20/2)
+        − 0,05×100×0,951229×0,55962
+      = −3,752 − 2,662 = −6,414 al año
+      ≈ −0,018 al día</div></div></li>
+        <li><div><strong>Traducir a decisiones.</strong> Si la acción sube $1, la call sube ≈ $0,64 y la delta sube a ≈ 0,656 (por gamma). Para estar delta-neutral vendiendo una call hay que comprar 0,637 acciones, y rebalancear a medida que S se mueve.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>c = $10,45 · p = $5,57 · Δ = 0,637 · Γ = 0,0188</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Ingeniería financiera: Capital Protected Note</span></header>
+    <div class="body">
+      <p class="given">Nota emitida en 2/2008: precio $10, principal $10 protegido al 100%, cupón 0%, vencimiento 7 años, pago = principal + 1,16 × la subida del S&amp;P 500 normalizado. Datos: r = 3,23%, q = 2%, σ = 15%, índice normalizado a S₀ = $10.</p>
+      <ol class="steps">
+        <li><div><strong>Descomponer el producto.</strong> Un pago con piso y participación en la subida siempre es:
+          <div class="work">Nota = bono cupón cero ($10, 7 años)
+     + 1,16 calls ATM sobre el índice (K = 10, T = 7)</div></div></li>
+        <li><div><strong>Valorar el bono.</strong>
+          <div class="work">10 · e^(−0,0323×7) = 10 × 0,79784 = 7,978</div></div></li>
+        <li><div><strong>Valorar la call con BSM con dividendos.</strong>
+          <div class="work">d₁ = [(0,0323 − 0,02 + 0,01125)×7]/(0,15×√7)
+   = 0,16485/0,39686 = 0,4154
+d₂ = 0,4154 − 0,3969 = 0,0185
+c = 10·e^(−0,14)·N(0,4154) − 10·e^(−0,2261)·N(0,0185)
+  = 5,747 − 4,048 = 1,70</div></div></li>
+        <li><div><strong>Sumar.</strong>
+          <div class="work">7,978 + 1,16 × 1,70 = 7,978 + 1,971 = $9,95</div>
+          Se emite a $10: el inversor <strong>renuncia a 7 años de intereses</strong> a cambio de la opcionalidad. Es un intercambio explícito, no magia.</div></li>
+        <li><div><strong>Cubrir el corto con delta hedge.</strong> La delta de cada call con dividendos es e^(−qT)·N(d₁):
+          <div class="work">Δ = e^(−0,14) × 0,66109 = 0,5747
+Por call: invertir 0,5747×10 = $5,747 en el índice
+          y pedir prestado 5,747 − 1,70 = $4,047
+Escalar × 1,16 para la nota completa</div></div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>Valor teórico $9,95 · Δ inicial = 0,575 por call</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>Con un solo árbol binomial puedes estimar <strong>delta, gamma y theta</strong> (se leen en nodos vecinos del mismo árbol). <strong>Vega y rho no</strong>: requieren cambiar un parámetro y reconstruir un árbol nuevo. Esta es literalmente la pregunta S1 del examen de muestra.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Con S=80, K=83, r=3%, σ=16%, T=1, sin dividendos: ¿cuánto vale la put europea por BSM y cuál es su delta? Compáralo con el $5,42 que dio el árbol de dos pasos del módulo 4.</div>
+    <div class="a">
+      <div class="work">ln(80/83) = −0,036822
+d₁ = (−0,036822 + 0,0428)/0,16 = 0,03736
+d₂ = 0,03736 − 0,16 = −0,12264
+N(−d₁) = 0,48508     N(−d₂) = 0,54879
+
+p = 83·e^(−0,03)·0,54879 − 80·0,48508
+  = 80,547×0,54879 − 38,806
+  = 44,203 − 38,806 = 5,40
+Delta de la put = −N(−d₁) = −0,485</div>
+      Árbol de 2 pasos: 5,42. BSM: 5,40. Con dos pasos ya estás a 2 centavos — esa convergencia <em>es</em> la demostración de que BSM es el límite del binomial.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 6 ============ -->
+<section class="module" id="m6">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 06</div>
+    <h2>Volatilidad y otros modelos de valoración</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    BSM valora mal las opciones fuera del dinero de forma sistemática. La industria no lo abandonó: lo convirtió en un <em class="term">lenguaje de cotización</em> — el precio se cita en volatilidad implícita.
+  </div>
+
+  <div class="prose">
+    <h3>Delta-gamma hedging</h3>
+    <p>El delta hedge falla en dos frentes: hay que rebalancear mucho (caro) y se rompe con saltos grandes. La solución es añadir a la cartera un instrumento con <strong>gamma positiva</strong> — típicamente una opción cotizada de corto plazo — y elegir cantidades para anular a la vez la primera y la segunda derivada respecto de S. Es exactamente la misma lógica que duración+convexidad en renta fija, un módulo antes.</p>
+
+    <h3>Variantes de BSM</h3>
+    <div class="formula">
+      <div class="f">Índices (yield q):
+  c = S₀·e^(−qT)·N(d₁) − K·e^(−rT)·N(d₂)
+
+Divisas (tasa extranjera r_f hace de q):
+  c = S₀·e^(−r_f·T)·N(d₁) − K·e^(−rT)·N(d₂)
+
+Modelo de Black (opciones sobre futuros/forwards):
+  c = e^(−rT)·[ F₀·N(d₁) − K·N(d₂) ]
+  p = e^(−rT)·[ K·N(−d₂) − F₀·N(−d₁) ]
+  d₁ = [ln(F₀/K) + σ²T/2] / (σ√T)</div>
+      <div class="cap">El modelo de Black es el caballo de batalla real: evita tener que estimar <em>convenience yields</em> o rentas del subyacente, y se usa para futuros, caps, floors y swaptions.</div>
+    </div>
+
+    <h3>Por qué BSM se desvía y qué se hace</h3>
+    <ul>
+      <li><strong>Colas gordas</strong>: la distribución empírica de retornos no es normal, tiene más masa en los extremos.</li>
+      <li><strong>Volatilidad cambiante</strong>: agrupada en el tiempo (<em>clustering</em>), no constante.</li>
+      <li><strong>Saltos</strong>: 1987, 2008, 2020. Con saltos no puedes rebalancear a tiempo → la réplica falla → hay prima de riesgo.</li>
+      <li>Resultado observable: BSM <strong>infravalora las puts OTM</strong> y sobrevalora las ITM (y al revés en calls). Es la <em>volatility smile / skew</em>, y refleja que la protección contra caídas grandes es un seguro caro.</li>
+    </ul>
+    <p>Los remedios: modelos de volatilidad determinista, <strong>volatilidad estocástica</strong> (Heston), modelos con saltos (Poisson) y <strong>árboles implícitos</strong> calibrados a los precios observados. El <strong>VIX</strong> permite además tomar posición directa en la volatilidad implícita del S&amp;P 500.</p>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Modelo de Black sobre un bono (pregunta S4 del examen)</span></header>
+    <div class="body">
+      <p class="given">Put europea a 1 año sobre un bono a 10 años. Valor actual del bono $125, strike $110, r = 10% anual, volatilidad del precio forward 8% anual, VP de los cupones durante la vida de la opción = $10.</p>
+      <ol class="steps">
+        <li><div><strong>Precio forward del bono</strong> (descontar los cupones, luego capitalizar):
+          <div class="work">F₀ = (125 − 10) · e^(0,10×1)
+   = 115 × 1,105171 = 127,09</div></div></li>
+        <li><div><strong>d₁ y d₂ con la fórmula de Black.</strong>
+          <div class="work">ln(127,09/110) = 0,144443
+d₁ = (0,144443 + 0,5×0,0064) / 0,08
+   = 0,147643/0,08 = 1,8455
+d₂ = 1,8455 − 0,08 = 1,7655
+N(−d₁) = 0,0325     N(−d₂) = 0,0387</div></div></li>
+        <li><div><strong>Precio de la put.</strong>
+          <div class="work">p = e^(−0,10)·[110×0,0387 − 127,09×0,0325]
+  = 0,904837 × [4,261 − 4,128]
+  = 0,904837 × 0,133 ≈ 0,12</div></div></li>
+        <li><div><strong>Interpretar.</strong> El forward está muy por encima del strike: la put está profundamente OTM y casi no vale nada. Sensible al redondeo de N(·) — con tablas de 4 decimales el resultado cae entre $0,12 y $0,13.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>Put ≈ $0,12</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Volatilidad implícita como termómetro de precio relativo</span></header>
+    <div class="body">
+      <p class="given">3 de mayo de 2007. S&amp;P 500 = 1502,39; r = 4,713%; q = 1,91%. La volatilidad histórica de 3 meses da un número; ajustada a las opciones ATM, la implícita es 11,5%.</p>
+      <ol class="steps">
+        <li><div><strong>El problema.</strong> Comparar una call K=1400 a 1 mes con una put K=1600 a 3 meses es imposible en dólares: distinto valor intrínseco, distinto valor temporal.</div></li>
+        <li><div><strong>La solución.</strong> Invertir BSM: dado el precio de mercado, ¿qué σ lo reproduce? Ese número, la <em>volatilidad implícita</em>, es comparable entre strikes y vencimientos.</div></li>
+        <li><div><strong>Lo que se observa al hacerlo.</strong>
+          <div class="work">Moneyness K/S bajo  → put OTM  → implícita ALTA
+Moneyness K/S = 1   → ATM       → implícita "base" (11,5%)
+Moneyness K/S alto  → call OTM  → implícita más baja</div>
+          Si BSM fuera correcto, la superficie sería <strong>plana</strong>. No lo es: es la <em>skew</em>.</div></li>
+        <li><div><strong>Descartar culpables.</strong> ¿Podría ser un input mal puesto? r y q son observables y poco variables, y además mueven calls y puts en <em>direcciones opuestas</em> — pero el error observado va en la misma dirección para ambas. Luego no es eso: es el modelo.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>La skew es el precio del seguro contra colas, no un error de datos</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>Una opción sobre futuro europea y una opción spot europea valen lo mismo <strong>sólo si el futuro vence a la vez que la opción</strong>. Fuera de ese caso no son intercambiables. Y ojo: la mayoría de las opciones sobre futuros que se negocian son <strong>americanas</strong>, así que Black da sólo una cota.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">¿Por qué se dice que BSM "sigue siendo útil" si sabemos que valora mal? Da tres usos concretos que sobreviven al fallo del modelo.</div>
+    <div class="a">
+      <strong>1. Ratios de cobertura.</strong> Aunque el nivel del precio esté mal, la delta y la gamma de BSM cerca del dinero son buenas aproximaciones, y con eso se cubre.<br><br>
+      <strong>2. Lenguaje de cotización.</strong> El mercado no cotiza dólares, cotiza volatilidad implícita. BSM es el diccionario que convierte precio ↔ vol. Si todos usan el mismo diccionario, no importa que sea imperfecto.<br><br>
+      <strong>3. Benchmark de valor relativo.</strong> La superficie de volatilidad implícita permite ver qué opción está cara respecto de otra — que es la pregunta que de verdad se hace un trader, no "¿cuál es el valor absoluto verdadero?".
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 7 ============ -->
+<section class="module" id="m7">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 07</div>
+    <h2>Opciones exóticas y métodos numéricos</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    No hay que memorizar fórmulas de exóticas. Hay que saber responder cuatro preguntas: <em class="term">qué problema resuelve, se replica con vainillas, es cara o barata frente a la alternativa estándar, y cómo se valora si no hay fórmula</em>.
+  </div>
+
+  <div class="prose">
+    <h3>Catálogo</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Exótica</th><th>Pago</th><th>Por qué existe</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Bermuda</td><td>Ejercicio sólo en fechas prefijadas</td><td>Entre europea y americana; bonos <em>callable</em>, warrants</td></tr>
+          <tr><td class="k">Binaria</td><td>Cash-or-nothing: paga 1 si S_T &gt; K.<br>Asset-or-nothing: paga S_T si S_T &gt; K</td><td>Ladrillos de construcción: call vainilla = asset-or-nothing − K × cash-or-nothing</td></tr>
+          <tr><td class="k">Asiática</td><td>Sobre el <strong>promedio</strong> del precio (path-dependent)</td><td>El beneficio real depende del promedio; resiste manipulación del precio de cierre; mercados ilíquidos</td></tr>
+          <tr><td class="k">Barrera</td><td>Knock-in / knock-out al tocar un nivel</td><td>Más barata que la vainilla equivalente — pagas menos porque puedes perderla</td></tr>
+          <tr><td class="k">Lookback</td><td>Strike flotante = mínimo/máximo del periodo</td><td>Compra en el mínimo garantizada. Muy cara</td></tr>
+          <tr><td class="k">Exchange</td><td>max(0, S_T − N_T)</td><td>Apuesta relativa: un activo contra un benchmark</td></tr>
+          <tr><td class="k">Compuesta</td><td>Opción sobre opción</td><td>Se valora por inducción hacia atrás en árbol</td></tr>
+          <tr><td class="k">Gap</td><td>Paga S − K₁ cuando S &gt; K₂</td><td>Desacopla el disparador del importe; puede pagar negativo</td></tr>
+          <tr><td class="k">Quanto</td><td>Activo extranjero, pago en moneda local sin riesgo FX</td><td>Lleva dentro un forward de divisa de nocional variable ("quantity adjusting")</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Las tres herramientas de valoración</h3>
+    <ul>
+      <li><strong>BSM modificado</strong> — cuando hay solución cerrada (asiática geométrica, barreras con paridad, binarias).</li>
+      <li><strong>Árbol binomial</strong> — obligatorio cuando hay que decidir <em>cuándo ejercer</em> (americanas, bermudas). El árbol ordena los estados, y eso permite optimizar hacia atrás.</li>
+      <li><strong>Monte Carlo</strong> — cuando el pago depende de la <em>trayectoria</em> y el número de pasos es grande.</li>
+    </ul>
+    <div class="formula">
+      <div class="f">Monte Carlo neutral al riesgo, en 3 pasos:
+
+1. Simular N trayectorias bajo la medida neutral al riesgo
+   S_{t+Δt} = S_t · exp[ (r − σ²/2)Δt + σ√Δt · ε ]
+   con ε ~ N(0,1)   [en Excel: NORMINV(RAND();0;1)]
+
+2. Calcular el pago descontado en cada trayectoria
+
+3. Precio ≈ media de los pagos descontados
+   Error estándar = s / √N</div>
+      <div class="cap">La razón por la que Monte Carlo es necesario: el <b>promedio</b> de una trayectoria genera un árbol <b>no recombinante</b>. Con 2 pasos hay 4 caminos; con 30, más de mil millones. El árbol de precios recombina; el árbol de promedios no.</div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Cinco formas de cubrir el mismo riesgo cambiario</span></header>
+    <div class="body">
+      <p class="given">Una empresa recibe euros cada mes durante un año. Tipo actual $0,90/EUR, K = 0,90, r$ = 6%, r€ = 3%, σ = 10%. ¿Cuánto cuesta cada alternativa de cobertura?</p>
+      <ol class="steps">
+        <li><div><strong>Poner las alternativas sobre la mesa.</strong> Todas cubren el mismo flujo; lo que cambia es <em>qué</em> exactamente aseguran.</div></li>
+        <li><div><strong>Comparar precios.</strong>
+          <div class="work">12 puts europeas a 1 año           0,2753
+Cesta de 12 puts mensuales         0,2178
+12 puts sobre promedio geométrico  0,1796
+12 puts sobre promedio aritmético  0,1764
+Currency swap                      0 (coste inicial)</div></div></li>
+        <li><div><strong>Explicar el orden.</strong> Cada escalón hacia abajo <strong>reduce la opcionalidad</strong>:
+          <div class="work">1 año → mensual : menos tiempo, menos vol acumulada
+mensual → asiática: el promedio tiene MENOS varianza
+                    que cualquier precio individual
+asiática → swap  : ya no es un seguro, es un precio fijo</div></div></li>
+        <li><div><strong>Elegir.</strong> Si lo que te importa de verdad es el tipo <em>medio</em> del año — que es lo normal para un flujo repartido — la asiática cubre exactamente tu riesgo y cuesta un 36% menos que las puts a un año. Pagar por proteger cada fecha por separado es sobre-cubrir.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>La asiática aritmética cubre lo mismo por 0,1764 vs. 0,2753</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Descomponer una exótica en vainillas (pregunta S3 del examen)</span></header>
+    <div class="body">
+      <p class="given">Los accionistas de Abacus recibirán, según el precio P de Xylon dentro de 3 meses: (a) 0,5462 acciones si P ≥ 84,22; (b) acciones por valor de $46,00 si 76,20 &lt; P &lt; 84,22; (c) 0,6037 acciones si P ≤ 76,20. Expresar el valor de Abacus con calls sobre Xylon.</p>
+      <ol class="steps">
+        <li><div><strong>Dibujar el pago en dólares.</strong>
+          <div class="work">P ≤ 76,20        →  0,6037·P     (crece con P)
+76,20 < P < 84,22 →  46,00        (plano)
+P ≥ 84,22        →  0,5462·P     (crece con P)
+
+Comprobación de continuidad:
+ 0,6037 × 76,20 = 46,00 ✓
+ 0,5462 × 84,22 = 46,00 ✓</div></div></li>
+        <li><div><strong>Empezar por la base.</strong> El tramo inferior es lineal desde cero: <strong>0,6037 acciones de Xylon</strong>.</div></li>
+        <li><div><strong>Aplanar el tramo medio.</strong> A partir de 76,20 el pago deja de crecer: hay que <em>restar</em> la pendiente completa.
+          <div class="work">− 0,6037 calls con K = 76,20</div></div></li>
+        <li><div><strong>Reactivar la pendiente arriba.</strong> A partir de 84,22 el pago vuelve a crecer, pero con pendiente 0,5462.
+          <div class="work">+ 0,5462 calls con K = 84,22</div></div></li>
+        <li><div><strong>Ensamblar.</strong>
+          <div class="work">Abacus = 0,6037·S
+       − 0,6037·Call(K = 76,20)
+       + 0,5462·Call(K = 84,22)</div>
+          Es un <strong>bear spread montado sobre acciones</strong>. Una vez descompuesto, se valora con BSM sin más.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>0,6037·S − 0,6037·C(76,20) + 0,5462·C(84,22)</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>Dos preguntas de intuición que caen siempre: <strong>(1)</strong> una asiática vale <em>menos</em> que la europea equivalente porque el promedio tiene menor varianza; <strong>(2)</strong> una barrera vale <em>menos</em> que la vainilla idéntica (knock-out: puede desaparecer; knock-in: puede no nacer nunca). Y ojo con la paridad: knock-in + knock-out = vainilla.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Tienes una cartera: larga una asset-or-nothing call con strike K, y corta K unidades de cash-or-nothing call con el mismo strike K. ¿Qué es?</div>
+    <div class="a">
+      <div class="work">Si S_T > K:  recibes S_T  −  K×1  =  S_T − K
+Si S_T ≤ K:  recibes 0    −  0     =  0
+
+Pago = max(S_T − K, 0)</div>
+      Es exactamente una <strong>call europea vainilla</strong>. Y de aquí sale la lectura de BSM:
+      <div class="work">c = S₀·N(d₁)  −  K·e^(−rT)·N(d₂)
+    ↑              ↑
+asset-or-nothing   K × cash-or-nothing</div>
+      Los dos términos de la fórmula de Black-Scholes <em>son</em> esas dos binarias. Por eso N(d₂) se interpreta como probabilidad neutral al riesgo de terminar in-the-money.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 8 ============ -->
+<section class="module" id="m8">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 08</div>
+    <h2>Opciones sobre bonos y tasas de interés</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    Para bonos hay que modelar la <em class="term">tasa</em>, no el precio. Un bono converge a la par en vencimiento; su volatilidad de precio cae con el tiempo, justo lo contrario de lo que BSM asume.
+  </div>
+
+  <div class="prose">
+    <h3>Por qué BSM falla aquí</h3>
+    <ul>
+      <li>Asume volatilidad de precio constante; la del bono <strong>decrece</strong> hacia el vencimiento (pull to par).</li>
+      <li>Asume precios log-normales con probabilidad positiva de valores arbitrariamente altos; un bono no puede valer más que la suma de sus flujos.</li>
+      <li>Asume tasa libre de riesgo constante — absurdo cuando el subyacente <em>es</em> la tasa.</li>
+      <li>Muchas opciones sobre bonos son americanas, y el ejercicio anticipado importa.</li>
+    </ul>
+    <p><strong>El caso patológico de clase:</strong> una call europea a 3 años sobre un cupón cero a 3 años con strike $110 (sobre $100 de nominal) vale obviamente <strong>cero</strong> — el bono valdrá exactamente 100. BSM con r = 10% y 4% de volatilidad da <strong>$7,78</strong>.</p>
+
+    <h3>Modelo de Black: el parche que sí funciona</h3>
+    <p>Sirve cuando (1) el pago depende sólo del valor en una fecha, no de la trayectoria, y (2) es razonable suponer la variable log-normal <em>en esa fecha</em>. Se cumple bien cuando la vida de la opción es mucho más corta que el vencimiento del bono. Es el estándar para cotizar <strong>caps, floors y swaptions</strong>.</p>
+
+    <h3>Árbol binomial de tasas cortas</h3>
+    <div class="formula">
+      <div class="f">Estructura estándar (log-normal, p = ½):
+  r_H = r_L · e^(2σ)
+
+Volatilidad desde datos:
+  σ_diaria = desv. típica de Δr/r
+  σ_anual  = σ_diaria · √(nº de observaciones al año)
+
+Calibración (procedimiento iterativo):
+  1. Fijar p = ½ y σ
+  2. Adivinar la tasa del camino más bajo r_t
+  3. Rellenar el árbol con r_H = r_L·e^(2σ)
+  4. Valorar el bono de mercado sobre el árbol
+  5. ¿Coincide con el precio observado? Si no, ajustar r_t
+     y volver a 3</div>
+      <div class="cap">Cada periodo tiene <b>un solo parámetro libre</b>: la tasa del camino inferior. Eso es lo que se calibra para reproducir la curva observada. Todo lo demás lo fija σ.</div>
+    </div>
+
+    <h3>Bonos con opciones y caps</h3>
+    <div class="formula">
+      <div class="f">Bono callable  = bono sin opción  −  valor de la call
+Bono putable   = bono sin opción  +  valor de la put
+
+Cap = tira de calls sobre la tasa ("caplets"):
+  pago = principal × longitud del periodo × max(R_t − R_x, 0)
+Floor = tira de puts sobre la tasa
+Collar = cap + floor</div>
+    </div>
+
+    <h3>Modelos en tiempo continuo</h3>
+    <p>Todos son de la forma <code>dr = a(r,t)·dt + σ(r,t)·dZ</code>. <strong>CIR</strong>: <code>dr = κ(b − r)dt + σ√r·dZ</code> — reversión a la media, tasas que no pueden ser negativas, solución cerrada para la curva. Su debilidad es que no captura bien la dinámica de la curva. Vasicek, Ho-Lee, Hull-White, Black-Derman-Toy y Black-Karasinski son las otras piezas del catálogo. <strong>Monte Carlo</strong> vale para europeas; para americanas hay que pasar a árbol, porque hay que optimizar el ejercicio y Monte Carlo no ordena los estados.</p>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Calibrar el árbol a la curva observada</span></header>
+    <div class="body">
+      <p class="given">Curva spot: 1 año 3,500%, 2 años 4,010%. σ = 10%, p = ½. El bono a 2 años con cupón 4% cotiza a 100. Construir el árbol de 1 periodo.</p>
+      <ol class="steps">
+        <li><div><strong>Fijar el nodo raíz.</strong> r₀ = 3,500%, que viene directo de la curva.</div></li>
+        <li><div><strong>Primer intento: r_L = 4,50%.</strong>
+          <div class="work">r_H = 4,50% × e^(2×0,10) = 4,50% × 1,221403 = 5,496%
+V_H = 104/1,05496 = 98,582
+V_L = 104/1,04500 = 99,522
+V₀  = ½[(98,582+4) + (99,522+4)] / 1,035
+    = 103,05175/1,035 = 99,567</div>
+          Debería dar 100. <strong>Está bajo</strong> ⇒ las tasas del árbol son demasiado altas ⇒ bajar r_L.</div></li>
+        <li><div><strong>Segundo intento: r_L = 4,074%.</strong>
+          <div class="work">r_H = 4,074% × 1,221403 = 4,976%
+V_H = 104/1,04976 = 99,070
+V_L = 104/1,04074 = 99,929
+V₀  = ½[(99,070+4) + (99,929+4)] / 1,035
+    = 103,4996/1,035 = 100,00 ✓</div></div></li>
+        <li><div><strong>Continuar.</strong> Para extender a 3 años se repite el proceso con el bono a 3 años, ajustando la tasa del camino inferior del periodo siguiente. El árbol resultante del curso es:
+          <div class="work">r₀   = 3,500%
+r_H  = 4,976%   r_L  = 4,074%
+r_HH = 6,757%   r_HL = 5,532%   r_LL = 4,530%</div></div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>r_L = 4,074% ⇒ el modelo reproduce el mercado</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Valorar un cap de tasa sobre el árbol</span></header>
+    <div class="body">
+      <p class="given">Préstamo de $100.000 a 3 años, indexado a la tasa a 1 año, reset anual. Cap al 4,75%. Usar el árbol calibrado arriba.</p>
+      <ol class="steps">
+        <li><div><strong>Identificar los caplets.</strong> Con reset anual y 3 años hay <strong>dos</strong> caplets: la tasa del primer año (3,5%) ya se conoce hoy y está bajo el cap, así que no genera pago.</div></li>
+        <li><div><strong>Caplet 1 — paga al final del año 2 según la tasa fijada en t=1.</strong>
+          <div class="work">Estado H: (4,976% − 4,75%) × 100.000 = $226
+Estado L: 4,074% < 4,75%             = $0
+
+V = 0,5×226 / (1,035 × 1,04976) = $104</div>
+          Fíjate en el descuento: <strong>a lo largo del camino</strong>, no con una tasa plana.</div></li>
+        <li><div><strong>Caplet 2 — paga al final del año 3 según la tasa en t=2.</strong>
+          <div class="work">HH: (6,757% − 4,75%)×100.000 = $2.007  (prob ¼)
+HL: (5,532% − 4,75%)×100.000 = $  782  (prob ¼, dos caminos)
+LL: 4,530% < 4,75%           = $    0  (prob ¼)
+
+V = 0,25×2007 / (1,035×1,04976×1,06757)
+  + 0,25×782  / (1,035×1,04074×1,05532)
+  + 0,25×782  / (1,035×1,04976×1,05532)
+  = 432,6 + 172,0 + 170,5 = $775</div>
+          El estado HL tiene <strong>dos caminos</strong> (arriba-abajo y abajo-arriba) y se descuentan <em>por separado</em>, porque las tasas del camino difieren.</div></li>
+        <li><div><strong>Sumar.</strong>
+          <div class="work">Cap = 104 + 775 = $879</div></div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>Cap 4,75% a 3 años = $879</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Bono callable y el coste de la opción en puntos básicos</span></header>
+    <div class="body">
+      <p class="given">Bono a 3 años, cupón 5,25% anual, sobre el mismo árbol. Vale 102,075 sin opción. Es rescatable a fin del año 2 por $99,50. ¿Cuánto le cuesta al emisor esa opción?</p>
+      <ol class="steps">
+        <li><div><strong>Valor de la call en cada nodo de t=2</strong> (intrínseco = valor del bono − precio de rescate):
+          <div class="work">HH: bono 98,588 < 99,50   →  0
+HL: 99,732 − 99,50       →  0,232
+LL: 100,689 − 99,50      →  1,190</div></div></li>
+        <li><div><strong>Retroceder por el árbol.</strong>
+          <div class="work">Nodo H: 0,5(0,232 + 0)/1,04976     = 0,110
+Nodo L: 0,5(1,190 + 0,232)/1,04074 = 0,683
+t = 0 : 0,5(0,110 + 0,683)/1,035   = 0,383</div></div></li>
+        <li><div><strong>Bono callable.</strong>
+          <div class="work">102,075 − 0,383 = 101,692</div></div></li>
+        <li><div><strong>Traducirlo a rendimiento</strong>, que es como se cotiza:
+          <div class="work">Sin opción:  102,075 → TIR = 4,495%
+Callable  :  101,692 → TIR = 4,633%
+Coste anual de la opcionalidad ≈ 14 pb</div>
+          <strong>Ojo</strong>: eso no es el OAS. El <em>option-adjusted spread</em> es el diferencial sobre la libre de riesgo <em>después de quitar</em> el efecto de la opción.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>Call = $0,383 · Callable = $101,692 · ≈14 pb/año</span></div>
+    </div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Serie de tasas diarias a corto: 3,88 · 3,90 · 3,91 · 3,93 · 3,90 · 3,83 · 3,85 · 3,85 · 3,81 · 3,83 · 3,86 (%). La desviación típica diaria de los cambios proporcionales resulta 0,00857. ¿Cuál es σ anual y qué distancia vertical impone en el árbol?</div>
+    <div class="a">
+      <div class="work">σ_anual = 0,00857 × √365 = 0,1638 ≈ 16,4%
+
+Con el modelo multiplicativo r_{t+1} = r_t(1 ± δ):
+  δ = σ ⇒ desde r₀ = 4%
+  r_H = 4% × 1,164 = 4,66%
+  r_L = 4% / 1,164 = 3,44%</div>
+      <em>Por qué δ = σ:</em> ln(r_{t+1}) − ln(r_t) = ±ln(1+δ) ≈ ±δ para δ pequeño. La media es cero y la desviación típica es √[½δ² + ½δ²] = δ. Nota que el curso usa √365 (días naturales), no √252 — usa la convención que te den.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 9 ============ -->
+<section class="module" id="m9">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 09</div>
+    <h2>Riesgo de crédito</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    Deuda con riesgo = <em class="term">deuda libre de riesgo − una put vendida sobre los activos de la empresa</em>. Toda la valoración de crédito, garantías y CDS sale de esa identidad.
+  </div>
+
+  <div class="prose">
+    <h3>Enfoque estadístico: descomponer el spread</h3>
+    <p>El <em>credit spread</em> sobre el Tesoro no es todo pérdida esperada. Tiene al menos cuatro componentes: <strong>pérdidas esperadas</strong> (prob. de default × pérdida dado default), <strong>prima por riesgo de mercado</strong> (el default correlaciona con recesiones), <strong>prima de liquidez</strong> y <strong>características no crediticias</strong> (fiscalidad, opciones incorporadas). Confundir spread con pérdida esperada es el error clásico.</p>
+    <div class="formula">
+      <div class="f">Modelo simple de bono con riesgo (F = 1):
+
+     T                d·g·(1+c) + (1−d)·c        (1−d)^T
+P = Σ  (1−d)^(i−1) · ───────────────────────  +  ───────
+    i=1                    (1 + r)^i             (1 + r)^T
+
+d = tasa de default por periodo   g = tasa de recuperación
+c = cupón   r = retorno ESPERADO (rf + β·prima)
+
+La TIR toma los pagos prometidos como ciertos:
+     T      c            1
+P = Σ  ────────────  +  ────────
+    i=1  (1+y)^i        (1+y)^T</div>
+      <div class="cap">La clave: <b>y ≠ r</b>. La TIR es lo que cobrarías si nadie fallara; el retorno esperado es lo que cobrarás en promedio. La brecha crece con d, con (1−g) y con el plazo.</div>
+    </div>
+
+    <h3>Enfoque estructural: el modelo de Merton</h3>
+    <div class="formula">
+      <div class="f">Activos V, deuda cupón cero de nominal F a plazo T
+
+Equity   = call sobre los activos, strike F
+  E = V·N(d₁) − F·e^(−rT)·N(d₂)
+Deuda    = F·e^(−rT) − Put(V, F)
+Garantía = exactamente esa put
+
+Volatilidad del equity apalancado:
+  σ_E = (V/E) · N(d₁) · σ_V
+
+Distancia al default (KMV):
+  DTD = (V − punto de default) / (V · σ_V)</div>
+      <div class="cap">Consecuencia del "efecto apalancamiento" de Fischer Black: cuando E cae respecto de V, σ_E se dispara. Por eso analizar una empresa en dificultades con un beta constante y CAPM es directamente inválido.</div>
+    </div>
+
+    <h3>Credit Default Swaps</h3>
+    <ul>
+      <li>El comprador de protección paga una prima periódica sobre un nocional; si hay evento de crédito, recibe 100 − recuperación (o entrega el bono contra la par).</li>
+      <li><strong>Resultado central:</strong> el <em>credit spread</em> del bono es aproximadamente la prima justa del CDS. Comprar CDS ≡ vender el bono con riesgo y comprar el libre de riesgo.</li>
+      <li>Eventos de disparo: quiebra, impago, reestructuración, degradación, aceleración… todo bajo reglas ISDA.</li>
+      <li><strong>Multi-name:</strong> un <em>nth-to-default basket</em> es mucho más barato que comprar CDS individuales, y su prima depende críticamente de la <strong>correlación de default</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Valorar una garantía de crédito como put (binomial)</span></header>
+    <div class="body">
+      <p class="given">XYZ vale $100 M hoy; en un año sus activos valen $140 M o $70 M. Tiene deuda garantizada de $90 M que vence en un año. Un bono libre de riesgo a 1 año cotiza a $95 por $100. ¿Cuánto vale la garantía?</p>
+      <ol class="steps">
+        <li><div><strong>Dibujar el pago del garante.</strong>
+          <div class="work">Activos 140 → deuda se paga sola  →   $0
+Activos  70 → falta 90 − 70      →  −$20</div>
+          Es una <strong>put vendida sobre los activos con strike 90</strong>.</div></li>
+        <li><div><strong>Vía A — replicar con bono y activos.</strong> Buscar X (bonos) e Y (activos):
+          <div class="work">X·100 + Y·140 =   0
+X·100 + Y· 70 = −20
+Restando:  Y·70 = 20  ⇒  Y = 0,285714
+           X·100 = −40 ⇒  X = −0,4
+
+Precio = −0,4×95 + 0,285714×100
+       = −38 + 28,5714 = −9,43</div></div></li>
+        <li><div><strong>Vía B — probabilidad neutral al riesgo (comprobación).</strong>
+          <div class="work">q* = (100/0,95 − 70)/(140 − 70)
+   = (105,263 − 70)/70 = 0,503759
+Valor = 0,95 × [0,496241 × 20] = 9,43 ✓</div></div></li>
+        <li><div><strong>Interpretar.</strong> La garantía vale <strong>$9,43 M</strong> — casi el 10% del valor de la empresa. Y fíjate en la cartera replicante: corto 0,4 bonos, largo 0,29 activos. El garante tiene una <strong>posición muy apalancada</strong> en los activos de la empresa aunque no haya puesto un dólar.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>Garantía = $9,43 M (put vendida, strike $90 M)</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Merton completo: equity, deuda, spread y volatilidad</span></header>
+    <div class="body">
+      <p class="given">Activos V₀ = $100 M, σ_V = 30%, deuda cupón cero F = $70 M a T = 2 años, r = 5% continua.</p>
+      <ol class="steps">
+        <li><div><strong>Valorar el equity como call sobre los activos.</strong>
+          <div class="work">d₁ = [ln(100/70) + (0,05 + 0,045)×2] / (0,3×√2)
+   = (0,356675 + 0,19)/0,424264 = 1,2885
+d₂ = 1,2885 − 0,4243 = 0,8643
+N(d₁) = 0,90121    N(d₂) = 0,80629
+
+E = 100×0,90121 − 70×e^(−0,10)×0,80629
+  = 90,121 − 51,069 = $39,05 M</div></div></li>
+        <li><div><strong>La deuda es el residuo.</strong>
+          <div class="work">D = V − E = 100 − 39,05 = $60,95 M
+Deuda libre de riesgo = 70×e^(−0,10) = $63,34 M
+Valor de la put/garantía = 63,34 − 60,95 = $2,39 M</div></div></li>
+        <li><div><strong>Credit spread implícito.</strong>
+          <div class="work">60,95 = 70·e^(−y×2)
+e^(−2y) = 0,870714
+y = 6,92%
+Spread = 6,92% − 5,00% = 192 pb</div>
+          Y esa es también, aproximadamente, la <strong>prima justa de un CDS</strong> sobre esta deuda.</div></li>
+        <li><div><strong>Volatilidad del equity apalancado.</strong>
+          <div class="work">σ_E = (V/E)·N(d₁)·σ_V
+    = (100/39,05) × 0,90121 × 0,30
+    = 2,5608 × 0,270363 = 69,2%</div>
+          Los activos oscilan un 30%; el equity un 69%. Si la empresa se deteriora y E cae, σ_E se dispara todavía más — el <strong>efecto apalancamiento</strong>.</div></li>
+        <li><div><strong>El problema práctico.</strong> V y σ_V <strong>no se observan</strong>. Lo que se observa es E (capitalización) y σ_E. Se resuelven las dos ecuaciones no lineales simultáneamente. Eso es exactamente lo que hace el modelo KMV de Moody's antes de mapear la distancia al default a una EDF.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>E = $39,05 M · D = $60,95 M · spread 192 pb · σ_E = 69%</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Bono con riesgo: TIR frente a retorno esperado</span></header>
+    <div class="body">
+      <p class="given">Bono a 2 años, cupón 6%, nominal 1. Default 3% anual, recuperación 40%, retorno esperado exigido r = 6%.</p>
+      <ol class="steps">
+        <li><div><strong>Flujo esperado de cada periodo.</strong>
+          <div class="work">d·g·(1+c) + (1−d)·c
+= 0,03×0,40×1,06 + 0,97×0,06
+= 0,01272 + 0,05820 = 0,07092</div></div></li>
+        <li><div><strong>Descontar al retorno esperado.</strong>
+          <div class="work">i=1: 0,07092/1,06                 = 0,066906
+i=2: 0,97 × 0,07092/1,1236       = 0,061224
+Principal: 0,97²/1,1236          = 0,837398
+P = 0,965528</div></div></li>
+        <li><div><strong>Sacar la TIR de los pagos prometidos.</strong>
+          <div class="work">0,965528 = 0,06/(1+y) + 1,06/(1+y)²
+y ≈ 7,93%</div></div></li>
+        <li><div><strong>La lección.</strong>
+          <div class="work">TIR prometida    = 7,93%
+Retorno esperado = 6,00%
+Diferencia       = 193 pb  ← pérdida esperada</div>
+          Un gestor que compare TIRs entre bonos de distinta calidad crediticia está comparando promesas, no rentabilidades. Ese es el error que el módulo quiere que no cometas.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>P = 0,9655 · TIR 7,93% vs. retorno esperado 6,00%</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>Pregunta S5 del examen de muestra: ¿qué <em>reduce</em> el precio de una garantía sobre un cupón cero con riesgo? La garantía es una <strong>put</strong> sobre los activos, así que baja con lo que sube el valor de la empresa o baja el strike: <strong>(a) tasa libre de riesgo más alta</strong> ✓. Suben la garantía: mayor volatilidad de activos (b), mayor nominal (c) y mayor plazo (d).</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">¿Qué es un <em>first-to-default</em> CDS sobre una cesta y qué le pasa a su valor si sube la correlación de default entre los nombres de la cesta? (Pregunta S2 del examen.)</div>
+    <div class="a">
+      Es protección que paga una sola vez, en el <strong>primer</strong> default de la cesta, y después se extingue.<br><br>
+      Si la correlación sube, los defaults tienden a ocurrir <strong>juntos o no ocurrir</strong>: la probabilidad de que al menos uno falle <em>baja</em> (los eventos se solapan en vez de repartirse). Como la protección sólo cubre el primero, <strong>vale menos</strong>.
+      <div class="work">ρ = 0   → defaults independientes → P(al menos 1) máxima → caro
+ρ → 1   → todos fallan a la vez o ninguno
+          → P(al menos 1) ≈ P(uno solo) → barato</div>
+      Es la imagen espejo del tramo senior de un CDO: correlación alta perjudica al senior y ayuda al equity. Mismo mecanismo, distinto lado de la estructura.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 10 ============ -->
+<section class="module" id="m10">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 10</div>
+    <h2>Titulización: ABS, MBS y CDO</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    La titulización no crea ni destruye riesgo: lo <em class="term">reparte</em>. Y el parámetro que decide cómo se reparte — la correlación de default — es precisamente el que peor se estima.
+  </div>
+
+  <div class="prose">
+    <h3>Por qué se tituliza</h3>
+    <ul>
+      <li><strong>Eficiencia:</strong> especialización en el proceso de crédito; reparto más amplio del riesgo.</li>
+      <li><strong>Liquidez:</strong> convierte préstamos individuales ilíquidos en títulos negociables.</li>
+      <li><strong>Financiación:</strong> abre un mercado local a inversores nacionales o globales.</li>
+      <li><strong>Arbitraje regulatorio:</strong> sacar activos del balance reduce requisitos de capital. Este motivo no es una nota al pie — explica buena parte del volumen.</li>
+    </ul>
+    <p>Y los problemas que crea: <strong>selección adversa</strong> (¿se titulizan los peores préstamos?), <strong>riesgo moral</strong> (¿el originador filtra menos si va a vender?), <strong>riesgo de modelo</strong> (estructuras difíciles de valorar; especificar mal la correlación) e iliquidez de los tramos peores.</p>
+
+    <h3>Estructuras</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Estructura</th><th>Cómo reparte el flujo</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Pass-through</td><td>Prorrata a todos los tenedores. Diversificación, sin tranching</td></tr>
+          <tr><td class="k">CMO secuencial</td><td>Clase A cobra todo el principal primero, luego B, luego C, luego Z</td></tr>
+          <tr><td class="k">PAC / TAC / Support</td><td>El tramo PAC recibe un calendario de amortización protegido; el <em>support</em> absorbe la variación de prepago</td></tr>
+          <tr><td class="k">IO / PO</td><td>IO recibe sólo intereses; PO sólo principal. Sensibilidades opuestas a las tasas</td></tr>
+          <tr><td class="k">CDO por tramos</td><td>Senior / mezzanine / junior-equity. El subordinado absorbe las primeras pérdidas (sobrecolateralización)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Riesgos específicos del MBS</h3>
+    <p>Las hipotecas conformes en EEUU se pueden <strong>prepagar sin penalización</strong>. Eso genera dos riesgos simétricos: <strong>riesgo de prepago</strong> (bajan las tasas → refinancian → te devuelven el principal justo cuando no puedes reinvertir bien) y <strong>riesgo de extensión</strong> (suben las tasas → dejan de prepagar → te quedas atrapado en un cupón bajo). El resultado es <strong>convexidad negativa</strong>.</p>
+    <p>El modelado del prepago va de simple a complejo: CPR/SMM constantes → modelo PSA (útil sobre todo como <em>lenguaje común</em> para comunicar supuestos) → modelos econométricos propietarios que dependen del tamaño del préstamo, la antigüedad, el credit score, el LTV y la ubicación. Cuidado con la inestabilidad de parámetros.</p>
+    <p><strong>IO y PO:</strong> si suben las tasas, el PO cae doblemente (descuento mayor <em>y</em> principal más tardío) → su duración se alarga. El IO puede llegar a <em>subir</em> de valor con tasas altas, porque el principal sobrevive más tiempo y sigue devengando intereses — llega a tener <strong>duración efectiva negativa</strong>.</p>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Correlación de default y valor de los tramos</span></header>
+    <div class="body">
+      <p class="given">CDO de $300 sobre dos notas cupón cero a 1 año. Nota 1: $100 nominal, recuperación 50%, precio $95. Nota 2: $200 nominal, recuperación 40%, precio $179,50. Tasa 2%. Tramos: senior $220, mezzanine $60, junior $20.</p>
+      <ol class="steps">
+        <li><div><strong>Extraer probabilidades de default neutrales al riesgo de los precios.</strong>
+          <div class="work">Nota 1: (50·p₁ + 100(1−p₁))/1,02 = 95  →  p₁ = 6,2%
+Nota 2: (80·p₂ + 200(1−p₂))/1,02 = 179,5 →  p₂ = 14,1%</div></div></li>
+        <li><div><strong>Caso A — probabilidad conjunta 1%.</strong>
+          <div class="work">Sólo falla 1:  6,2 − 1  =  5,2%   → pool cobra 250
+Sólo falla 2: 14,1 − 1  = 13,1%   → pool cobra 180
+Fallan ambas            =  1,0%   → pool cobra 130
+Ninguna                 = 80,7%   → pool cobra 300</div></div></li>
+        <li><div><strong>Cascada (waterfall): el senior cobra primero.</strong>
+          <div class="work">Pago 300 → sen 220, mez 60, jun 20
+Pago 250 → sen 220, mez 30, jun  0
+Pago 180 → sen 180, mez  0, jun  0
+Pago 130 → sen 130, mez  0, jun  0
+
+E*(senior) = 213,80 → VP 209,60 → yield  4,9%
+E*(mezz)   =  50,00 → VP  49,00 → yield 22,4%
+E*(junior) =  16,10 → VP  15,80 → yield 26,6%</div></div></li>
+        <li><div><strong>Caso B — subir la correlación: conjunta 3%.</strong> Las marginales no cambian, así que se reparten distinto:
+          <div class="work">Sólo 1: 3,2%  |  Sólo 2: 11,1%
+Ambas : 3,0%  |  Ninguna: 82,7%
+
+E*(senior) = 212,86 → VP 208,69 → yield 5,42% ↑
+E*(mezz)   =  50,58 → VP  49,59 → yield 21,0% ↓
+E*(junior) =  16,54 → VP  16,22 → yield 21,3% ↓</div></div></li>
+        <li><div><strong>La conclusión que explica 2008.</strong> Más correlación ⇒ <strong>el senior vale menos</strong> (aumenta la probabilidad de que todo falle a la vez, que es el único escenario que le hace daño) y <strong>el junior vale más</strong> (aumenta la probabilidad de que no falle nada). Los MBS senior sufrieron pérdidas inesperadas porque la correlación real resultó ser mucho mayor que la modelada.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>Correlación ↑ ⇒ senior ↓ · junior ↑</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Precio de un MBS por trayectorias</span></header>
+    <div class="body">
+      <p class="given">Árbol de tasas libres de riesgo (4 caminos equiprobables) y un modelo de prepago que genera los flujos de abajo. Los inversores exigen 0,25% sobre la libre de riesgo. ¿Precio máximo a pagar?</p>
+      <ol class="steps">
+        <li><div><strong>Tasas de descuento por camino</strong> (libre de riesgo + 25 pb):
+          <div class="work">(u,u)  6,25%  6,75%  7,25%   flujos 100  100  100
+(u,d)  6,25%  6,75%  6,25%   flujos 100  100  104
+(d,u)  6,25%  5,75%  6,25%   flujos 100  150   50
+(d,d)  6,25%  5,75%  5,25%   flujos 100  150   58</div>
+          Fíjate en el mecanismo: cuando las tasas <strong>bajan</strong>, el prepago se acelera (150 en vez de 100) y el flujo llega antes.</div></li>
+        <li><div><strong>Descontar cada camino con SUS tasas</strong> (no con una tasa plana — ese es todo el punto):
+          <div class="work">Camino 1: 100/1,0625 + 100/(1,0625·1,0675)
+          + 100/(1,0625·1,0675·1,0725) = 264,49
+Camino 2:                              = 268,58
+Camino 3:                              = 269,50
+Camino 4:                              = 276,66</div></div></li>
+        <li><div><strong>Promediar (los cuatro son equiprobables).</strong>
+          <div class="work">(264,49 + 268,58 + 269,50 + 276,66)/4 = 269,81</div></div></li>
+        <li><div><strong>Ver la convexidad negativa en los números.</strong> En el camino más bajista de tasas (4) el valor es el mayor, sí — pero mira el <em>flujo</em>: el principal vuelve antes y hay que reinvertirlo a tasas peores. El precio sube menos de lo que subiría un bono sin opción de prepago. Eso es convexidad negativa vista de cerca.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>Precio del MBS = $269,81</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>Pregunta S6: si toda la curva sube 1%, ¿qué pasa con el IO y el PO? <strong>El prepago se ralentiza</strong> (nadie refinancia con tasas altas), así que el riesgo de prepago <em>disminuye</em> y aparece el de extensión. La suma IO+PO cae (es el valor del pool descontado más). El <strong>PO alarga su duración</strong> (principal más tardío + descuento mayor). Y el <strong>IO gana valor relativo</strong>: el principal sobrevive más y sigue generando intereses ⇒ Precio(IO)/Precio(PO) sube.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">¿Por qué existe un tramo <em>support</em> en un CMO con PAC, y quién asume qué?</div>
+    <div class="a">
+      El PAC promete un <strong>calendario de amortización fijo</strong> dentro de una banda de velocidades de prepago (por ejemplo, entre 100% y 250% PSA). Ese calendario no se cumple solo: alguien tiene que absorber la desviación.<br><br>
+      Ese alguien es el <strong>tramo support</strong>. Si el prepago se acelera, el support recibe el exceso de principal; si se frena, el support deja de cobrar para que el PAC siga en calendario.
+      <div class="work">PAC     : flujos casi ciertos → duración estable → rinde MENOS
+Support : flujos muy volátiles → duración inestable → rinde MÁS</div>
+      Es exactamente la misma lógica que el tranching de crédito de un CDO, pero aplicada al <strong>riesgo de prepago</strong> en lugar de al riesgo de default. Ninguna estructura reduce el riesgo total del pool: sólo decide quién lo lleva.
+    </div>
+  </details>
+</section>
+
+</main>
+</div>
+
+<!-- ============ CHULETA ============ -->
+<section class="closing" id="chuleta">
+  <div class="wrap">
+    <div class="mod-num" style="margin-bottom:10px">Antes del examen</div>
+    <h2 style="font-size:clamp(26px,3.4vw,34px)">Mapa de fórmulas</h2>
+    <p style="max-width:var(--maxw);color:var(--ink-2);margin-top:12px">Si sólo repasas una página, que sea esta. Casi todo el examen es aplicar una de estas doce líneas al caso concreto.</p>
+
+    <div class="cardgrid">
+      <div class="card">
+        <h4>Forwards</h4>
+        <div class="f">F₀ = S₀·e^((r−q)T)
+F₀ = (S₀ − VP flujos)·e^(rT)
+f_t = (F_t − K)·e^(−r(T−t))
+Commodity: F₀=S₀·e^((r+u−y)T)</div>
+      </div>
+      <div class="card">
+        <h4>Swaps</h4>
+        <div class="f">Flotante vale par en cada reset
+c = [1 − 1/(1+Y_N)^N] / Σ 1/(1+Y_i)^i
+K_divisa = S₀ · Σe^(−r_f T) / Σe^(−r_d T)
+Swap = forwards + préstamo forward</div>
+      </div>
+      <div class="card">
+        <h4>Duración</h4>
+        <div class="f">D_M = D/(1+y/k)
+D_$ = D_M · P    (se SUMA)
+dP/P ≈ −D_M·dy + ½C₀(dy)²
+Hedge:  P·D_M = F·D_F
+Flotante: D_ef = reset/(1+y/k)</div>
+      </div>
+      <div class="card">
+        <h4>Binomial</h4>
+        <div class="f">Δ = (c_u − c_d)/(S_u − S_d)
+q* = (S₀e^(rΔt) − S_d)/(S_u − S_d)
+V₀ = e^(−rΔt)[q*V_u + (1−q*)V_d]
+u = e^(σ√Δt),  d = 1/u
+Americana: max(intrínseco, esperar)</div>
+      </div>
+      <div class="card">
+        <h4>Black-Scholes</h4>
+        <div class="f">c = S₀e^(−qT)N(d₁) − Ke^(−rT)N(d₂)
+d₁ = [ln(S/K)+(r−q+σ²/2)T]/(σ√T)
+d₂ = d₁ − σ√T
+p = c + Ke^(−rT) − S₀e^(−qT)
+Δ_call = e^(−qT)N(d₁)</div>
+      </div>
+      <div class="card">
+        <h4>Modelo de Black</h4>
+        <div class="f">c = e^(−rT)[F₀N(d₁) − KN(d₂)]
+p = e^(−rT)[KN(−d₂) − F₀N(−d₁)]
+d₁ = [ln(F₀/K) + σ²T/2]/(σ√T)
+Uso: futuros, caps, floors, swaptions</div>
+      </div>
+      <div class="card">
+        <h4>Griegas</h4>
+        <div class="f">Δ = ∂V/∂S      = N(d₁)
+Γ = ∂²V/∂S²    = N′(d₁)/(Sσ√T)
+ν = ∂V/∂σ      = S·N′(d₁)·√T
+ρ = ∂V/∂r      = KTe^(−rT)N(d₂)
+Θ = ∂V/∂t      < 0 normalmente</div>
+      </div>
+      <div class="card">
+        <h4>Tasas de interés</h4>
+        <div class="f">r_H = r_L·e^(2σ)
+σ_anual = σ_diaria·√(obs/año)
+Callable = sin opción − call
+Putable  = sin opción + put
+Caplet: N·Δt·max(R_t − R_x, 0)</div>
+      </div>
+      <div class="card">
+        <h4>Crédito</h4>
+        <div class="f">Deuda riesgo = libre riesgo − put
+E = V·N(d₁) − Fe^(−rT)N(d₂)
+σ_E = (V/E)·N(d₁)·σ_V
+DTD = (V − default point)/(V·σ_V)
+Prima CDS ≈ credit spread</div>
+      </div>
+      <div class="card">
+        <h4>Monte Carlo</h4>
+        <div class="f">S_{t+Δt} = S_t·exp[(r−σ²/2)Δt + σ√Δt·ε]
+ε ~ N(0,1)
+Precio = media de pagos descontados
+Error estándar = s/√N</div>
+      </div>
+      <div class="card">
+        <h4>Titulización</h4>
+        <div class="f">Correlación ↑ ⇒ senior ↓, junior ↑
+Tasas ↓ ⇒ prepago ↑ ⇒ convexidad neg.
+Tasas ↑ ⇒ PO alarga duración
+Tasas ↑ ⇒ IO gana valor relativo</div>
+      </div>
+      <div class="card">
+        <h4>Sanidad mental</h4>
+        <div class="f">Todo forward vale 0 al inicio
+Put-call parity SÓLO en europeas
+Un árbol solo → Δ, Γ, Θ (no ν ni ρ)
+Call americana sin div: nunca ejercer
+Asiática < europea; barrera < vainilla</div>
+      </div>
+    </div>
+
+    <footer>
+      Resumen elaborado a partir de las diapositivas de clase, las recitaciones y el examen de muestra de <strong>15.435x Derivatives Markets</strong> (MITx MicroMasters in Finance, Prof. Deborah Lucas). Los ejemplos numéricos están recalculados de principio a fin; los que provienen directamente del curso conservan sus cifras originales. Referencia de apoyo: Hull, <em>Options, Futures and Other Derivatives</em>, 10ª ed.
+    </footer>
+  </div>
+</section>
+</body>
+</html>

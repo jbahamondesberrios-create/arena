@@ -6,7 +6,7 @@
    Al tocar cualquier archivo de la app hay que subir VERSION: es lo único
    que hace que los navegadores que ya la tienen instalada se actualicen.
    ============================================================ */
-const VERSION = "arena-v4";
+const VERSION = "arena-v5";
 
 /* El esqueleto que se guarda en la instalación. Si algún día se añade un
    archivo nuevo y se olvida esta lista, no se rompe nada: lo de abajo lo
@@ -20,6 +20,7 @@ const ESQUELETO = [
   "js/motor.js",
   "js/juegos.js",
   "js/estudio.js",
+  "js/cuadernos.js",
   "js/especiales.js",
   "js/app.js",
   "datos/aleman.js",
@@ -35,10 +36,21 @@ const ESQUELETO = [
   "datos/apuntes-matematicas.js",
   "datos/apuntes-quimica.js",
   "datos/apuntes-geografia.js",
+  "datos/cuadernos.js",
   "datos/ejercicios-matematicas.js",
   "datos/ejercicios-finanzas.js",
   "iconos/icono-192.png",
-  "iconos/icono-512.png"
+  "iconos/icono-512.png",
+
+  /* Los cinco cuadernos del MicroMasters. Pesan ~530 KB entre todos, pero
+     son justo lo que hay que poder leer sin internet. Las tipografías que
+     enlazan son de Google: al ser de otro origen el fetch de abajo no las
+     toca, y sin red caen a la familia de respaldo. */
+  "cuadernos/15516x-contabilidad.html",
+  "cuadernos/154151x-fundamentos-i.html",
+  "cuadernos/154152x-fundamentos-ii.html",
+  "cuadernos/15455x-metodos-matematicos.html",
+  "cuadernos/15435x-derivados.html"
 ];
 
 self.addEventListener("install", e => {

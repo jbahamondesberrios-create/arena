@@ -223,6 +223,11 @@ function marcarLeido(id){
 
 function contarLeidos(){ return Object.keys(E.leidos || {}).length; }
 
+/* Un cuaderno del MicroMasters es un curso entero, no un apartado: paga
+   más que un apunte. Comparte la tabla `leidos`, así que la copia del
+   progreso entre dispositivos ya lo lleva. */
+const XP_CUADERNO = 120;
+
 /* ---------- Conquista (tablero de química y atlas) ---------- */
 /* Una casilla se conquista cuando aciertas TODO lo que se pregunta de ella. */
 const XP_CASILLA = 25;
@@ -427,7 +432,7 @@ cargar();
 
 return {
   get estado(){ return E; },
-  NIVELES, RANGOS, ICONO_MED, XP_APUNTE, XP_CASILLA,
+  NIVELES, RANGOS, ICONO_MED, XP_APUNTE, XP_CASILLA, XP_CUADERNO,
   LIMITES, TOPE_PREGUNTAS, limpiarPerso, ajustePerso, guardarPerso, cfgPerso,
   guardar, rango, sumarXP, marcarDia,
   estaLeido, marcarLeido, contarLeidos,

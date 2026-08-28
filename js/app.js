@@ -99,8 +99,24 @@ function pintarEspeciales(){
   });
 }
 
+/* --- banda de cuadernos del hub --- */
+function pintarBandaCuadernos(){
+  const pr = Cuadernos.progreso();
+  const fill = $("#cuad-banda-fill");
+  const txt  = $("#cuad-banda-txt");
+  if(!fill || !txt) return;
+  fill.style.width = pr.total ? (pr.leidos / pr.total * 100) + "%" : "0%";
+  if(pr.leidos === pr.total){
+    txt.innerHTML = `🎓 Los ${pr.total} repasados.`;
+  }else{
+    const min = Cuadernos.minutosPendientes();
+    txt.innerHTML = `${pr.leidos} de ${pr.total} repasados · quedan ~${min} min de lectura`;
+  }
+}
+
 function pintarHub(){
   pintarEspeciales();
+  pintarBandaCuadernos();
   const cont = $("#mundos");
   cont.innerHTML = "";
 
@@ -860,8 +876,19 @@ Especiales.init({
 });
 Especiales.conectar();
 
+Cuadernos.init({
+  ir,
+  brindis,
+  pintarCabecera,
+  volverAlHub: () => { M.Sonido.clic(); volverAlHub(); }
+});
+Cuadernos.conectar();
+
 $("#btn-estudiar").addEventListener("click", () => { pararCrono(); M.Sonido.clic(); Estudio.pintarIndice(); });
 $("#btn-ir-estudio").addEventListener("click", () => { M.Sonido.clic(); Estudio.pintarIndice(); });
+
+$("#btn-ir-cuadernos").addEventListener("click", () => { pararCrono(); M.Sonido.clic(); Cuadernos.pintar(); });
+$("#btn-estudio-cuadernos").addEventListener("click", () => { M.Sonido.clic(); Cuadernos.pintar(); });
 
 $("#btn-sonido").addEventListener("click", () => {
   const on = M.alternarSonido();
@@ -948,6 +975,7 @@ document.addEventListener("keydown", e => {
     if(enJuego){ pararCrono(); volverAlHub(); }
     else if($("#pantalla-lectura").classList.contains("activa")) Estudio.volverAlIndice();
     else if($("#pantalla-estudio").classList.contains("activa")) volverAlHub();
+    else if($("#pantalla-cuadernos").classList.contains("activa")) volverAlHub();
     else if($("#pantalla-perfil").classList.contains("activa")) volverAlHub();
     else if($("#pantalla-tabla").classList.contains("activa")) volverAlHub();
     else if($("#pantalla-atlas").classList.contains("activa")) volverAlHub();

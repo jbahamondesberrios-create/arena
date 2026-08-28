@@ -1,0 +1,1845 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#12243f">
+<link rel="icon" href="../iconos/icono-192.png">
+<title>Cuaderno 15.455x</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,400;0,500;0,600;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Fira+Mono:wght@400;500;700&display=swap">
+
+<style>
+:root{
+  --paper:#eef2f3;
+  --surface:#ffffff;
+  --surface-2:#e2e9eb;
+  --ink:#10191c;
+  --ink-2:#465559;
+  --ink-3:#78888d;
+  --rule:#d2dbdd;
+  --rule-strong:#b0bdc0;
+  --accent:#0f5f7a;
+  --accent-soft:#e0edf1;
+  --accent-2:#8a3f6b;
+  --accent-2-soft:#f4e9ef;
+  --loss:#a03828;
+  --shadow:0 1px 2px rgba(16,25,28,.06),0 8px 24px -18px rgba(16,25,28,.45);
+  --maxw:72ch;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0a1114;
+    --surface:#111a1e;
+    --surface-2:#182328;
+    --ink:#dfe7e9;
+    --ink-2:#9aabaf;
+    --ink-3:#77878c;
+    --rule:#223037;
+    --rule-strong:#374a52;
+    --accent:#5fb4d1;
+    --accent-soft:#0f2731;
+    --accent-2:#d491b8;
+    --accent-2-soft:#2a1a24;
+    --loss:#e58b7c;
+    --shadow:0 1px 2px rgba(0,0,0,.45),0 8px 26px -18px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0a1114;
+  --surface:#111a1e;
+  --surface-2:#182328;
+  --ink:#dfe7e9;
+  --ink-2:#9aabaf;
+  --ink-3:#77878c;
+  --rule:#223037;
+  --rule-strong:#374a52;
+  --accent:#5fb4d1;
+  --accent-soft:#0f2731;
+  --accent-2:#d491b8;
+  --accent-2-soft:#2a1a24;
+  --loss:#e58b7c;
+  --shadow:0 1px 2px rgba(0,0,0,.45),0 8px 26px -18px rgba(0,0,0,.9);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:Lora,Georgia,"Times New Roman",serif;
+  font-size:17px;
+  line-height:1.64;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:"Zilla Slab",Georgia,serif;text-wrap:balance;margin:0;line-height:1.15;font-weight:600}
+p{margin:0}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+code,.mono{font-family:"Fira Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:.9em}
+
+/* ---------- shell ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.shell{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+@media(min-width:1040px){
+  .shell{grid-template-columns:216px minmax(0,1fr);gap:56px;align-items:start}
+}
+
+/* ---------- hero ---------- */
+.hero{border-bottom:1px solid var(--rule);background:var(--surface)}
+.hero-in{padding:64px 0 44px;display:flex;flex-direction:column;gap:22px}
+.eyebrow{
+  font-family:"Fira Mono",monospace;font-size:11.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--accent);font-weight:500;
+}
+.hero h1{font-size:clamp(36px,6vw,62px);letter-spacing:-.02em;max-width:17ch}
+.hero .lede{font-size:19px;color:var(--ink-2);max-width:60ch}
+.facts{
+  display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--rule);border-radius:3px;
+  overflow:hidden;background:var(--paper);margin-top:8px;
+}
+.fact{padding:12px 20px;border-right:1px solid var(--rule);flex:1 1 auto;min-width:132px}
+.fact:last-child{border-right:0}
+.fact dt{font-family:"Fira Mono",monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 3px}
+.fact dd{margin:0;font-family:"Zilla Slab",serif;font-size:19px;font-weight:600}
+
+/* ---------- nav ---------- */
+nav.toc{display:none}
+@media(min-width:1040px){
+  nav.toc{
+    display:block;position:sticky;top:0;padding:44px 0;max-height:100vh;overflow-y:auto;
+  }
+  nav.toc h2{
+    font-family:"Fira Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink-3);font-weight:500;margin-bottom:14px;
+  }
+  nav.toc ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+  nav.toc a{
+    display:grid;grid-template-columns:26px 1fr;gap:6px;padding:5px 0;
+    font-size:13.5px;line-height:1.3;color:var(--ink-2);text-decoration:none;
+  }
+  nav.toc a span{font-family:"Fira Mono",monospace;font-size:11px;color:var(--ink-3);padding-top:2px}
+  nav.toc a:hover{color:var(--accent)}
+  nav.toc a:hover span{color:var(--accent)}
+  nav.toc .blk{
+    font-family:"Fira Mono",monospace;font-size:9.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-3);margin:14px 0 4px;
+  }
+}
+.chipbar{display:flex;gap:6px;overflow-x:auto;padding:14px 0;border-bottom:1px solid var(--rule);margin-bottom:8px}
+@media(min-width:1040px){.chipbar{display:none}}
+.chipbar a{
+  flex:0 0 auto;font-family:"Fira Mono",monospace;font-size:11.5px;
+  padding:5px 10px;border:1px solid var(--rule);border-radius:2px;
+  text-decoration:none;color:var(--ink-2);background:var(--surface);
+}
+
+/* ---------- module ---------- */
+main{padding:8px 0 96px;min-width:0}
+.module{padding:52px 0;border-bottom:1px solid var(--rule)}
+.module:last-of-type{border-bottom:0}
+.mod-head{display:flex;flex-direction:column;gap:10px;margin-bottom:26px}
+.mod-head h2{font-size:clamp(26px,3.4vw,36px);letter-spacing:-.015em}
+.mod-num{
+  font-family:"Fira Mono",monospace;font-size:11.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+.mod-num b{color:var(--accent);font-weight:500}
+.prose{max-width:var(--maxw);display:flex;flex-direction:column;gap:16px}
+.prose h3{
+  font-size:19.5px;margin-top:16px;letter-spacing:-.005em;
+  display:flex;align-items:baseline;gap:9px;
+}
+.prose h3::before{
+  content:"";width:16px;height:1px;background:var(--accent);flex:0 0 auto;transform:translateY(-5px);
+}
+.prose ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:7px}
+.prose li::marker{color:var(--accent)}
+strong{font-weight:600}
+em.term{font-style:normal;font-weight:600;color:var(--accent)}
+
+/* thesis callout */
+.thesis{
+  max-width:var(--maxw);border-left:2px solid var(--accent);padding:2px 0 2px 18px;
+  font-size:18.5px;color:var(--ink);margin-bottom:26px;
+}
+.thesis span{display:block;font-family:"Fira Mono",monospace;font-size:10.5px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+
+/* formula */
+.formula{
+  background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+  padding:16px 18px;display:flex;flex-direction:column;gap:8px;overflow-x:auto;
+  box-shadow:var(--shadow);
+}
+.formula .f{font-family:"Fira Mono",monospace;font-size:13.4px;line-height:1.9;white-space:pre;color:var(--ink)}
+.formula .cap{font-size:14px;color:var(--ink-2);line-height:1.5}
+.formula .cap b{color:var(--ink);font-weight:600}
+
+/* worked example */
+.ex{
+  background:var(--surface);border:1px solid var(--rule-strong);border-radius:3px;
+  margin:12px 0;box-shadow:var(--shadow);overflow:hidden;
+}
+.ex > header{
+  padding:12px 20px;border-bottom:1px solid var(--rule);background:var(--accent-soft);
+  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+}
+.ex > header b{
+  font-family:"Fira Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--accent);font-weight:500;
+}
+.ex > header span{font-family:"Zilla Slab",serif;font-weight:600;font-size:17px}
+.ex .body{padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+.ex .given{font-size:15.5px;color:var(--ink-2)}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0;counter-reset:s}
+.steps li{
+  counter-increment:s;display:grid;grid-template-columns:24px minmax(0,1fr);gap:12px;
+  padding:12px 0;border-top:1px solid var(--rule);
+}
+.steps li:first-child{border-top:0;padding-top:2px}
+.steps li::before{
+  content:counter(s);font-family:"Fira Mono",monospace;font-size:11px;
+  color:var(--accent);padding-top:5px;font-weight:500;
+}
+.steps .work{
+  font-family:"Fira Mono",monospace;font-size:12.8px;line-height:1.85;
+  background:var(--surface-2);border-radius:2px;padding:9px 12px;margin-top:7px;
+  overflow-x:auto;white-space:pre;color:var(--ink);
+}
+.result{
+  border-top:2px solid var(--accent);padding-top:12px;display:flex;gap:12px;
+  align-items:baseline;flex-wrap:wrap;
+}
+.result b{font-family:"Fira Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--accent)}
+.result span{font-family:"Zilla Slab",serif;font-size:19px;font-weight:600}
+
+/* trap */
+.trap{
+  max-width:var(--maxw);border:1px solid var(--rule);border-left:3px solid var(--accent-2);
+  background:var(--accent-2-soft);border-radius:3px;padding:14px 18px;
+  display:flex;flex-direction:column;gap:6px;font-size:15.5px;
+}
+.trap b{
+  font-family:"Fira Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--accent-2);
+}
+
+/* challenge */
+details.reto{
+  max-width:var(--maxw);border:1px dashed var(--rule-strong);border-radius:3px;
+  padding:14px 18px;background:var(--surface);
+}
+details.reto summary{
+  cursor:pointer;font-family:"Fira Mono",monospace;font-size:11px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);list-style:none;
+}
+details.reto summary::-webkit-details-marker{display:none}
+details.reto summary::before{content:"▸ ";color:var(--accent)}
+details.reto[open] summary::before{content:"▾ "}
+details.reto .q{margin-top:10px;font-size:15.5px}
+details.reto .a{
+  margin-top:12px;padding-top:12px;border-top:1px solid var(--rule);
+  font-size:15.5px;color:var(--ink-2);
+}
+details.reto .a .work{
+  font-family:"Fira Mono",monospace;font-size:12.4px;line-height:1.85;white-space:pre;
+  overflow-x:auto;background:var(--surface-2);padding:8px 11px;border-radius:2px;margin-top:8px;color:var(--ink);
+}
+
+/* tables */
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);border-radius:3px;background:var(--surface);box-shadow:var(--shadow);margin:2px 0}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:440px}
+th,td{padding:9px 14px;text-align:left;border-bottom:1px solid var(--rule)}
+thead th{
+  font-family:"Fira Mono",monospace;font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-3);font-weight:500;background:var(--surface-2);
+}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-family:"Fira Mono",monospace;font-variant-numeric:tabular-nums}
+td.k{font-weight:600}
+td code{font-size:.94em}
+
+/* closing */
+.closing{background:var(--surface);border-top:1px solid var(--rule);padding:56px 0 72px}
+.cardgrid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));margin-top:24px}
+.card{border:1px solid var(--rule);border-radius:3px;padding:16px 18px;background:var(--paper)}
+.card h4{font-size:16px;margin-bottom:8px}
+.card .f{font-family:"Fira Mono",monospace;font-size:12.2px;line-height:1.95;white-space:pre;overflow-x:auto;color:var(--ink-2)}
+footer{padding:28px 0 56px;color:var(--ink-3);font-size:13.5px;max-width:var(--maxw)}
+</style>
+
+<style id="arena-barra-estilo">
+  .arena-volver{
+    position:sticky; top:0; z-index:9999;
+    display:flex; align-items:center; gap:10px;
+    height:46px; padding:0 18px;
+    background:#12243f; color:#e6f1fd;
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+    font-size:13.5px; box-shadow:0 1px 0 rgba(0,0,0,.25);
+  }
+  .arena-volver a{
+    color:#e6f1fd; text-decoration:none; font-weight:600;
+    display:inline-flex; align-items:center; gap:7px;
+    padding:5px 12px; border-radius:99px; border:1px solid rgba(230,241,253,.28);
+    transition:.15s;
+  }
+  .arena-volver a:hover{ background:rgba(230,241,253,.14); }
+  .arena-volver .arena-curso{ color:rgba(230,241,253,.62); font-size:12.5px; }
+  @media print{ .arena-volver{ display:none; } }
+
+  /* el índice del cuaderno también es sticky: se baja para que no quede
+     tapado por la barra */
+  nav.toc{ top:46px !important; max-height:calc(100vh - 46px) !important; }
+</style>
+</head>
+<body>
+<div class="arena-volver">
+  <a href="../index.html#cuadernos">← La Arena</a>
+  <span class="arena-curso">MITx MicroMasters in Finance · 15.455x</span>
+</div>
+<header class="hero">
+  <div class="wrap hero-in">
+    <div class="eyebrow">MITx MicroMasters · 15.455x · Prof. Paul Mende</div>
+    <h1>Cuaderno de Métodos Matemáticos</h1>
+    <p class="lede">Los nueve módulos del curso puente del programa: de la probabilidad al cálculo de Itô, del álgebra lineal del arbitraje a la programación dinámica. Es la caja de herramientas que convierte los resultados de Fundamentos en modelos que se pueden <strong>calcular, estimar y programar</strong>.</p>
+    <dl class="facts">
+      <div class="fact"><dt>Módulos</dt><dd>9 + repaso</dd></div>
+      <div class="fact"><dt>Evaluación</dt><dd>50% PS · 50% final</dd></div>
+      <div class="fact"><dt>Software</dt><dd>R / RStudio</dd></div>
+      <div class="fact"><dt>Textos</dt><dd>Tsay · Capinski-Zastawniak</dd></div>
+    </dl>
+  </div>
+</header>
+
+<div class="wrap shell">
+
+<nav class="toc" aria-label="Índice de módulos">
+  <h2>Índice</h2>
+  <div class="blk">Tiempo discreto</div>
+  <ol>
+    <li><a href="#m1"><span>01</span>Probabilidad</a></li>
+    <li><a href="#m2"><span>02</span>Procesos estocásticos</a></li>
+    <li><a href="#m3"><span>03</span>Series de tiempo</a></li>
+  </ol>
+  <div class="blk">Tiempo continuo</div>
+  <ol>
+    <li><a href="#m4"><span>04</span>Browniano y lema de Itô</a></li>
+    <li><a href="#m5"><span>05</span>Cobertura y BSM</a></li>
+    <li><a href="#m6"><span>06</span>De la SDE a la PDE</a></li>
+  </ol>
+  <div class="blk">Estructura y decisión</div>
+  <ol>
+    <li><a href="#m7"><span>07</span>Álgebra lineal del pricing</a></li>
+    <li><a href="#m8"><span>08</span>Optimización</a></li>
+    <li><a href="#m9"><span>09</span>Decisión óptima</a></li>
+    <li><a href="#chuleta"><span>★</span>Mapa de fórmulas</a></li>
+  </ol>
+</nav>
+
+<main>
+<div class="chipbar">
+  <a href="#m1">01 Probabilidad</a><a href="#m2">02 Procesos</a><a href="#m3">03 Series</a>
+  <a href="#m4">04 Itô</a><a href="#m5">05 BSM</a><a href="#m6">06 PDE</a>
+  <a href="#m7">07 FTAP</a><a href="#m8">08 Optimización</a><a href="#m9">09 Bellman</a>
+  <a href="#chuleta">★ Fórmulas</a>
+</div>
+
+<!-- ============ MÓDULO 1 ============ -->
+<section class="module" id="m1">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 01 · <b>Tiempo discreto</b></div>
+    <h2>Probabilidad: momentos, sumas y el TCL</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    Casi nunca hace falta la distribución completa. La <em class="term">linealidad de la esperanza</em> entrega los momentos sin pelear con convoluciones, y el Teorema Central del Límite se encarga de que, para sumas grandes, media y varianza describan todo.
+  </div>
+
+  <div class="prose">
+    <h3>Momentos</h3>
+    <div class="formula">
+      <div class="f">E[X^ℓ] = Σ_k x_k^ℓ p(x_k)      (discreto)
+         = ∫ x^ℓ p(x) dx          (continuo)
+
+σ² = Var(X) = E[(X − μ)²] = E[X²] − E[X]²
+
+Linealidad (siempre vale, haya o no independencia):
+    E[aX + bY] = a·E[X] + b·E[Y]
+
+Momentos superiores:
+  asimetría  = E[(X−μ)³]/σ³   ¿es simétrica?
+  curtosis   = E[(X−μ)⁴]/σ⁴   ¿tiene colas gruesas?  (3 = normal)</div>
+      <div class="cap">La esperanza es lineal <b>sin condiciones</b>; la varianza no lo es. Toda la aritmética de carteras vive en esa asimetría.</div>
+    </div>
+
+    <h3>Las distribuciones que aparecen en finanzas</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Distribución</th><th>Momentos</th><th>Para qué</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Uniforme [0,1]</td><td><code>μ=1/2, σ²=1/12</code></td><td>generador de base para simulación</td></tr>
+          <tr><td class="k">Binomial (n,p)</td><td><code>μ=np, σ²=npq</code></td><td>defaults, aciertos, árbol binomial</td></tr>
+          <tr><td class="k">Poisson (λ)</td><td><code>μ=σ²=λ</code></td><td>límite raro de la binomial; saltos</td></tr>
+          <tr><td class="k">Normal (μ,σ²)</td><td><code>μ, σ²</code></td><td>retornos logarítmicos, límite del TCL</td></tr>
+          <tr><td class="k">Lognormal</td><td>ver abajo</td><td>precios (no pueden ser negativos)</td></tr>
+          <tr><td class="k">Cauchy</td><td><strong>ninguno existe</strong></td><td>advertencia: hay colas donde el TCL falla</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Que la Cauchy no tenga media ni varianza no es una curiosidad de pizarra: es el recordatorio de que <strong>el TCL exige momentos finitos</strong>. Si los datos tienen colas suficientemente gruesas, promediar más observaciones no estabiliza nada.</p>
+
+    <h3>Sumas de variables aleatorias</h3>
+    <div class="formula">
+      <div class="f">S = X₁ + X₂ + … + X_n
+
+E[S] = Σ E[X_i]                     ← siempre
+
+Var(S) = Σ_i Var(X_i) + 2 Σ_{i<j} Cov(X_i, X_j)
+
+Cartera:  R_p = Σ w_i R_i
+    μ_p = Σ w_i μ_i
+    σ²_p = Σ w_i²σ_i² + 2 Σ_{i<j} w_i w_j σ_i σ_j ρ_ij
+
+Densidad de una suma = CONVOLUCIÓN de las densidades
+    p(x) = ∫ p₁(x₁)·p₂(x − x₁) dx₁</div>
+      <div class="cap">La convolución es el camino difícil y casi nunca hace falta. Ejemplo típico: dos uniformes en [0,1] no dan una uniforme sino una <b>triangular</b> sobre [0,2] — dos no es un número grande.</div>
+    </div>
+
+    <h3>Del TCL, y de la lognormal</h3>
+    <div class="formula">
+      <div class="f">TCL:  si los X son IID con media y varianza finitas,
+      (S_n − nμ)/(σ√n)  →  N(0,1)
+
+Binomial escalada:  z = (k − np)/√(npq)  →  Gaussiana
+
+LOGNORMAL — si  r ~ N(μ̃, σ²)  y  X = e^r :
+    E[X]   = e^(μ̃ + σ²/2)  ≡  e^μ
+    Var(X) = (e^(σ²) − 1)·e^(2μ̃ + σ²)
+
+En términos del retorno simple  R = e^r − 1 :
+    m = E[R]  = e^μ − 1
+    s = SD(R) = e^μ·√(e^(σ²) − 1)</div>
+      <div class="cap">Donde <code>μ = μ̃ + σ²/2</code> es el drift logarítmico total. La lognormal aparece porque <b>los precios son productos de retornos</b>, y el logaritmo convierte productos en sumas — que es donde el TCL sabe trabajar.</div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Cuántos terminales Bloomberg comprar</span></header>
+    <div class="body">
+      <p class="given">Un programa tiene <strong>120 alumnos</strong> y <strong>9 terminales</strong>. Cada alumno los quiere usar, de forma independiente, con probabilidad <strong>7,5%</strong>. ¿Con qué frecuencia alcanzan los terminales?</p>
+      <ol class="steps">
+        <li><div><strong>Identificar la estructura.</strong> Cada alumno es un ensayo de Bernoulli independiente: el número de usuarios simultáneos <code>K</code> es <strong>binomial(120 · 0,075)</strong>.</div></li>
+        <li><div><strong>Momentos, para saber qué esperar.</strong>
+          <div class="work">μ = np  = 120 × 0,075 = 9,0
+σ² = npq = 120 × 0,075 × 0,925 = 8,325
+σ  = 2,885</div>
+          La demanda media es exactamente 9: los terminales alcanzan <em>justo</em> en promedio. Pero la media no es la pregunta.</div></li>
+        <li><div><strong>Calcular la probabilidad acumulada.</strong>
+          <div class="work">P(K ≤ 9) = Σ_{k=0}^{9} C(120,k)·0,075^k·0,925^(120−k)
+         = 0,5875
+
+R:  sum(dbinom(0:9, 120, 0.075))
+    [1] 0.587475</div></div></li>
+        <li><div><strong>Leer el resultado.</strong> Sólo el <strong>58,75%</strong> del tiempo alcanzan. Uno de cada 2,4 momentos hay alguien esperando. Que la capacidad iguale la demanda <em>media</em> deja un nivel de servicio muy pobre — porque lo que importa es la cola de la distribución, no su centro.</div></li>
+        <li><div><strong>Cuántos harían falta.</strong> Para llegar al 95% de servicio se necesitan ≈ <code>9 + 1,645×2,885 ≈ 14</code> terminales. <strong>Cinco terminales más, un 55% de capacidad extra</strong>, sólo para pasar de 59% a 95%. Ésa es la aritmética de todo dimensionamiento de capacidad — y también la de los colchones de capital.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>P(alcanzan) = 58,75% con 9 terminales</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Retorno logarítmico no es retorno simple</span></header>
+    <div class="body">
+      <p class="given">Un activo tiene drift logarítmico <strong>μ = 10%</strong> y volatilidad logarítmica <strong>σ = 30%</strong> anual. ¿Cuál es el retorno simple esperado y su desviación estándar?</p>
+      <ol class="steps">
+        <li><div><strong>La tentación (y el error).</strong> Reportar 10% y 30%. Los parámetros del modelo están en <em>logaritmos</em>; el retorno que se cobra es <code>R = e^r − 1</code>.</div></li>
+        <li><div><strong>Media del retorno simple.</strong>
+          <div class="work">m = e^μ − 1 = e^0,10 − 1 = 1,105171 − 1
+  = 10,517%</div></div></li>
+        <li><div><strong>Desviación estándar del retorno simple.</strong>
+          <div class="work">s = e^μ·√(e^(σ²) − 1)
+  = 1,105171 × √(e^0,09 − 1)
+  = 1,105171 × √0,094174
+  = 1,105171 × 0,306879 = 33,915%</div></div></li>
+        <li><div><strong>Ver de dónde salen las diferencias.</strong> Expandiendo en serie:
+          <div class="work">m = μ + μ²/2 + …  = 0,100 + 0,005 + …  = 10,52%
+s = σ(1 + μ + σ²/4 + …) = 0,3(1 + 0,1 + 0,0225) = 33,92%</div>
+          El término de segundo orden no es despreciable: <strong>52 puntos base en la media y 392 en la volatilidad</strong>. Sobre un mandato de mil millones eso son millones de dólares de diferencia en cómo se reporta el mismo activo.</div></li>
+        <li><div><strong>La regla operativa.</strong> Estima <em>siempre</em> con retornos logarítmicos (que son los normales dentro del modelo), y convierte al final si hay que reportar retornos simples. Mezclar los dos es el error silencioso más caro del curso.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>m = 10,52% · s = 33,92%, no 10% y 30%</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>La esperanza es lineal siempre; la <strong>varianza sólo es aditiva si las covarianzas son cero</strong>. Y el TCL exige momentos finitos: con colas al estilo Cauchy no hay media que estimar, y promediar más datos no converge a nada. Que un histograma «parezca normal en el centro» no dice nada sobre las colas, que es justamente donde vive el riesgo.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Un fondo tiene <strong>500 bonos</strong>, cada uno con probabilidad <strong>2%</strong> de entrar en default en el año, <strong>independientes</strong> entre sí. (a) ¿Cuál es la probabilidad de que haya <strong>más de 15</strong> defaults? Calcúlala exacta, con la aproximación de Poisson y con la normal. (b) ¿Qué pasa con la respuesta si los defaults están correlacionados?</div>
+    <div class="a">
+      <div class="work">MOMENTOS
+  μ = np  = 500 × 0,02 = 10,0
+  σ² = npq = 500 × 0,02 × 0,98 = 9,8
+  σ = 3,131
+
+(a) TRES CAMINOS
+  Binomial exacta   P(X > 15) = 1 − F(15) = 4,70%
+  Poisson (λ = 10)  P(X > 15)            = 4,87%
+  Normal + corrección de continuidad
+      z = (15,5 − 10)/3,131 = 1,757
+      P = 1 − Φ(1,757)                   = 3,95%</div>
+      Las tres coinciden razonablemente, y eso ya es información: con <code>n</code> grande y <code>p</code> chico la Poisson es la mejor aproximación (error de 17 pb), mientras que la normal <strong>subestima la cola</strong> en 75 pb, casi un 16% relativo. La corrección de continuidad ayuda pero no salva: la binomial es asimétrica y la normal no.
+      <div class="work">(b) SI LOS DEFAULTS ESTÁN CORRELACIONADOS
+
+  Var(X) = Σ Var(X_i) + 2 Σ_{i<j} Cov(X_i, X_j)
+         = npq + n(n−1)·ρ·pq
+
+  con ρ = 0,02 (correlación modesta):
+     npq            = 9,8
+     n(n−1)ρpq      = 500×499×0,02×0,0196 = 97,8
+     Var total      = 107,6   ⇒  σ = 10,4
+
+  ¡La desviación estándar se TRIPLICA con ρ = 2%!</div>
+      Ahí está el punto de todo el ejercicio. La media no se mueve — sigue en 10 defaults esperados — pero la dispersión explota, y con ella la cola. El término de covarianza tiene <strong>n²</strong> sumandos contra <strong>n</strong> de las varianzas, así que domina en cuanto ρ deja de ser exactamente cero. Es exactamente el mecanismo que hizo estallar los CDO en 2008: los modelos calibraban bien la probabilidad media de default y luego suponían una correlación demasiado baja. Independencia es un supuesto <em>muy</em> fuerte, y hay que ganárselo.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 2 ============ -->
+<section class="module" id="m2">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 02 · <b>Tiempo discreto</b></div>
+    <h2>Procesos estocásticos y el random walk</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    El random walk es el ladrillo de todo el curso, y tiene una sola propiedad que hay que recordar: la <em class="term">varianza crece con T</em>, así que la desviación estándar crece con <strong>√T</strong>. Todo escalamiento posterior sale de ahí.
+  </div>
+
+  <div class="prose">
+    <h3>El modelo y sus momentos</h3>
+    <div class="formula">
+      <div class="f">S_T = z₁ + z₂ + … + z_T ,   z_t IID "estándar":
+
+    E[z_t] = 0 ,  E[z_t²] = 1 ,  E[z_t z_t'] = 0  si t ≠ t'
+
+⇒  E[S_T] = 0
+    Var(S_T) = T          SD(S_T) = √T
+
+Random walk generalizado:   r_t = σ·z_t + μ
+
+    X_T = r₁ + … + r_T
+    E[X_T] = μT           Var(X_T) = σ²T</div>
+      <div class="cap">Los dos parámetros <b>μ</b> y <b>σ</b> son el retorno y el riesgo. Y son <em>los mismos</em> ladrillos que sean monedas al aire o gaussianas: por eso el modelo es universal.</div>
+    </div>
+
+    <h3>Precios: por qué el logaritmo</h3>
+    <div class="formula">
+      <div class="f">r_t ≡ log(P_t / P_{t−1})    ⇒   P_T = P₀·e^(r₁+r₂+…+r_T)
+
+El PRECIO es un producto; el LOG RETORNO es una suma.
+El random walk vive en los logaritmos.
+
+⇒  log(P_T/P₀) ~ N(μT, σ²T)     ⇒  P_T es LOGNORMAL</div>
+      <div class="cap">Consecuencia práctica: el precio nunca se vuelve negativo, y la distribución de precios es asimétrica a la derecha aunque la de los logs sea perfectamente simétrica.</div>
+    </div>
+
+    <h3>Salir del random walk</h3>
+    <div class="formula">
+      <div class="f">MA(1):   r_t = μ + z_t + θ·z_{t−1}
+AR(p):   R_t = c₀ + c₁R_{t−1} + … + c_p R_{t−p} + z_t
+ARMA(p,q): ambos a la vez
+GARCH:   r_t = μ + σ_t·z_t ,   σ_t variable en el tiempo
+
+Estacionariedad DÉBIL: media y covarianzas invariantes
+bajo traslación en el tiempo (no toda la distribución)</div>
+      <div class="cap">La estacionariedad es la herramienta algebraica del curso: permite escribir <code>E[R_t] = E[R_{t−1}]</code> y despejar los momentos <em>sin resolver</em> la recursión.</div>
+    </div>
+
+    <h3>Monte Carlo, y por qué es un laboratorio</h3>
+    <p>Simular da un banco de pruebas con «datos del mejor caso»: el proceso generador es <em>conocido</em>, cosa que jamás ocurre con datos reales. Sirve para validar código y fórmulas cerradas, y para obtener números donde no hay solución analítica. Las primitivas en R son <code>sample</code>, <code>runif</code> y <code>rnorm</code>; los precios lognormales salen de <code>exp(apply(r, 2, cumsum))</code>.</p>
+
+    <h3>Poner a prueba la hipótesis del random walk</h3>
+    <div class="formula">
+      <div class="f">Razón de varianzas — el test central del módulo:
+
+    VR(q) = Var(r_t(q)) / [q·Var(r_t)]
+          = 1 + 2·Σ_{k=1..q−1} (1 − k/q)·ρ_k
+
+    VR = 1  ⇒  random walk
+    VR > 1  ⇒  autocorrelación POSITIVA (tendencia, momentum)
+    VR < 1  ⇒  autocorrelación NEGATIVA (reversión)</div>
+      <div class="cap">Si el random walk vale, la varianza escala linealmente con el horizonte y la volatilidad con <b>√q</b>. El test mide justo esa desviación.</div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Anualizar volatilidad, y qué se está suponiendo al hacerlo</span></header>
+    <div class="body">
+      <p class="given">Una acción tiene volatilidad de retornos diarios de <strong>1,2%</strong>. Se quiere reportar la volatilidad anual.</p>
+      <ol class="steps">
+        <li><div><strong>Aplicar la regla.</strong> El año bursátil tiene 252 días de negociación.
+          <div class="work">σ_anual = σ_diaria × √252
+        = 0,012 × 15,8745
+        = 0,19049 = 19,05%</div></div></li>
+        <li><div><strong>De dónde sale el √.</strong> No es una convención: es que la varianza se suma sobre incrementos independientes.
+          <div class="work">Var(r₁ + … + r₂₅₂) = 252 · Var(r_t)     ← si IID
+SD = √252 · SD(r_t)</div></div></li>
+        <li><div><strong>Los tres supuestos escondidos.</strong> <em>(i)</em> Incrementos incorrelacionados — si hay autocorrelación, la fórmula está mal. <em>(ii)</em> Varianza constante — falso en la práctica, la volatilidad se agrupa en el tiempo. <em>(iii)</em> El calendario de 252 días ignora el fin de semana, cuando la información sigue llegando.</div></li>
+        <li><div><strong>El diagnóstico que corresponde.</strong> Estima la volatilidad a distintas frecuencias — diaria, semanal, mensual — y anualiza cada una. Si el random walk vale, las tres dan lo mismo. <strong>Si divergen, la razón de varianzas te dice exactamente en qué dirección.</strong></div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>σ_anual = 19,05%, si y sólo si los retornos son IID</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>La regla de <strong>√T sólo vale con incrementos incorrelacionados</strong>. Con autocorrelación positiva la volatilidad real de largo plazo es <em>mayor</em> que la anualizada ingenuamente; con reversión a la media, <em>menor</em>. Y ojo con la dirección de la conversión: se anualiza la <strong>varianza</strong> multiplicando por T, y recién ahí se saca la raíz.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Los retornos diarios de una acción tienen desviación estándar <strong>1,5%</strong> y autocorrelación de primer orden <strong>ρ₁ = 0,10</strong>, con todas las autocorrelaciones de orden mayor iguales a cero. (a) ¿Cuál es VR(2)? (b) ¿Cuánto se equivoca la volatilidad anual calculada con la regla de √252?</div>
+    <div class="a">
+      <div class="work">(a) DOS DÍAS
+  Var(r_t + r_{t−1}) = 2Var(r) + 2Cov(r_t, r_{t−1})
+                     = 2Var(r)(1 + ρ₁)
+  VR(2) = (1 + ρ₁) = 1,10
+  ⇒ 10% MÁS de varianza que bajo random walk
+
+(b) UN AÑO
+  VR(q) = 1 + 2·Σ_{k=1..q−1}(1 − k/q)·ρ_k
+  con sólo ρ₁ ≠ 0:
+  VR(252) = 1 + 2(1 − 1/252)(0,10) = 1,19921
+
+  volatilidad ingenua   = 1,5% × √252        = 23,81%
+  volatilidad verdadera = 23,81% × √1,19921  = 26,08%
+
+  ⇒ la regla de √T SUBESTIMA en 9,51%</div>
+      Dos lecturas. Primera, la magnitud: una autocorrelación de <strong>0,10</strong> —minúscula, casi indetectable en un correlograma con ruido— produce un error del 9,5% en la volatilidad anual. Sobre una posición grande eso es la diferencia entre pasar y no pasar un límite de riesgo.
+      <div class="work">Nótese la estructura del factor:
+    VR(q) → 1 + 2ρ₁   cuando q → ∞
+  Un solo rezago no nulo mueve el límite en 2ρ₁,
+  sin importar cuán largo sea el horizonte.</div>
+      Segunda, la dirección: aquí <code>ρ₁ &gt; 0</code> significa <em>momentum</em>, los días buenos siguen a los buenos, y la incertidumbre acumulada es <strong>mayor</strong> de lo que sugiere el random walk. Con reversión (<code>ρ₁ &lt; 0</code>) sería al revés, y la regla de √T <em>sobreestimaría</em> el riesgo. El signo de la primera autocorrelación decide si tu medida de riesgo peca de optimista o de pesimista — y eso es una decisión, no un detalle técnico.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 3 ============ -->
+<section class="module" id="m3">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 03 · <b>Tiempo discreto</b></div>
+    <h2>Modelos de series de tiempo</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    El AR(1) es el caballo de batalla, y su firma es que la <em class="term">autocovarianza decae exponencialmente</em> con el rezago. Sabiendo eso, un correlograma se lee de un vistazo.
+  </div>
+
+  <div class="prose">
+    <h3>Estadísticos, estimadores y estimaciones</h3>
+    <p>Tres cosas distintas que se confunden. Un <strong>estadístico</strong> es una función de los datos. Un <strong>estimador</strong> es una variable aleatoria — función de observaciones futuras, con su propia distribución muestral. Una <strong>estimación</strong> es un número. Las propiedades deseables de un estimador: <em>consistente</em> (converge en probabilidad al valor real), <em>insesgado</em> (<code>E[θ̂] = θ</code>), <em>asintóticamente normal</em> y <em>eficiente</em> (varianza mínima dentro de su clase).</p>
+
+    <h3>Resolver el AR(1) con estacionariedad</h3>
+    <div class="formula">
+      <div class="f">R_t = c₀ + c₁·R_{t−1} + z_t ,   z_t IID(0, σ²)
+
+Reparametrizando:  μ = c₀/(1 − c₁),  φ = c₁
+
+    R_t − μ = φ·(R_{t−1} − μ) + z_t ,   |φ| < 1
+
+Momentos (por estacionariedad, sin resolver la recursión):
+    E[R_t]  = μ
+    γ₀ = Var(R_t) = σ²/(1 − φ²)
+    γ_k = φ^k · γ₀            ρ_k = φ^k
+
+⇒  la autocovarianza DECAE EXPONENCIALMENTE:
+    |γ_k| = γ₀ · e^(−k/τ)  con  τ = −1/ln|φ|</div>
+      <div class="cap">Con <b>φ &gt; 0</b> hay persistencia (momentum); con <b>φ &lt; 0</b>, reversión a la media alternante. El curso escribe la forma de reversión como <code>R_t − μ = −λ(R_{t−1} − μ) + σz_t</code>, que es lo mismo con <code>φ = −λ</code>.</div>
+    </div>
+
+    <h3>Estimarlo es una regresión</h3>
+    <div class="formula">
+      <div class="f">R_t = [μ(1 − φ)] + [φ]·R_{t−1} + [z_t]
+       ↑ α              ↑ β        ↑ ε
+
+⇒ MCO de R_t contra su propio rezago.
+
+Para AR(p), aplicar máxima verosimilitud equivale a
+MCO sobre los p rezagos:
+    p(r_t | r_{t−1},…) ∝ exp[ −(r_t − r̄_t)²/(2σ²) ]
+    r̄_t = c₀ + c₁r_{t−1} + … + c_p r_{t−p}</div>
+      <div class="cap">Por eso todo el aparato de regresión —errores estándar, contrastes, R²— se importa directamente. Cuidado: los regresores están correlacionados con el pasado del error, lo que sesga los estimadores en muestras chicas.</div>
+    </div>
+
+    <h3>Estimar volatilidad mejor</h3>
+    <div class="formula">
+      <div class="f">Cierre a cierre:   σ̂² = (1/(T−1))·Σ (r_t − μ̂)²
+
+Parkinson (usa el rango del día):
+    σ̂²_P = (1/(4T·ln2))·Σ [ln(H_t/L_t)]²
+
+Garman-Klass (rango + apertura/cierre):
+    σ̂²_GK = (1/T)·Σ [ ½(ln(H_t/L_t))²
+                     − (2ln2 − 1)(ln(C_t/O_t))² ]</div>
+      <div class="cap">Usan la información intradía que el cierre a cierre desperdicia, y son bastante más eficientes. A cambio no manejan bien el drift intradía ni los saltos de apertura.</div>
+    </div>
+
+    <h3>Calibrar el árbol binomial</h3>
+    <div class="formula">
+      <div class="f">Con  r_t = log(S_t/S_{t−1}) = a + b·x_t ,  x_t ∈ {0,1}:
+
+    μ = a + p·b            σ² = b²·p(1−p)
+
+⇒  log u = μ + σ·√((1−p)/p)
+    log d = μ − σ·√(p/(1−p))
+
+Caso simétrico p = 1/2, μ = 0, paso Δt:
+    u = e^(σ√Δt) ,   d = 1/u        ← calibración CRR</div>
+      <div class="cap">Es el puente exacto entre este curso y el árbol binomial de 15.415.2x y 15.435x: <b>u y d no son datos, son la volatilidad disfrazada</b>.</div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Leer un AR(1) estimado</span></header>
+    <div class="body">
+      <p class="given">Sobre retornos mensuales se estima por MCO <code>R_t = 0,0048 + 0,20·R_{t−1} + z_t</code> con <code>σ̂(z) = 4,0%</code>. ¿Qué dice el modelo?</p>
+      <ol class="steps">
+        <li><div><strong>Traducir a la parametrización con media.</strong>
+          <div class="work">φ = c₁ = 0,20
+μ = c₀/(1 − c₁) = 0,0048/0,80 = 0,60% mensual
+                                = 7,2% anualizado</div></div></li>
+        <li><div><strong>Varianza incondicional del proceso.</strong>
+          <div class="work">γ₀ = σ²/(1 − φ²) = 0,04²/(1 − 0,04)
+   = 0,0016/0,96 = 0,0016667
+SD = 4,082% mensual</div>
+          Fíjate: la volatilidad <em>del proceso</em> (4,08%) es mayor que la del shock (4,00%), porque la persistencia amplifica.</div></li>
+        <li><div><strong>La estructura de autocorrelación.</strong>
+          <div class="work">ρ₁ = 0,200   ρ₂ = 0,040   ρ₃ = 0,008
+ρ₄ = 0,0016  ρ₅ = 0,00032
+
+tiempo característico  τ = −1/ln(0,20) = 0,62 meses</div>
+          A los tres rezagos ya no queda casi nada: la memoria de un AR(1) es <strong>corta</strong> salvo que φ esté muy cerca de 1.</div></li>
+        <li><div><strong>Pronosticar.</strong> Si el último retorno observado fue +6%:
+          <div class="work">E[R_{t+1}] = μ + φ(R_t − μ)
+           = 0,60% + 0,20(6,00% − 0,60%) = 1,68%
+E[R_{t+2}] = μ + φ²(R_t − μ) = 0,82%
+E[R_{t+3}] = μ + φ³(R_t − μ) = 0,64%</div>
+          El pronóstico converge geométricamente a la media incondicional. <strong>Toda la información se agota en pocos periodos</strong>, y ésa es la limitación estructural del AR(1) como herramienta de trading.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>φ = 0,20 · μ = 0,60% · memoria ≈ 3 meses</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>El error cuadrático medio de pronóstico <strong>no es invariante</strong> ante cómo parametrices el problema. Pronosticar niveles <code>x_t</code> y pronosticar diferencias <code>Δx_t</code> dan errores distintos a dos pasos, salvo en el caso particular <code>φ = −1/2</code>. Antes de comparar dos pronósticos hay que fijar la variable, el horizonte <em>y</em> la función de costo — y si además los parámetros están estimados, la incertidumbre del estimador entra al error.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Un proceso estacionario en tiempo discreto es <code>x_t = A + B·x_{t−2} + C·z_t</code>, con <code>z_t ~ N(0,1)</code> IID. (a) ¿Cuál es la media incondicional? (b) Con A = 0,1 · B = 0,2 · C = 0,3, y habiendo observado <code>x₁ = 0,4</code> y <code>x₂ = 0,5</code>, calcula en t = 2 los pronósticos <code>f₃</code> y <code>f₄</code> y sus varianzas. <em>(Examen de muestra, pregunta 2.)</em></div>
+    <div class="a">
+      <div class="work">(a) MEDIA INCONDICIONAL
+    Por estacionariedad,  E[x_t] = E[x_{t−2}] ≡ m
+      m = A + B·m  ⇒  m = A/(1 − B)
+    Con los números:  m = 0,1/0,8 = 0,125
+
+(b) PRONÓSTICOS — ojo con el rezago DOS
+    f₃ = E₂[x₃] = A + B·x₁ + C·E[z₃]
+       = 0,1 + 0,2(0,4) + 0 = 0,18       ← usa x₁, no x₂
+    f₄ = E₂[x₄] = A + B·x₂
+       = 0,1 + 0,2(0,5) + 0 = 0,20       ← usa x₂
+
+    VARIANZAS
+    Var(f₃) = Var(C·z₃) = C² = 0,09      (SD = 0,30)
+    Var(f₄) = Var(C·z₄) = C² = 0,09      (SD = 0,30)</div>
+      Aquí está la sutileza que el problema pone a prueba, y es fácil equivocarse por inercia. En un AR(1) normal, el pronóstico a dos pasos siempre es <em>más incierto</em> que el de un paso, porque hay que atravesar dos shocks. <strong>Aquí no.</strong> Como el rezago es de dos periodos, tanto <code>x₃</code> como <code>x₄</code> dependen de valores <em>ya observados</em> (<code>x₁</code> y <code>x₂</code>), así que en ambos casos sólo falta un shock por realizarse: la varianza es <code>C²</code> en los dos.
+      <div class="work">La incertidumbre recién crece en el paso TRES:
+    x₅ = A + B·x₃ + C·z₅       ← x₃ ya es aleatorio
+    Var(f₅) = B²·Var(f₃) + C²
+            = 0,04(0,09) + 0,09 = 0,0936</div>
+      La lección general: <strong>el horizonte de un pronóstico no se mide en periodos calendario, sino en cuántos shocks todavía no se han realizado</strong>. Y nota el detalle de la parte (a): un proceso con rezago de orden 2 se comporta como dos cadenas AR(1) entrelazadas —una para índices pares y otra para impares— pero comparten la misma media incondicional <code>A/(1−B)</code>.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 4 ============ -->
+<section class="module" id="m4">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 04 · <b>Tiempo continuo</b></div>
+    <h2>Movimiento browniano y el lema de Itô</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    Al pasar del random walk al tiempo continuo, el único escalamiento que sobrevive es <code>Δx ∝ √Δt</code>. De ahí sale <em class="term">(dB)² = dt</em>, y de ahí el término extra que distingue al lema de Itô de la regla de la cadena de siempre.
+  </div>
+
+  <div class="prose">
+    <h3>Tomar el límite: sólo una de tres opciones funciona</h3>
+    <div class="formula">
+      <div class="f">Partimos de  B = Σ_{t=1..n} ε_t  con  Δt = T/n.
+
+Caso I  — sólo achicar el paso de tiempo, ε_t = z_t:
+    Var = n  →  ∞        DIVERGE
+
+Caso II — achicar tiempo y tamaño con ε = σ₁/n:
+    Var = n·σ₁²/n² = σ₁²/n  →  0     COLAPSA
+
+Caso III — escalar como la RAÍZ:  ε_t = √Δt · z_t
+    Var = n · Δt = T       ✓  FINITO Y NO NULO</div>
+      <div class="cap">Sólo el caso III da un límite útil, y por eso <b>√Δt</b> es la escala natural de todo lo que sigue. El resultado es el <b>movimiento browniano</b>: trayectorias continuas en todas partes y diferenciables en ninguna.</div>
+    </div>
+
+    <div class="formula">
+      <div class="f">Propiedades del incremento infinitesimal:
+
+    dB_t ~ N(0, dt)
+    E[dB] = 0            E[(dB)²] = dt
+    E[(dB)³] = 0         E[(dB)⁴] = 3(dt)²
+    Cov(dB_t, dB_t') = 0  si t ≠ t'
+
+Incrementos finitos:  B(t₂) − B(t₁) ~ N(0, t₂ − t₁)</div>
+      <div class="cap">La clave está en <code>E[(dB)²] = dt</code> con <code>Var((dB)²) = 2(dt)²</code>: <b>(dB)² tiene media de orden dt pero varianza de orden (dt)²</b>. A primer orden deja de ser aleatorio y se puede reemplazar por dt.</div>
+    </div>
+
+    <h3>El lema de Itô</h3>
+    <div class="formula">
+      <div class="f">Proceso de Itô:     dX = a·dt + b·dB
+
+Para F(t, X), expandiendo por Taylor y usando (dB)² → dt:
+
+    dF = ∂F/∂t·dt + ∂F/∂X·dX + ½·b²·∂²F/∂X²·dt
+                                 ↑↑↑ EL TÉRMINO EXTRA
+
+Agrupando:
+    dF = [ ∂F/∂t + a·∂F/∂X + ½b²·∂²F/∂X² ]·dt
+       + [ b·∂F/∂X ]·dB
+
+⇒ dF es a su vez un proceso de Itô.</div>
+      <div class="cap">Receta operativa: <b>expande hasta segundo orden y reemplaza (dB)² por dt</b>. Nada más. El resto es derivar.</div>
+    </div>
+
+    <h3>Los tres procesos que hay que reconocer</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Proceso</th><th>SDE</th><th>Rasgo</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Browniano con drift</td><td><code>dS = μ dt + σ dB</code></td><td>admite precios negativos</td></tr>
+          <tr><td class="k">Browniano geométrico</td><td><code>dS = μS dt + σS dB</code></td><td>lognormal; nunca llega a cero</td></tr>
+          <tr><td class="k">Ornstein-Uhlenbeck</td><td><code>dS = λ(S̄ − S) dt + σ dB</code></td><td>reversión a la media</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>El browniano geométrico es el estándar para acciones porque el drift y la varianza se anulan cuando <code>S → 0</code>: el precio no puede cruzar el cero. Su contracara es que <strong>no admite quiebras</strong>, lo que lo vuelve inservible para riesgo de crédito sin modificaciones. El OU, por su parte, es el AR(1) del módulo 3 en tiempo continuo, y es la base de los modelos de tasas de interés del módulo 5.</p>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>El −σ²/2 que aparece de la nada</span></header>
+    <div class="body">
+      <p class="given">El precio sigue un browniano geométrico, <code>dS = μS dt + σS dB</code>. ¿Qué proceso sigue <code>log S</code>?</p>
+      <ol class="steps">
+        <li><div><strong>Identificar los coeficientes.</strong>
+          <div class="work">a = μS      b = σS      F = log S</div></div></li>
+        <li><div><strong>Las derivadas.</strong>
+          <div class="work">∂F/∂t = 0
+∂F/∂S = 1/S
+∂²F/∂S² = −1/S²</div></div></li>
+        <li><div><strong>Aplicar el lema.</strong>
+          <div class="work">d(log S) = [0 + μS·(1/S) + ½(σS)²·(−1/S²)]dt
+           + [σS·(1/S)]dB
+         = (μ − σ²/2)·dt + σ·dB</div></div></li>
+        <li><div><strong>Integrar y leer la consecuencia.</strong>
+          <div class="work">log(S_T/S₀) ~ N( (μ − σ²/2)T , σ²T )
+
+S_T = S₀·exp[(μ − σ²/2)T + σ(B_T − B₀)]
+
+E[S_T]      = S₀·e^(μT)                ← MEDIA
+mediana(S_T) = S₀·e^((μ−σ²/2)T)         ← MEDIANA</div></div></li>
+        <li><div><strong>Por qué importa.</strong> Con <code>μ = 10%</code>, <code>σ = 30%</code> y <code>T = 10</code>: la media es <code>S₀·e^1 = 2,72·S₀</code>, pero la mediana es <code>S₀·e^(0,55) = 1,73·S₀</code>. <strong>Más de la mitad de las trayectorias terminan por debajo del retorno esperado.</strong> El promedio lo levantan pocas trayectorias muy buenas — es la firma de la asimetría lognormal, y la razón de que la media geométrica de los retornos sea siempre menor que la aritmética.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>d(log S) = (μ − σ²/2)dt + σ dB</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>El drift del logaritmo <strong>no</strong> es el drift del precio: hay que restar <code>σ²/2</code>. Y el error simétrico también se cobra: si un enunciado te da la volatilidad y el «retorno esperado del precio» <code>μ</code>, el exponente de la solución lleva <code>μ − σ²/2</code>, no <code>μ</code>. La otra confusión clásica es aplicar la regla de la cadena sin el término de segundo orden — el término de Itô sólo desaparece cuando la función es <strong>lineal</strong> en X.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">El precio de un activo sigue <code>dS = μS dt + σS dB</code>. Usa el lema de Itô para encontrar la SDE de <code>dV</code> en cada caso, y determina si el resultado es a su vez un proceso de Itô: <strong>(a)</strong> <code>V = S + β</code>; <strong>(b)</strong> <code>V = S^α</code>; <strong>(c)</strong> <code>V = e^(r(T−t))·S</code>. Aquí α, β, r y T son constantes. <em>(Examen de muestra, pregunta 1.)</em></div>
+    <div class="a">
+      <div class="work">(a) V = S + β        ∂V/∂S = 1 , ∂²V/∂S² = 0 , ∂V/∂t = 0
+    Sin término de Itô: la función es lineal.
+       dV = μS dt + σS dB
+          = μ(V − β) dt + σ(V − β) dB
+    SÍ es proceso de Itô. Pero ojo: NO es browniano
+    geométrico, porque los coeficientes son afines en V,
+    no proporcionales.  Es GBM DESPLAZADO.
+
+(b) V = S^α          ∂V/∂S = αS^(α−1)
+                     ∂²V/∂S² = α(α−1)S^(α−2)
+       dV = [ αS^(α−1)·μS + ½σ²S²·α(α−1)S^(α−2) ] dt
+          + σS·αS^(α−1) dB
+          = [ αμ + ½α(α−1)σ² ]·V dt  +  ασ·V dB
+    SÍ, y además es BROWNIANO GEOMÉTRICO:
+       drift_V = αμ + ½α(α−1)σ²      vol_V = ασ
+
+(c) V = e^(r(T−t))·S     ∂V/∂t = −rV
+                         ∂V/∂S = e^(r(T−t)) , ∂²V/∂S² = 0
+       dV = −rV dt + e^(r(T−t))(μS dt + σS dB)
+          = (μ − r)·V dt  +  σ·V dB
+    SÍ, browniano geométrico con drift μ − r
+    y la MISMA volatilidad σ.</div>
+      Cada parte enseña algo distinto. En <strong>(a)</strong>, una transformación lineal no genera término de Itô — es el único caso en que la regla de la cadena de siempre funciona. En <strong>(b)</strong>, cualquier potencia de un GBM vuelve a ser un GBM; nota que el drift <em>no</em> es simplemente <code>αμ</code> sino que gana <code>½α(α−1)σ²</code>, que es negativo para <code>0 &lt; α &lt; 1</code> y positivo para <code>α &gt; 1</code> o <code>α &lt; 0</code>.
+      <div class="work">Caso especial de (b):  α = −1  ⇒  V = 1/S
+   drift = −μ + σ²    vol = −σ
+Con μ < σ² el RECÍPROCO del precio tiene drift
+POSITIVO aunque el precio también lo tenga.
+No es paradoja: es la desigualdad de Jensen,
+E[1/S] ≠ 1/E[S].</div>
+      Y <strong>(c)</strong> es el caso más útil de los tres: capitalizar el precio al tipo libre de riesgo le resta exactamente <code>r</code> al drift y deja intacta la volatilidad. Si además <code>μ = r</code> —o sea, bajo la medida neutral al riesgo— el drift se anula: <code>dV = σV dB</code>, un <strong>martingala</strong>. Ésa es, en una línea, la propiedad que sostiene toda la valoración del módulo 6.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 5 ============ -->
+<section class="module" id="m5">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 05 · <b>Tiempo continuo</b></div>
+    <h2>Cálculo de Itô: cobertura dinámica y Black-Scholes</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    Black-Scholes no supone nada sobre preferencias ni sobre el retorno esperado de la acción. Sale de una sola exigencia: existe una <em class="term">cartera autofinanciada</em>, rebalanceada con <code>Δ = ∂V/∂S</code>, que elimina por completo el riesgo.
+  </div>
+
+  <div class="prose">
+    <h3>La condición de autofinanciamiento</h3>
+    <div class="formula">
+      <div class="f">Cartera con q acciones y C bonos, valor X = qS + CM.
+Rebalancear no puede inyectar ni retirar dinero:
+
+    S·dq + M·dC + dS·dq + dM·dC = 0
+
+Entonces, para  Π = V + qS + CM  (una opción más la cobertura):
+
+    dΠ = dV + q·dS + r(Π − V − qS)·dt</div>
+      <div class="cap">Esto arregla un hueco lógico de la derivación de manual: si <code>Δ</code> cambia todo el tiempo, no se puede escribir <code>d(ΔS) = Δ·dS</code>. La condición de autofinanciamiento hace que los términos que faltan se cancelen entre sí.</div>
+    </div>
+
+    <h3>La derivación en cuatro pasos</h3>
+    <div class="formula">
+      <div class="f">1. Itô sobre V(S,t) con dS = μS dt + σS dB:
+
+   dΠ = [∂V/∂t + ½σ²S²·∂²V/∂S²]dt
+      + [∂V/∂S + q]dS  +  r(Π − V − qS)dt
+
+2. Elegir q para anular el término estocástico:
+
+       q = −∂V/∂S ≡ −Δ
+
+3. Con la cartera ya sin riesgo y valor inicial cero,
+   no arbitraje exige dΠ = 0 en todo momento.
+
+4. Reordenando ⇒ la PDE de BLACK-SCHOLES:
+
+   ∂V/∂t + ½σ²S²·∂²V/∂S² + rS·∂V/∂S − rV = 0</div>
+      <div class="cap">Fíjate en lo que <b>desapareció</b>: el drift <code>μ</code> del subyacente. Es el mismo hecho que en el árbol binomial — el precio de la opción no depende de si esperas que la acción suba o baje.</div>
+    </div>
+
+    <h3>Las variantes, y la que se pregunta</h3>
+    <div class="formula">
+      <div class="f">Dividendo continuo D:
+    ∂V/∂t + ½σ²S²V_SS + (r − D)S·V_S − rV = 0
+
+Divisas (r_f tasa extranjera):
+    ∂V/∂t + ½σ²S²V_SS + (r − r_f)S·V_S − rV = 0
+
+Materias primas (costo de acarreo q):
+    ∂V/∂t + ½σ²S²V_SS + (r + q − D)S·V_S − rV = 0
+
+FUTUROS: cambiando a F = e^(r(T−t))·S,
+    ∂V/∂t + ½σ²F²·∂²V/∂F² − rV = 0
+                     ↑ el término de primera derivada DESAPARECE</div>
+      <div class="cap">La versión con dividendos <b>no</b> es «sustituir r por r−D en todas partes»: el término de descuento <code>−rV</code> conserva la <code>r</code>. La razón es económica — el tenedor de la acción cobra el dividendo, el tenedor de la opción no.</div>
+    </div>
+
+    <h3>Renta fija: por qué el modelo de un factor es distinto</h3>
+    <p>Las tasas de interés <strong>no son activos transables</strong>, y hay toda una curva en vez de un solo precio. En un modelo de un factor se supone que todos los bonos dependen de la misma tasa corta <code>y</code>, con <code>dy = a dt + b dB</code>. Formando una cartera con dos bonos de distinto plazo que cancele el riesgo, se llega a que <strong>todos los plazos satisfacen la misma PDE</strong>:</p>
+    <div class="formula">
+      <div class="f">∂V/∂t + ½b²·∂²V/∂y² − y·V − f(t,y)·∂V/∂y = 0 ,  V(T,y) = 1
+
+donde  f(t,y) = λ·b − a  y  λ es el PRECIO DE MERCADO DEL RIESGO
+
+Modelos de la tasa corta:
+   Ho-Lee     dy = θ(t) dt + σ dB
+   Vasicek    dy = λ(ȳ − y) dt + σ dB
+   CIR        dy = λ(ȳ − y) dt + σ√y dB     (no cruza cero)
+   Hull-White dy = [λ(ȳ − y) + θ(t)] dt + σ dB</div>
+      <div class="cap">La función <code>f(t,y)</code> —o equivalentemente <b>λ</b>— <em>no se puede eliminar</em> por arbitraje, y tampoco se observa. Ésa es la diferencia estructural con las opciones sobre acciones: cuando el factor estocástico no es el precio de un activo transado, queda un grado de libertad que hay que calibrar contra el mercado.</div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Opciones sobre futuros: por qué el modelo de Black es más simple</span></header>
+    <div class="body">
+      <p class="given">Se quiere valorar una opción sobre un contrato de futuros. Muestra que, en la variable adecuada, la PDE de Black-Scholes pierde un término.</p>
+      <ol class="steps">
+        <li><div><strong>Cambiar de variable.</strong> El precio del futuro se relaciona con el spot por acarreo:
+          <div class="work">F = e^(r(T−t))·S      ⇒     S = e^(−r(T−t))·F</div>
+          Ya lo derivamos en el módulo anterior: <code>dF = (μ − r)F dt + σF dB</code> — misma volatilidad, drift reducido en r.</div></li>
+        <li><div><strong>Traducir las derivadas.</strong> Con <code>V(S,t) = Ṽ(F,t)</code> y usando la regla de la cadena ordinaria (F es lineal en S, así que no hay término de Itô extra):
+          <div class="work">∂V/∂S = e^(r(T−t))·∂Ṽ/∂F
+∂²V/∂S² = e^(2r(T−t))·∂²Ṽ/∂F²
+∂V/∂t |_S = ∂Ṽ/∂t |_F + (−rF)·∂Ṽ/∂F</div></div></li>
+        <li><div><strong>Sustituir en la PDE original.</strong>
+          <div class="work">   ∂Ṽ/∂t − rF·Ṽ_F
+ + ½σ²S²·e^(2r(T−t))·Ṽ_FF
+ + rS·e^(r(T−t))·Ṽ_F  − rṼ = 0
+
+pero  S·e^(r(T−t)) = F , y  S²e^(2r(T−t)) = F²:
+
+   ∂Ṽ/∂t − rF·Ṽ_F + ½σ²F²·Ṽ_FF + rF·Ṽ_F − rṼ = 0
+                ↑ se CANCELA con ↑</div></div></li>
+        <li><div><strong>El resultado.</strong>
+          <div class="work">∂Ṽ/∂t + ½σ²F²·∂²Ṽ/∂F² − rṼ = 0</div>
+          Es la PDE del <strong>modelo de Black</strong>. Perdió el término de primera derivada, que es el que arrastraba los costos de acarreo — porque el precio del futuro ya los incorpora. Consecuencia inmediata: <strong>el precio del futuro se comporta como un activo con dividend yield igual a r</strong>, y por eso en la fórmula de Black aparece <code>e^(−rT)[F·N(d₁) − K·N(d₂)]</code> con <code>d₁ = [ln(F/K) + σ²T/2]/(σ√T)</code>.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>∂V/∂t + ½σ²F²V_FF − rV = 0 (modelo de Black)</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>El delta hedge <strong>no elimina todo el riesgo, sólo el de primer orden</strong>. Es exacto en el límite continuo; con rebalanceo discreto queda un error de cobertura de orden <code>Γ·(ΔS)²</code>. Y en la variante con dividendos, la sustitución correcta es <code>r → r − D</code> <strong>únicamente en el término de arrastre</strong> <code>S·∂V/∂S</code>; el término <code>−rV</code>, que es el descuento, conserva la tasa libre de riesgo completa.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Dos acciones siguen brownianos geométricos movidos por el <strong>mismo</strong> <code>dB</code>: <code>dS₁ = μ₁S₁dt + σ₁S₁dB</code> y <code>dS₂ = μ₂S₂dt + σ₂S₂dB</code>. <strong>(a)</strong> Un contrato vale <code>V = S₁S₂</code>: demuestra que también sigue un browniano geométrico y encuentra su drift y su volatilidad. <strong>(b)</strong> ¿Qué proceso sigue <code>1/V</code>? <strong>(c)</strong> Una call sobre V con strike K y pago <code>max(S₁S₂ − K, 0)</code>: ¿qué PDE satisface? <em>(Examen de muestra, pregunta 5.)</em></div>
+    <div class="a">
+      <div class="work">(a) PRODUCTO — Itô en dos variables
+    dV = S₂·dS₁ + S₁·dS₂ + dS₁·dS₂
+                            ↑ el término cruzado de Itô
+
+    dS₁·dS₂ = σ₁σ₂S₁S₂ (dB)² = σ₁σ₂·V·dt
+              ↑ NO se anula porque comparten dB
+
+    dV = V[(μ₁ + μ₂ + σ₁σ₂) dt + (σ₁ + σ₂) dB]
+
+    ⇒  drift_V = μ₁ + μ₂ + σ₁σ₂
+       vol_V   = σ₁ + σ₂            ← SE SUMAN
+
+(b) RECÍPROCO — aplica el caso α = −1 sobre V
+    drift = −μ_V + σ_V²
+          = −(μ₁+μ₂+σ₁σ₂) + (σ₁+σ₂)²
+          = −μ₁ − μ₂ + σ₁² + σ₂² + σ₁σ₂
+    vol   = −(σ₁ + σ₂)
+
+(c) LA PDE
+    V es un GBM de volatilidad σ₁+σ₂, así que la call
+    satisface Black-Scholes en la variable V:
+
+    ∂C/∂t + ½(σ₁+σ₂)²V²·∂²C/∂V² + rV·∂C/∂V − rC = 0
+    C(T, V) = max(V − K, 0)</div>
+      Lo interesante es la parte (a), y conviene detenerse. Las volatilidades <strong>se suman</strong>, no se combinan en cuadratura. Ésa es la diferencia entre compartir el <em>mismo</em> browniano y tener dos independientes:
+      <div class="work">mismo dB          ⇒  σ_V = σ₁ + σ₂
+brownianos indep. ⇒  σ_V = √(σ₁² + σ₂²)
+
+Con σ₁ = σ₂ = 20%:
+   mismo dB     →  40%
+   independientes → 28,3%</div>
+      Correlación perfecta significa que los riesgos se apilan sin ninguna cancelación. Es el mismo fenómeno del módulo 1 —<code>Var(X+Y) = σ₁² + σ₂² + 2ρσ₁σ₂</code> con ρ=1 da <code>(σ₁+σ₂)²</code>— reapareciendo en tiempo continuo. Y nota el término <code>σ₁σ₂</code> del drift: es una corrección de Itô pura, que existe <em>sólo</em> porque las dos acciones comparten el mismo shock. Con brownianos independientes ese término se anula y el drift del producto es simplemente <code>μ₁ + μ₂</code>.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 6 ============ -->
+<section class="module" id="m6">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 06 · <b>Tiempo continuo</b></div>
+    <h2>De la SDE a la PDE: difusión, Green y medida neutral</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    La densidad de probabilidad de un random walk obedece la <em class="term">ecuación de difusión</em>. Valorar un derivado y resolver esa PDE con una condición terminal son literalmente la misma operación — el precio es una esperanza, y la esperanza satisface la misma ecuación que la densidad.
+  </div>
+
+  <div class="prose">
+    <h3>La densidad satisface una PDE</h3>
+    <div class="formula">
+      <div class="f">Si  X_t ~ N(μt, σ²t) :
+
+    p(x,t) = (1/√(2πσ²t))·exp[ −(x − μt)²/(2σ²t) ]
+
+satisface       ∂p/∂t − ½σ²·∂²p/∂x² + μ·∂p/∂x = 0
+
+Caso puro (μ = 0) — ECUACIÓN DE DIFUSIÓN:
+
+    ∂p/∂t = ½·∂²p/∂z²
+
+Solución fundamental (núcleo gaussiano):
+    p₀(z,t) = (1/√(2πt))·e^(−z²/(2t))</div>
+      <div class="cap">Vista desde las coordenadas <em>iniciales</em>, la misma densidad satisface la ecuación <b>«hacia atrás»</b>. Ésa es la versión que se usa para valorar, porque lo que se pide es un valor <em>hoy</em> dado un pago <em>mañana</em>.</div>
+    </div>
+
+    <h3>Funciones especiales, y para qué sirven</h3>
+    <div class="formula">
+      <div class="f">Pago de una call:   f(S) = max(S−K,0) = ½(|S−K| + S − K)
+
+    df/dS   = θ(S − K)      ← función escalón
+    d²f/dS² = δ(S − K)      ← delta de Dirac
+
+Delta de Dirac: ∫δ(x)dx = 1 , ∫δ(x−y)f(x)dx = f(y)
+   Límite de una gaussiana cuando el ancho tiende a cero.
+
+Solución general por convolución con el núcleo:
+    p(z,t) = ∫ p₀(z − w, t)·f(w) dw     con p(z,0) = f(z)</div>
+      <div class="cap">La segunda derivada del pago de una call es una delta en el strike. Traducción financiera: <b>una mariposa infinitesimal en K es un título de Arrow-Debreu</b>, y su precio es exactamente la densidad neutral al riesgo evaluada en K.</div>
+    </div>
+
+    <h3>Barreras y probabilidad de supervivencia: el método de las imágenes</h3>
+    <div class="formula">
+      <div class="f">Pregunta: ¿probabilidad de llegar de A a B SIN tocar nunca C?
+
+Truco: a la trayectoria libre se le resta la que parte del
+punto ESPEJO A* (reflejo de A bajo la barrera). Esto anula
+la densidad en la barrera, que es la condición de frontera.
+
+Con barrera en z*, colchón b = z₀ − z* > 0, drift μ, vol σ:
+
+  P(sobrevivir hasta t)
+     = Φ( (b + μt)/(σ√t) )
+     − e^(−2μb/σ²)·Φ( (−b + μt)/(σ√t) )</div>
+      <div class="cap">Aplicación directa: <b>default como el cruce del valor de la firma bajo su nivel de deuda</b>. Es el modelo estructural de crédito en su forma más limpia, y contesta la pregunta que importa: ¿cuánto colchón hace falta, dado el crecimiento?</div>
+    </div>
+
+    <h3>La medida neutral al riesgo</h3>
+    <div class="formula">
+      <div class="f">La esperanza de un pago futuro satisface la MISMA PDE
+que la densidad, vista como función de (S,t):
+
+    F(S,t) = E_t[f(S_T)]        y   V = e^(−r(T−t))·F
+
+⇒  ∂V/∂t + ½σ²S²V_SS + μS·V_S − rV = 0
+
+Esto es Black-Scholes SI Y SÓLO SI μ → r. Basta cambiar
+la medida:  dB^Q = dB + ((μ−r)/σ)dt
+
+    dS/S = r·dt + σ·dB^Q
+    d(log S) = (r − σ²/2)dt + σ dB^Q
+
+Y todo activo transado descontado es un MARTINGALA:
+    e^(−rt)·X_t = E^Q_t[ e^(−rT)·X_T ]</div>
+      <div class="cap">El cambio de medida <b>mueve el drift y deja intacta la volatilidad</b>. Por eso al simular bajo Q se usa <code>r</code> en el drift pero la misma <code>σ</code>: la volatilidad es la única cosa que hay que estimar de verdad.</div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Probabilidad de default por difusión</span></header>
+    <div class="body">
+      <p class="given">El valor de una empresa (en logaritmos) crece con drift <strong>μ = 1%</strong> anual y volatilidad <strong>σ = 25%</strong>. El nivel de deuda está <strong>0,50</strong> por debajo del valor actual, en escala logarítmica. ¿Cuál es la probabilidad de default en 10 años?</p>
+      <ol class="steps">
+        <li><div><strong>Los ingredientes.</strong>
+          <div class="work">b = colchón = 0,50
+μ = 0,01 ,  σ = 0,25 ,  t = 10
+σ√t = 0,25 × 3,16228 = 0,790569
+μt  = 0,10</div></div></li>
+        <li><div><strong>Primer término: la trayectoria libre.</strong>
+          <div class="work">(b + μt)/(σ√t) = 0,60/0,790569 = 0,758945
+Φ(0,758945) = 0,776050</div></div></li>
+        <li><div><strong>Segundo término: la imagen especular.</strong>
+          <div class="work">factor = e^(−2μb/σ²) = e^(−2(0,01)(0,5)/0,0625)
+       = e^(−0,16) = 0,852144
+
+(−b + μt)/(σ√t) = −0,40/0,790569 = −0,505963
+Φ(−0,505963) = 0,306448
+
+producto = 0,852144 × 0,306448 = 0,261139</div></div></li>
+        <li><div><strong>Restar.</strong>
+          <div class="work">P(sobrevivir) = 0,776050 − 0,261139 = 0,514911
+P(default)    = 1 − 0,514911 = 48,5%</div></div></li>
+        <li><div><strong>Contrastar con la respuesta ingenua.</strong> ¿Cuál es la probabilidad de terminar <em>bajo</em> la barrera en t=10, sin importar el camino?
+          <div class="work">P(X₁₀ < barrera) = Φ(−0,758945) = 22,4%</div>
+          <strong>22,4% contra 48,5%: más del doble.</strong> Y la razón es exactamente el método de las imágenes: hay muchísimas trayectorias que tocan la barrera en algún momento y luego se recuperan. Si el default es <em>absorbente</em> —y lo es, una empresa quebrada no vuelve— mirar sólo el valor terminal subestima gravemente el riesgo.</div></li>
+        <li><div><strong>Cuánto colchón haría falta.</strong> Invirtiendo la fórmula para que el default a 10 años sea del 25%:
+          <div class="work">b* = 0,8413   (contra 0,50)</div>
+          Es decir, un <strong>68% más de colchón</strong> — o, con estos números, subir el patrimonio de un 65% del valor de la firma a un 57%... y aun así uno de cada cuatro escenarios termina en default. Con volatilidad del 25%, un drift del 1% no protege a nadie.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>48,5% de default en 10 años (22,4% mirando sólo el final)</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Monte Carlo contra la fórmula cerrada</span></header>
+    <div class="body">
+      <p class="given">Call europea con <code>S₀ = 100</code>, <code>K = 100</code>, <code>r = 10%</code>, <code>T = 1</code>, <code>σ = 30%</code>. Se valora por Monte Carlo con 252 pasos y 10.000 trayectorias.</p>
+      <ol class="steps">
+        <li><div><strong>Generar bajo Q, no bajo P.</strong> Ésta es la única decisión de modelo:
+          <div class="work">para cada paso Δt = T/252:
+   r_t = (r − σ²/2)·Δt + σ·√Δt·z
+   con z ~ N(0,1)      ← drift r, NO μ
+
+S_T = S₀ · exp(Σ r_t)</div></div></li>
+        <li><div><strong>Promediar los pagos descontados.</strong> Como bajo Q todas las trayectorias son equiprobables, el promedio es aritmético simple:
+          <div class="work">C = e^(−rT) · (1/N)·Σ max(S_T^(i) − K, 0)
+
+resultado MC:  call = 16,93    put = 7,05</div></div></li>
+        <li><div><strong>Comparar con Black-Scholes cerrado.</strong>
+          <div class="work">d₁ = [ln(1) + (0,10 + 0,045)(1)]/(0,30) = 0,48333
+d₂ = 0,48333 − 0,30 = 0,18333
+N(d₁) = 0,685570    N(d₂) = 0,572732
+
+C = 100(0,685590) − 100·e^(−0,10)(0,572735)
+  = 68,5570 − 51,8229 = 16,7341
+P = C + Ke^(−rT) − S₀ = 7,2179</div></div></li>
+        <li><div><strong>Diagnosticar la diferencia.</strong>
+          <div class="work">call:  16,93 (MC)  vs  16,73 (cerrado)   +1,2%
+put :   7,05 (MC)  vs   7,22 (cerrado)   −2,3%</div>
+          El error estándar de un MC de 10.000 trayectorias es del orden de <code>s/√N</code>, unos 20 puntos base sobre el precio. Aquí la diferencia es mayor, lo que apunta a un sesgo, no a ruido — y en efecto: el código del curso usa <code>sign(rnorm(...))</code>, que genera ±1 en vez de gaussianas. Es un árbol binomial disfrazado. <strong>Converge al mismo límite pero con sesgo de discretización</strong>, y la convergencia es lenta: mejorarla requiere cuadruplicar las trayectorias por cada dígito.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>MC 16,93 vs cerrado 16,7341</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>El cambio a la medida neutral al riesgo <strong>modifica el drift y no toca la volatilidad</strong>. Simular con <code>μ</code> en vez de <code>r</code> es el error de implementación más común, y da precios sistemáticamente sesgados. El segundo error clásico es olvidar el <code>−σ²/2</code> dentro de la exponencial: sin él, el activo simulado rinde en promedio <code>e^(σ²/2)</code> más de lo debido, y la call sale cara.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Usando el mismo modelo de barrera del ejemplo (μ = 1% anual, σ = 25%), responde: <strong>(a)</strong> ¿es más eficaz duplicar el colchón inicial o duplicar la tasa de crecimiento? <strong>(b)</strong> ¿Qué le pasa a la probabilidad de default cuando <code>t → ∞</code>?</div>
+    <div class="a">
+      <div class="work">(a) DOS PALANCAS, MISMO PUNTO DE PARTIDA (48,5% a 10 años)
+
+  duplicar el colchón:  b = 0,50 → 1,00 , μ = 1%
+     P(default) = 17,5%       ⇒  −31,1 puntos
+
+  duplicar el drift:    b = 0,50 , μ = 1% → 2%
+     P(default) = 44,4%       ⇒   −4,1 puntos
+
+  ⇒ EL COLCHÓN GANA POR UN FACTOR DE SIETE</div>
+      La razón está en la estructura de la fórmula. El colchón <code>b</code> entra en el argumento de <code>Φ</code> dividido por <code>σ√t</code>, así que su efecto es de <em>primer orden</em>. El drift entra multiplicado por <code>t</code> en el mismo cociente, o sea escalado por <code>√t/σ</code>, y con σ = 25% ese factor es pequeño: se necesitan muchos años para que un crecimiento del 1% construya el colchón que se puede tener el primer día.
+      <div class="work">(b) EL LÍMITE t → ∞
+
+  A medida que t crece, ambos argumentos de Φ tienden a +∞
+  (porque μ > 0 domina), así que Φ → 1 en los dos:
+
+     P(sobrevivir) → 1 − e^(−2μb/σ²)
+
+  Con los números:  1 − e^(−0,16) = 14,8%
+  ⇒ P(default EVENTUAL) = 85,2%</div>
+      Este resultado es el que más incomoda y el más importante. <strong>Con μ &gt; 0, la probabilidad de default no tiende a 1: converge a un valor menor que uno.</strong> Hay una fracción de trayectorias que escapan hacia arriba y nunca vuelven. Pero con estos parámetros esa fracción es de sólo el 15%: <em>el 85% de las empresas idénticas a ésta terminan quebrando alguna vez</em>, aunque su valor esperado crezca todos los años.
+      <div class="work">La razón está en el exponente −2μb/σ².
+Es un cociente entre CRECIMIENTO×COLCHÓN y VARIANZA.
+Para que la supervivencia perpetua sea probable
+hace falta que 2μb >> σ², y con σ = 25% eso exige
+μ·b del orden de 0,03, sesenta veces lo que hay aquí.</div>
+      La moraleja financiera: <strong>sobrevivir no es lo mismo que tener retorno esperado positivo</strong>. La volatilidad al cuadrado en el denominador dice que reducir σ a la mitad cuadruplica la eficacia del colchón. Es, en otra forma, el mismo argumento del apalancamiento y el <em>risk of ruin</em>.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 7 ============ -->
+<section class="module" id="m7">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 07 · <b>Estructura</b></div>
+    <h2>Álgebra lineal del pricing y el FTAP</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    Precios y pagos viven en <em class="term">espacios duales</em>. El teorema fundamental dice que no hay arbitraje si y sólo si existe un vector de precios de estado <strong>estrictamente positivo</strong> consistente con los precios observados. Todo lo demás del curso es un caso particular.
+  </div>
+
+  <div class="prose">
+    <h3>La matriz de pagos</h3>
+    <div class="formula">
+      <div class="f">n títulos, s estados del mundo.
+Cada título es una COLUMNA de pagos:
+
+    A : R^n → R^s        A ∈ R^(s×n)
+
+Una cartera es un vector de cantidades  x ∈ R^n
+Su pago es  b = A·x  ∈ R^s
+
+El problema central es el INVERSO:
+dado un pago deseado b, ¿existe x tal que A·x = b?</div>
+      <div class="cap">Es una pregunta de negocio disfrazada de álgebra lineal: «¿puedo cubrir perfectamente este derivado OTC que me pidió un cliente?».</div>
+    </div>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Concepto</th><th>Álgebra</th><th>Finanzas</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Mercado completo</td><td><code>rank(A) = s</code>, A sobreyectiva</td><td>todo pago es replicable</td></tr>
+          <tr><td class="k">Mercado incompleto</td><td><code>rank(A) &lt; s</code></td><td>hay pagos que nadie puede armar</td></tr>
+          <tr><td class="k">Títulos redundantes</td><td><code>ker(A) ≠ {0}</code></td><td>una cartera con pago cero pero no trivial</td></tr>
+          <tr><td class="k">Réplica única</td><td><code>ker(A) = {0}</code></td><td>una sola forma de cubrirse</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Completo y sin redundancia son cosas distintas: <code>n &gt; s</code> con rango <code>s</code> es completo <em>y</em> redundante; <code>n &lt; s</code> es forzosamente incompleto. Sólo con <code>n = s</code> y A invertible hay una réplica única para cada pago.</p>
+
+    <h3>Los dos tipos de arbitraje</h3>
+    <div class="formula">
+      <div class="f">TIPO I  — algo por nada
+    S·x ≤ 0     (no cuesta nada, o te pagan)
+    A·x ≥ 0     (nunca pierdes)
+    con al menos una desigualdad estricta
+
+TIPO II — precio no nulo para un pago nulo
+    A·x = 0  con  S·x ≠ 0
+    (existe sólo si hay títulos redundantes)</div>
+      <div class="cap">El tipo II es puro álgebra: si dos carteras tienen el mismo pago y distinto precio, vendes la cara y compras la barata. El tipo I es dominancia estocástica.</div>
+    </div>
+
+    <h3>El teorema fundamental (FTAP)</h3>
+    <div class="formula">
+      <div class="f">NO HAY ARBITRAJE
+        ⇔
+existe ψ ∈ R^s  con  ψ > 0  (componente a componente)
+tal que
+        S = Aᵀ·ψ
+
+ψ = vector de PRECIOS DE ESTADO (Arrow-Debreu)
+
+  · mercado COMPLETO   ⇒  ψ es ÚNICO
+  · mercado INCOMPLETO ⇒  infinitos ψ admisibles
+                          ⇒ el precio de un activo nuevo
+                            es un INTERVALO, no un número</div>
+      <div class="cap">La dualidad es exacta: <code>A</code> lleva carteras a pagos, y su adjunta <code>Aᵀ</code> lleva precios de estado a precios de títulos, en la dirección contraria. Ésta es la versión de dos periodos y estados finitos de todo lo que hicimos con probabilidades neutrales al riesgo.</div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Qué se puede replicar y qué no</span></header>
+    <div class="body">
+      <p class="given">Tres estados. Se transan un bono (paga 1,1,1), una acción (paga 3,2,1) y una call de strike 1,5 sobre la acción (paga 1,5 · 0,5 · 0). ¿Se puede replicar una call de strike <strong>1</strong> (paga 2,1,0)? ¿Y una de strike 1,5?</p>
+      <ol class="steps">
+        <li><div><strong>Escribir la matriz de pagos.</strong>
+          <div class="work">        bono  acción  call(1,5)
+estado I   1      3       1,5
+estado II  1      2       0,5
+estado III 1      1       0,0</div></div></li>
+        <li><div><strong>Buscar la call de strike 1 con sólo bono y acción.</strong>
+          <div class="work">x₁·1 + x₂·3 = 2
+x₁·1 + x₂·2 = 1
+x₁·1 + x₂·1 = 0
+
+De la tercera: x₁ = −x₂.
+Sustituyendo en la segunda: −x₂ + 2x₂ = x₂ = 1
+⇒ x₂ = 1 , x₁ = −1
+Chequeo en la primera: −1 + 3 = 2  ✓</div>
+          <strong>Sí se puede</strong>, y hasta sobran títulos: comprar una acción y vender un bono. La call de strike 1 es <strong>redundante</strong>.</div></li>
+        <li><div><strong>Ahora la call de strike 1,5.</strong> Con bono y acción solamente:
+          <div class="work">x₁ + 3x₂ = 1,5
+x₁ + 2x₂ = 0,5
+x₁ +  x₂ = 0
+
+De la tercera y segunda: x₁ = −x₂ y x₂ = 0,5
+⇒ x₁ = −0,5
+Chequeo en la primera: −0,5 + 1,5 = 1,0 ≠ 1,5  ✗</div>
+          <strong>Inconsistente.</strong> Ese pago no está en la imagen de la matriz: el mercado de bono + acción es <strong>incompleto</strong>.</div></li>
+        <li><div><strong>Ver la estructura.</strong> Con dos títulos y tres estados, la imagen es un plano dentro de un espacio de dimensión 3. La call de strike 1 cae dentro de ese plano; la de strike 1,5, no. Ésa es exactamente la diferencia entre <em>replicable</em> y <em>no replicable</em>, y no depende de los precios sino sólo de los <strong>pagos</strong>.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>Call(1) = acción − bono · Call(1,5) no replicable</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>Que exista <em>algún</em> vector <code>ψ</code> que resuelva <code>S = Aᵀψ</code> <strong>no basta</strong>: el teorema exige que sea <strong>estrictamente positivo</strong>. Si todas las soluciones tienen alguna componente negativa o cero, hay arbitraje. Y en un mercado incompleto la pregunta «¿cuál es el precio?» está mal planteada: lo que se calcula es el rango de precios compatibles con ausencia de arbitraje.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Un mercado con <strong>tres estados</strong> y sólo <strong>dos títulos</strong>: un bono que cuesta <strong>1</strong> y paga (1,1,1), y una acción que cuesta <strong>2</strong> y paga (3,2,1). (a) Encuentra todos los vectores de precios de estado compatibles con ausencia de arbitraje. (b) ¿Cuál es el rango de precios posibles de una call con strike 1,5 (pago 1,5 · 0,5 · 0)?</div>
+    <div class="a">
+      <div class="work">(a) RESOLVER  S = Aᵀ·ψ  CON ψ > 0
+
+    ψ₁ + ψ₂ + ψ₃ = 1        (bono)
+   3ψ₁ + 2ψ₂ +  ψ₃ = 2        (acción)
+
+    Dos ecuaciones, tres incógnitas ⇒ una recta de soluciones.
+    Restando la primera de la segunda:
+        2ψ₁ + ψ₂ = 1   ⇒   ψ₂ = 1 − 2ψ₁
+    y de la primera:  ψ₃ = 1 − ψ₁ − ψ₂ = ψ₁
+
+    Parametrizando con x ≡ ψ₁:
+
+        ψ = (x , 1 − 2x , x)
+
+    POSITIVIDAD ESTRICTA:
+        x > 0        y      1 − 2x > 0
+    ⇒   0 < x < 1/2
+
+(b) PRECIO DE LA CALL, para cada ψ admisible
+
+    S_call = ψ·b = 1,5·x + 0,5·(1 − 2x) + 0·x
+           = 1,5x + 0,5 − x
+           = 0,5 + 0,5x
+
+    con 0 < x < 1/2:
+
+        0,50  <  S_call  <  0,75</div>
+      El resultado es el corazón del módulo: <strong>no hay <em>un</em> precio, hay un intervalo</strong>, y ese intervalo mide exactamente cuánto le falta al mercado para ser completo. Dos observaciones que vale la pena tener a mano.
+      <div class="work">Los EXTREMOS son informativos:
+  x → 0     : ψ = (0, 1, 0)   precio → 0,50
+  x → 1/2   : ψ = (0,5, 0, 0,5) precio → 0,75
+En ambos límites alguna componente se ANULA,
+que es justo la frontera del arbitraje.</div>
+      Primero, el intervalo es <em>abierto</em>: los precios 0,50 y 0,75 corresponden a vectores con ceros, o sea a arbitraje. Segundo, y más útil en la práctica: si un dealer cotiza esta call, cualquier precio dentro de (0,50 · 0,75) es defendible y ninguno es «el correcto». <strong>El spread bid-ask de un derivado no replicable no es codicia, es incompletitud del mercado.</strong> Para estrecharlo hay que agregar un tercer instrumento que complete el mercado — y ahí, y sólo ahí, el precio se vuelve único.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 8 ============ -->
+<section class="module" id="m8">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 08 · <b>Estructura</b></div>
+    <h2>Optimización y la frontera eficiente</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    La frontera eficiente es una <em class="term">hipérbola</em>, y sale de dos multiplicadores de Lagrange — uno por el presupuesto y otro por el retorno objetivo. Toda la teoría de portafolios de Fundamentos II es este cálculo.
+  </div>
+
+  <div class="prose">
+    <h3>Puntos críticos en varias variables</h3>
+    <div class="formula">
+      <div class="f">f(x) ≈ f(x₀) + (∇f)ᵀ(x − x₀) + ½(x − x₀)ᵀQ(x − x₀)
+
+con  Q_ij = ∂²f/∂x_i∂x_j     (matriz hessiana, simétrica)
+
+Los AUTOVALORES de Q clasifican el punto crítico:
+   todos > 0   →  mínimo
+   todos < 0   →  máximo
+   signos mixtos → punto SILLA
+   algún cero  →  dirección plana (degenerada)
+
+Los AUTOVECTORES dan los ejes de la forma cuadrática.</div>
+      <div class="cap">Es la generalización de «segunda derivada positiva ⇒ mínimo». En dimensión alta, la mayoría de los puntos críticos son sillas, no extremos.</div>
+    </div>
+
+    <h3>Multiplicadores de Lagrange</h3>
+    <div class="formula">
+      <div class="f">Optimizar h(x,y) sujeto a g(x,y) = c :
+
+    L(x, y, λ) = h(x,y) − λ·[g(x,y) − c]
+
+    ∂L/∂x = ∂L/∂y = ∂L/∂λ = 0     ⇔    ∇h ∥ ∇g
+
+Intuición geométrica: el óptimo sobre una curva ocurre
+donde la curva es TANGENTE a una curva de nivel de h.
+Un multiplicador por cada restricción.</div>
+      <div class="cap">El método agrega variables pero simplifica el problema — casi siempre es más fácil que eliminar restricciones por sustitución, y además <code>λ</code> tiene interpretación: es el precio sombra de relajar la restricción.</div>
+    </div>
+
+    <h3>Media-varianza, completo</h3>
+    <div class="formula">
+      <div class="f">min_w  ½·wᵀCw   s.a.   1ᵀw = 1  y  μᵀw = μ_p
+
+    L = ½wᵀCw + ℓ(1 − 1ᵀw) + m(μ_p − μᵀw)
+
+Condición de primer orden:  Cw = ℓ·1 + m·μ
+
+    ⇒   w = C⁻¹(ℓ·1 + m·μ)
+
+Definiendo los tres escalares
+    a = 1ᵀC⁻¹1     b = 1ᵀC⁻¹μ     c = μᵀC⁻¹μ
+
+la frontera es una HIPÉRBOLA en el plano (σ, μ):
+
+    σ²_p = (a·μ_p² − 2b·μ_p + c) / (a·c − b²)</div>
+      <div class="cap">La solución es una <b>combinación lineal de dos carteras características</b>: la de varianza mínima global y la de máximo Sharpe. Es el teorema de los dos fondos, deducido en tres líneas de álgebra.</div>
+    </div>
+
+    <h3>Restricciones reales y programación cuadrática</h3>
+    <p>Las restricciones lineales adicionales —beta objetivo, exposición a factores, neutralidad sectorial— se agregan con un multiplicador cada una. Pero las <strong>desigualdades</strong> sobre los pesos (sólo largo, límite de posición, apalancamiento máximo) requieren <em>programación cuadrática</em>. La frontera restringida queda estrictamente dentro de la libre, y sus extremos están acotados por el mejor y el peor activo individual.</p>
+    <p>Y la advertencia práctica del módulo: <strong>el optimizador es extremadamente sensible a los inputs</strong>. En el caso de asignación por países que muestra el curso, dos activos casi idénticos hacen que la solución se vaya «all in» a uno de los dos en vez de diversificar, porque la función objetivo es casi plana en esa dirección y el ruido de estimación decide. Vale la pena graficar tus carteras reales contra la frontera aunque no las hayas construido optimizando.</p>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Extremar una forma cuadrática sobre una recta</span></header>
+    <div class="body">
+      <p class="given">Encuentra los extremos de <code>Q(x,y) = 2x² + 12xy − 7y²</code> sujeto a <code>x + 3y = 5</code>, usando multiplicadores de Lagrange. Determina si cada solución es máximo, mínimo o ninguno. <em>(Examen de muestra, pregunta 3a.)</em></p>
+      <ol class="steps">
+        <li><div><strong>Montar la lagrangiana.</strong>
+          <div class="work">L = 2x² + 12xy − 7y² − λ(x + 3y − 5)</div></div></li>
+        <li><div><strong>Las tres condiciones de primer orden.</strong>
+          <div class="work">∂L/∂x:   4x + 12y − λ  = 0
+∂L/∂y:  12x − 14y − 3λ = 0
+∂L/∂λ:   x + 3y − 5    = 0</div></div></li>
+        <li><div><strong>Resolver.</strong> De la primera, <code>λ = 4x + 12y</code>. Sustituyendo en la segunda:
+          <div class="work">12x − 14y − 3(4x + 12y) = 0
+12x − 14y − 12x − 36y = −50y = 0
+⇒  y = 0
+⇒  x = 5      (de la restricción)
+⇒  λ = 20
+
+Q(5, 0) = 2(25) = 50</div></div></li>
+        <li><div><strong>Clasificarlo — y aquí está el truco.</strong> Los autovalores de la hessiana sin restringir son de signos opuestos (es una silla), así que <em>no</em> sirven para clasificar el punto restringido. Hay que mirar Q <strong>sobre la recta</strong>. Sustituye <code>x = 5 − 3y</code>:
+          <div class="work">Q = 2(5−3y)² + 12(5−3y)y − 7y²
+  = 50 − 60y + 18y² + 60y − 36y² − 7y²
+  = 50 − 25y²</div></div></li>
+        <li><div><strong>Leerlo.</strong> Sobre la recta, Q es una parábola invertida con vértice en <code>y = 0</code>. Es un <strong>MÁXIMO</strong>, y vale 50. No hay mínimo: <code>Q → −∞</code> al alejarse por la recta en cualquier dirección.
+          <div class="work"> y   −2    −1    0    1     2
+ Q  −50    25   50   25   −50</div>
+          Una forma cuadrática con silla puede tener un máximo estricto restringida a una recta, dependiendo de en qué dirección corte la recta las curvas de nivel.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>Máximo en (5,0), Q = 50, λ = 20</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>Los multiplicadores dan puntos <strong>críticos</strong>, no extremos. Hay que clasificarlos aparte — y la hessiana <em>sin restringir</em> no sirve: lo que importa es la hessiana <strong>proyectada sobre el espacio tangente a la restricción</strong>. En dos variables con una restricción, la forma más rápida es sustituir la restricción y mirar la función de una sola variable, como arriba.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Dos activos con correlación <strong>ρ</strong> y volatilidades <strong>2σ</strong> y <strong>σ</strong>. (a) Encuentra los pesos y el riesgo de la cartera de <strong>mínima varianza totalmente invertida</strong> (es decir, con <code>w₁ + w₂ = 1</code>). (b) ¿Para qué valores de ρ y σ la solución además cumple <code>0 ≤ w_i ≤ 1</code>, o sea es sólo larga y sin apalancamiento? <em>(Examen de muestra, preguntas 3b y 3c.)</em></div>
+    <div class="a">
+      <div class="work">(a) MINIMIZAR CON LA RESTRICCIÓN SUSTITUIDA
+
+    σ²_p = w²(4σ²) + (1−w)²σ² + 2w(1−w)(ρ·2σ·σ)
+         = σ²[ 4w² + (1−w)² + 4ρw(1−w) ]
+
+    d/dw = 0:
+       8w − 2(1−w) + 4ρ(1 − 2w) = 0
+       8w − 2 + 2w + 4ρ − 8ρw = 0
+       w(10 − 8ρ) = 2 − 4ρ
+
+              1 − 2ρ                     4 − 2ρ
+       w₁ = ─────────        w₂ = 1−w₁ = ─────────
+              5 − 4ρ                     5 − 4ρ
+
+    RIESGO (fórmula general de mínima varianza a 2 activos):
+
+       σ²_min = σ₁²σ₂²(1−ρ²) / (σ₁² + σ₂² − 2ρσ₁σ₂)
+              = 4σ⁴(1−ρ²) / (σ²(5 − 4ρ))
+
+              ⇒  σ_min = 2σ·√( (1−ρ²)/(5−4ρ) )
+
+(b) CUÁNDO ES LARGA Y SIN APALANCAMIENTO
+
+    Como 5 − 4ρ > 0 para todo ρ ∈ (−1,1):
+       w₁ ≥ 0  ⇔  1 − 2ρ ≥ 0  ⇔   ρ ≤ 1/2
+       w₁ ≤ 1  ⇔  1 − 2ρ ≤ 5 − 4ρ ⇔ ρ ≤ 2   (siempre)
+       w₂ ≥ 0  ⇔  4 − 2ρ ≥ 0                (siempre)
+       w₂ ≤ 1  ⇔  4 − 2ρ ≤ 5 − 4ρ ⇔ ρ ≤ 1/2
+
+    ⇒  la condición es  ρ ≤ 1/2,  para CUALQUIER σ > 0</div>
+      Que <code>σ</code> desaparezca de la respuesta no es casualidad: los pesos óptimos dependen de las volatilidades <em>relativas</em>, y aquí la razón está fija en 2:1. Escalar las dos volatilidades escala el riesgo pero no cambia la mezcla.
+      <div class="work">   ρ      w₁       w₂      σ_min/σ
+ −0,90   0,326   0,674    0,297
+ −0,50   0,286   0,714    0,655
+  0,00   0,200   0,800    0,894
+  0,25   0,125   0,875    0,968
+  0,50   0,000   1,000    1,000   ← frontera
+  0,75  −0,250   1,250    0,935
+  0,90  −0,571   1,571    0,737</div>
+      Vale la pena mirar la tabla. En <code>ρ = 1/2</code> ocurre algo exacto: <strong>w₁ = 0</strong>, la cartera de mínima varianza es el activo de baja volatilidad puro, y su riesgo es exactamente <code>σ</code>. Ese punto no es arbitrario: <code>ρ = σ₂/σ₁ = 1/2</code> es la condición general para que el activo volátil deje de aportar diversificación. Por encima de ese umbral —correlaciones altas— la única forma de bajar el riesgo es <strong>vender en corto</strong> el activo volátil, y ahí la cartera deja de ser implementable para un mandato sólo largo. Es exactamente el mismo mecanismo que aparecía en el reto del módulo 14 de Fundamentos II con la acción C.
+    </div>
+  </details>
+</section>
+
+<!-- ============ MÓDULO 9 ============ -->
+<section class="module" id="m9">
+  <div class="mod-head">
+    <div class="mod-num">Módulo 09 · <b>Estructura</b></div>
+    <h2>Decisión óptima: Bellman y ejecución</h2>
+  </div>
+
+  <div class="thesis">
+    <span>La idea en una frase</span>
+    La programación dinámica da vuelta el problema: en vez de elegir toda la trayectoria de una vez, se resuelve <em class="term">hacia atrás</em> desde el final. Y el algoritmo goloso —el que optimiza el paso siguiente— casi siempre pierde.
+  </div>
+
+  <div class="prose">
+    <h3>De variaciones a Bellman</h3>
+    <div class="formula">
+      <div class="f">Cálculo de variaciones: minimizar S = ∫ L(q, q̇) dt
+sobre todas las trayectorias con extremos fijos.
+
+Ecuación de Euler-Lagrange:
+    ∂L/∂q − (d/dt)(∂L/∂q̇) = 0
+
+Ejemplo: L = ½mq̇² − V(q)  ⇒  mq̈ = −V′(q)   (F = ma)
+
+PROGRAMACIÓN DINÁMICA — la versión estocástica y discreta:
+
+    V(s) = max_a  E[ r(s,a,s′) + γ·V(s′) ]
+                     ↑ premio inmediato  ↑ valor de continuar</div>
+      <div class="cap">Los ingredientes de un proceso de decisión de Markov: <b>estados</b>, <b>acciones</b>, <b>probabilidades de transición</b>, <b>premios</b>, <b>descuento</b> y una <b>política</b>. La función de valor guarda cuánto vale estar en cada estado siguiendo esa política.</div>
+    </div>
+
+    <h3>Por qué no ser goloso</h3>
+    <p>El ejemplo canónico del módulo es un triángulo de números donde hay que bajar eligiendo entre dos vecinos y maximizar la suma. El algoritmo goloso toma en cada paso el número más grande de los dos y llega a <strong>39</strong>. Resolviendo hacia atrás —guardando en cada nodo el mejor total alcanzable desde ahí— se llega a <strong>42</strong>. La diferencia es estructural: un premio inmediato pequeño puede abrir una rama mucho mejor, y sólo se descubre mirando desde el final.</p>
+
+    <h3>Ejecución óptima: Almgren-Chriss</h3>
+    <div class="formula">
+      <div class="f">Vender Q acciones en T, repartido en N tramos Δq_k.
+Dos costos que tiran en direcciones opuestas:
+
+  IMPACTO — vender rápido mueve el precio en contra
+      costo ≈ c₁·|Δq| + ½c₂·(Δq)²/τ     por tramo
+
+  RIESGO — vender lento deja inventario expuesto
+      Var[C] = σ²τ·Σ q_k²    (q_k = inventario restante)
+
+Con tramos iguales Δq = Q/N:
+      E[C] = c₁Q + ½γQ² + (c₂/τ)·Q²/N
+      Var[C] = σ²TQ²·(N−1)(2N−1)/(6N²)  →  ⅓σ²Q²T
+
+Óptimo con aversión al riesgo λ:  minimizar  E[C] + λ·Var[C]
+      ⇒  q̈ = κ²q ,  κ = √(λσ²/η)
+      ⇒  q(t) = Q · sinh(κ(T−t)) / sinh(κT)</div>
+      <div class="cap">Es la ecuación de un oscilador armónico con el signo cambiado — de ahí el <b>seno hiperbólico</b> en vez del seno. La familia de soluciones parametrizada por λ es la <b>frontera eficiente de trading</b>: λ→0 da la venta lineal (mínimo impacto), λ→∞ da vender todo de golpe (mínimo riesgo).</div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Goloso contra programación dinámica</span></header>
+    <div class="body">
+      <p class="given">Baja desde la cima de este triángulo hasta la base, moviéndote sólo a uno de los dos vecinos de la fila siguiente, maximizando la suma.</p>
+      <ol class="steps">
+        <li><div><strong>El triángulo.</strong>
+          <div class="work">              9
+            2   3
+          2   8  10
+        4  11   5   1
+      2   6  11  12   6</div></div></li>
+        <li><div><strong>Estrategia golosa: en cada paso, el vecino mayor.</strong>
+          <div class="work">9 → 3 → 10 → 1 → 6
+suma = 9 + 3 + 10 + 1 + 6 = 39</div>
+          El 10 de la tercera fila es una trampa: te deja atrapado en la esquina derecha, donde sólo hay 1 y 6.</div></li>
+        <li><div><strong>Programación dinámica: hacia atrás desde la base.</strong> A cada nodo se le suma el mejor de sus dos antecesores.
+          <div class="work">fila 1:              9
+fila 2:           11    12
+fila 3:        13    20    22
+fila 4:     17    31    27    23
+fila 5:  19    37    42    39    29
+                     ↑ máximo</div></div></li>
+        <li><div><strong>Reconstruir el camino.</strong> Desde el 42 se sube eligiendo el antecesor que lo generó:
+          <div class="work">9 → 2 → 8 → 11 → 12
+suma = 9 + 2 + 8 + 11 + 12 = 42</div>
+          El camino óptimo empieza tomando <strong>2 en vez de 3</strong> — el peor paso inmediato posible.</div></li>
+        <li><div><strong>La lección.</strong> 42 contra 39: un 7,7% más, y todo se juega en la primera decisión. El goloso maximiza <em>el premio</em>; la programación dinámica maximiza <em>el premio más el valor de continuación</em>. Ésa es literalmente la ecuación de Bellman, y es también por qué una opción americana se valora hacia atrás nodo por nodo en vez de decidir hacia adelante.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>DP 42 · goloso 39</span></div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b>Trampa de examen</b>
+    <div>La estrategia lineal de ejecución (vender la misma cantidad cada tramo) es la de <strong>mínimo impacto</strong>, no la óptima. Sólo es óptima si la aversión al riesgo es cero. Con <code>λ &gt; 0</code> el óptimo es una trayectoria <em>convexa</em> que vende más al principio, cuando el inventario expuesto es mayor. Y el otro punto que se pregunta: minimizar la varianza no es una meta razonable por sí sola, porque el mínimo absoluto se logra vendiendo todo de una vez — con un costo de impacto arbitrariamente grande.</div>
+  </div>
+
+  <details class="reto">
+    <summary>Reto — resuélvelo antes de mirar</summary>
+    <div class="q">Los retornos de N activos siguen un proceso con reversión a la media: <code>R_it − μ_i = −λ(R_i(t−1) − μ_i) + σ_i·z_it</code>, con <code>|λ| &lt; 1</code> y shocks incorrelacionados entre activos y en el tiempo. Una estrategia neutral al mercado invierte con pesos <code>w_it = −(1/N)(R_it − R̄_t)</code>, donde <code>R̄_t</code> es el retorno promedio del mercado. Sin costos de transacción y con <code>R_f = 0</code>, halla <code>E[R_p] = E[Σ_i w_i(t−1)·R_it]</code> en función de los parámetros. ¿Cuándo es positivo? <em>(Examen de muestra, pregunta 4.)</em></div>
+    <div class="a">
+      Conviene separar cada retorno en su media y su desviación: <code>R_it = μ_i + d_it</code>, con <code>d_it = −λ·d_i(t−1) + σ_i·z_it</code>. La desviación es un AR(1) de coeficiente <code>−λ</code>, así que su varianza estacionaria es <code>v_i = σ_i²/(1 − λ²)</code>.
+      <div class="work">EL PESO, DESCOMPUESTO
+   w_i(t−1) = −(1/N)[ (μ_i − μ̄) + (d_i(t−1) − d̄_(t−1)) ]
+                       ↑ parte FIJA      ↑ parte ALEATORIA
+
+TÉRMINO 1 — la parte fija contra las medias
+   Σ_i μ_i · (−1/N)(μ_i − μ̄)
+     = −(1/N)[ Σμ_i² − N·μ̄² ]
+     = −σ²_μ         donde σ²_μ ≡ (1/N)Σ(μ_i − μ̄)²
+   ⇒ SIEMPRE NEGATIVO
+
+TÉRMINO 2 — la parte aleatoria contra la reversión
+   E[w_i(t−1)·d_it] = −λ·E[w_i(t−1)·d_i(t−1)]
+     = (λ/N)·E[ d_i(t−1)² − d̄_(t−1)·d_i(t−1) ]
+     = (λ/N)·( v_i − v_i/N )          ← shocks independientes
+     = λ(N−1)·v_i / N²
+
+   sumando sobre i, con σ̄² ≡ (1/N)Σσ_i² :
+
+        λ(N−1)      σ̄²
+     ───────── · ───────
+          N       1 − λ²
+
+RESULTADO
+
+              λ(N−1)        σ̄²
+   E[R_p] = ─────────── · ──────── −  σ²_μ
+                 N         1 − λ²</div>
+      Ahora la lectura, que es lo que la pregunta pide de verdad. El retorno esperado tiene <strong>dos piezas que compiten</strong>.
+      <div class="work">POSITIVO cuando
+
+    λ(N−1)·σ̄²
+   ───────────── > σ²_μ
+    N(1 − λ²)
+
+Requiere:
+  · λ > 0    (reversión de verdad, no momentum)
+  · σ̄² grande (volatilidad = materia prima del rebote)
+  · σ²_μ chica (medias parecidas entre activos)
+  · N grande  (el factor (N−1)/N → 1)</div>
+      El <strong>primer</strong> término es el motor: la estrategia compra a los que quedaron abajo del promedio y vende a los que quedaron arriba, y si <code>λ &gt; 0</code> esos desvíos se corrigen. Fíjate en que la volatilidad aparece en el <em>numerador</em>: para esta estrategia la volatilidad no es un riesgo, es el <strong>combustible</strong>. Y el factor <code>1/(1−λ²)</code> hace que una reversión fuerte pague más que proporcionalmente.
+      <p style="margin-top:10px">El <strong>segundo</strong> término es un lastre permanente, y es la parte que sorprende: <code>−σ²_μ</code> aparece porque la estrategia confunde <em>desvío temporal</em> con <em>media alta</em>. Un activo cuyo retorno medio es estructuralmente superior al del mercado aparece «caro» todos los periodos, así que la estrategia lo vende en corto de forma sistemática y pierde su prima. En la práctica es exactamente por eso que un long/short de reversión se construye <strong>sobre residuos de un modelo de factores</strong> y no sobre retornos crudos: hay que quitarle las medias antes, o el sesgo se come la ganancia.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ============ CHULETA ============ -->
+<section class="module closing" id="chuleta">
+  <div class="mod-head">
+    <div class="mod-num">Repaso</div>
+    <h2>Mapa de fórmulas</h2>
+  </div>
+  <div class="prose">
+    <p>Para la víspera del examen: lo que hay que poder escribir de memoria, agrupado como aparece en el curso.</p>
+  </div>
+
+  <div class="cardgrid">
+    <div class="card">
+      <h4>Momentos</h4>
+      <div class="f">σ² = E[X²] − E[X]²
+E[aX + bY] = aE[X] + bE[Y]  (siempre)
+Var(ΣX) = Σσ² + 2ΣΣ cov
+Cov = E[(X−μ_X)(Y−μ_Y)]
+β = Cov(X,Y)/σ²_Y</div>
+    </div>
+    <div class="card">
+      <h4>Distribuciones</h4>
+      <div class="f">Binomial  μ=np   σ²=npq
+Poisson   μ=σ²=λ
+Normal    p = e^(−(x−μ)²/2σ²)/√(2πσ²)
+Lognormal E[X] = e^(μ̃+σ²/2)
+          Var  = (e^σ²−1)e^(2μ̃+σ²)
+Cauchy    NINGÚN momento existe</div>
+    </div>
+    <div class="card">
+      <h4>Random walk</h4>
+      <div class="f">S_T = Σ z_t   Var = T   SD = √T
+r_t = μ + σz_t  ⇒  E=μT, Var=σ²T
+σ_anual = σ_diaria·√252
+P_T = P₀·e^(r₁+…+r_T)   lognormal
+VR(q) = 1 + 2Σ(1−k/q)ρ_k</div>
+    </div>
+    <div class="card">
+      <h4>AR(1)</h4>
+      <div class="f">R_t − μ = φ(R_{t−1} − μ) + z_t
+μ = c₀/(1−c₁)
+γ₀ = σ²/(1−φ²)
+γ_k = φ^k γ₀      ρ_k = φ^k
+estimación: MCO sobre el rezago</div>
+    </div>
+    <div class="card">
+      <h4>Árbol binomial</h4>
+      <div class="f">μ = a + pb ,  σ² = b²p(1−p)
+log u = μ + σ√((1−p)/p)
+log d = μ − σ√(p/(1−p))
+CRR: u = e^(σ√Δt), d = 1/u
+Prob(S = S₀u^k d^(t−k)) = C(t,k)p^k q^(t−k)</div>
+    </div>
+    <div class="card">
+      <h4>Browniano</h4>
+      <div class="f">dB ~ N(0, dt)
+E[(dB)²] = dt      (dB)² → dt
+E[(dB)⁴] = 3(dt)²
+Escala: Δx ∝ √Δt
+B(t₂)−B(t₁) ~ N(0, t₂−t₁)</div>
+    </div>
+    <div class="card">
+      <h4>Lema de Itô</h4>
+      <div class="f">dX = a dt + b dB
+dF = [F_t + aF_X + ½b²F_XX]dt + bF_X dB
+GBM: d(log S) = (μ − σ²/2)dt + σdB
+S_T = S₀e^((μ−σ²/2)T + σB_T)
+S^α: drift αμ + ½α(α−1)σ², vol ασ</div>
+    </div>
+    <div class="card">
+      <h4>Black-Scholes</h4>
+      <div class="f">V_t + ½σ²S²V_SS + rS·V_S − rV = 0
+Δ = ∂V/∂S  (la cobertura)
+dividendo D: (r−D)S·V_S, pero −rV
+futuros: V_t + ½σ²F²V_FF − rV = 0
+c = SN(d₁) − Ke^(−rT)N(d₂)</div>
+    </div>
+    <div class="card">
+      <h4>Difusión y medida Q</h4>
+      <div class="f">∂p/∂t = ½σ²·∂²p/∂z²
+p₀ = e^(−z²/2t)/√(2πt)
+dB^Q = dB + ((μ−r)/σ)dt
+dS/S = r dt + σ dB^Q
+e^(−rt)X_t = E^Q_t[e^(−rT)X_T]</div>
+    </div>
+    <div class="card">
+      <h4>Barreras</h4>
+      <div class="f">Método de las imágenes: restar la
+trayectoria del punto espejo
+P(sobrevivir a t)
+ = Φ((b+μt)/(σ√t))
+ − e^(−2μb/σ²)Φ((−b+μt)/(σ√t))
+t→∞: P(tocar) = e^(−2μb/σ²)</div>
+    </div>
+    <div class="card">
+      <h4>FTAP</h4>
+      <div class="f">A·x = b   (cartera → pago)
+S = Aᵀ·ψ  (estados → precios)
+sin arbitraje ⇔ ∃ ψ > 0
+completo ⇔ rank(A) = s ⇒ ψ único
+incompleto ⇒ intervalo de precios
+redundante ⇔ ker(A) ≠ {0}</div>
+    </div>
+    <div class="card">
+      <h4>Optimización</h4>
+      <div class="f">L = h − λ(g − c)  ⇒  ∇h ∥ ∇g
+autovalores de la hessiana clasifican
+w = C⁻¹(ℓ·1 + m·μ)
+a = 1ᵀC⁻¹1, b = 1ᵀC⁻¹μ, c = μᵀC⁻¹μ
+σ²_p = (aμ² − 2bμ + c)/(ac − b²)</div>
+    </div>
+    <div class="card">
+      <h4>Decisión óptima</h4>
+      <div class="f">Euler-Lagrange: ∂L/∂q = d/dt(∂L/∂q̇)
+Bellman: V(s) = max_a E[r + γV(s′)]
+resolver HACIA ATRÁS
+Almgren-Chriss: q̈ = κ²q
+q(t) = Q·sinh(κ(T−t))/sinh(κT)</div>
+    </div>
+    <div class="card">
+      <h4>Sanidad mental</h4>
+      <div class="f">√T sólo si los incrementos son IID
+log ≠ simple: m = e^μ − 1
+Itô: expandir a 2º orden, (dB)²→dt
+Q cambia el drift, NO la volatilidad
+Independencia es un supuesto FUERTE
+Goloso ≠ óptimo</div>
+    </div>
+  </div>
+
+  <footer>
+    Resumen elaborado a partir de las diapositivas de clase, las recitaciones y el examen de muestra de <strong>15.455x Mathematical Methods for Quantitative Finance</strong> (MITx MicroMasters in Finance, Prof. Paul Mende). Los ejemplos numéricos están recalculados de principio a fin; los que provienen directamente del curso conservan sus cifras originales. Textos de apoyo: Tsay, <em>Analysis of Financial Time Series</em> 3e, y Capinski &amp; Zastawniak, <em>Mathematics for Finance</em>. Los libros de Shreve en <code>estudios/Libros de apoyo/</code> son el complemento natural de los módulos 4 a 6.
+  </footer>
+</section>
+
+</main>
+</div>
+</body>
+</html>

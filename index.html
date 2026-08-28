@@ -67,6 +67,16 @@
     <button class="btn" id="btn-ir-estudio">Entrar a la sala de estudio</button>
   </div>
 
+  <div class="banda-cuad" id="cuadernos">
+    <div>
+      <b>📕 Cuadernos del MicroMasters</b>
+      <p>Los cinco cursos del programa de finanzas del MIT, resumidos entero por entero: la idea de cada módulo, las fórmulas, ejemplos resueltos paso a paso y un reto por módulo.</p>
+      <span class="banda-cuad-prog"><i id="cuad-banda-fill"></i></span>
+      <small id="cuad-banda-txt"></small>
+    </div>
+    <button class="btn" id="btn-ir-cuadernos">Abrir los cuadernos</button>
+  </div>
+
   <div class="especiales-cab">
     <h2>🎖️ Juegos especiales</h2>
     <span class="cinta"></span>
@@ -138,6 +148,14 @@
     <h1>📚 Sala de estudio</h1>
     <p>Los mismos temas que salen en los juegos, explicados de corrido. Aquí no se pierde nada: lee, repasa y cuando lo tengas claro, baja a la arena.</p>
   </div>
+  <div class="banda-cuad banda-cuad-min">
+    <div>
+      <b>📕 ¿Buscas los cuadernos del MicroMasters?</b>
+      <p>Los apuntes de aquí abajo son de repaso rápido. Los cinco cursos del MIT están resumidos aparte, cada uno en su propia página.</p>
+    </div>
+    <button class="btn btn-fantasma" id="btn-estudio-cuadernos">Ver los cuadernos</button>
+  </div>
+
   <div id="estudio-filtros" class="chips"></div>
   <div id="estudio-lista"></div>
   <div class="acciones" style="margin-top:30px">
@@ -165,6 +183,27 @@
       <button class="btn btn-fantasma" id="btn-lectura-jugar">⚔️ Jugar los juegos de este mundo</button>
     </div>
   </article>
+</section>
+
+<!-- ================= CUADERNOS ================= -->
+<section id="pantalla-cuadernos" class="pantalla">
+  <div class="cuadernos-cab">
+    <h1>📕 Cuadernos del MicroMasters</h1>
+    <p>Los cinco cursos del <b>MITx MicroMasters in Finance</b>, cada uno resumido en un cuaderno propio.
+       No son preguntas: se leen. Cada módulo trae la idea en una frase, las fórmulas que hay que saberse,
+       ejemplos numéricos resueltos línea por línea, la trampa que cae en el examen y un reto con la
+       solución escondida. Están en el orden de estudio recomendado.</p>
+    <div class="cuadernos-prog">
+      <small id="cuadernos-cuenta">0 de 5 repasados</small>
+      <div class="barra"><i id="cuadernos-barra"></i></div>
+    </div>
+  </div>
+
+  <div id="cuadernos-lista"></div>
+
+  <div class="acciones" style="margin-top:30px">
+    <button class="btn btn-fantasma" id="btn-cuadernos-volver">← Volver al dojo</button>
+  </div>
 </section>
 
 <!-- ================= TABLA PERIÓDICA ================= -->
@@ -319,11 +358,13 @@
 <script src="datos/apuntes-matematicas.js" charset="utf-8"></script>
 <script src="datos/apuntes-quimica.js" charset="utf-8"></script>
 <script src="datos/apuntes-geografia.js" charset="utf-8"></script>
+<script src="datos/cuadernos.js" charset="utf-8"></script>
 <script src="datos/ejercicios-matematicas.js" charset="utf-8"></script>
 <script src="datos/ejercicios-finanzas.js" charset="utf-8"></script>
 <script src="js/motor.js" charset="utf-8"></script>
 <script src="js/juegos.js" charset="utf-8"></script>
 <script src="js/estudio.js" charset="utf-8"></script>
+<script src="js/cuadernos.js" charset="utf-8"></script>
 <script src="js/especiales.js" charset="utf-8"></script>
 <script src="js/app.js" charset="utf-8"></script>
 
