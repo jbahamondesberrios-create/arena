@@ -6,7 +6,7 @@
    Al tocar cualquier archivo de la app hay que subir VERSION: es lo único
    que hace que los navegadores que ya la tienen instalada se actualicen.
    ============================================================ */
-const VERSION = "arena-v6";
+const VERSION = "arena-v7";
 
 /* El esqueleto que se guarda en la instalación. Si algún día se añade un
    archivo nuevo y se olvida esta lista, no se rompe nada: lo de abajo lo
