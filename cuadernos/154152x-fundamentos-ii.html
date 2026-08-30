@@ -269,6 +269,87 @@ td.k{font-weight:600}
 .card .f{font-family:"DM Mono",monospace;font-size:12px;line-height:1.95;white-space:pre;overflow-x:auto;color:var(--ink-2)}
 footer{padding:28px 0 56px;color:var(--ink-3);font-size:14.5px;max-width:var(--maxw)}
 </style>
+<style>
+/* ============ COMPONENTES DE PROFUNDIDAD ============ */
+
+/* Notación: qué significa cada símbolo antes de usarlo */
+.defs{
+  max-width:var(--maxw);border:1px solid var(--rule);border-radius:3px;
+  background:var(--surface-2);padding:14px 18px;
+}
+.defs > b{
+  display:block;font-family:"DM Mono",monospace;font-size:10.5px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:9px;
+}
+.defs dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline}
+.defs dt{
+  font-family:"DM Mono",monospace;font-size:13px;font-weight:500;
+  color:var(--accent);white-space:nowrap;
+}
+.defs dd{margin:0;font-size:15px;color:var(--ink-2);line-height:1.5}
+
+/* Derivación: de dónde sale la fórmula, paso algebraico a paso algebraico */
+.deriv{
+  max-width:var(--maxw);border:1px solid var(--rule);border-left:3px solid var(--ink-3);
+  border-radius:3px;background:var(--surface);overflow:hidden;margin:2px 0;
+}
+.deriv > b{
+  display:block;padding:12px 18px 0;
+  font-family:"DM Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+.deriv > b em{font-style:normal;color:var(--ink-2);text-transform:none;letter-spacing:0;font-size:12.5px}
+.deriv ol{
+  list-style:none;margin:0;padding:10px 18px 16px;counter-reset:d;
+  display:flex;flex-direction:column;gap:11px;
+}
+.deriv li{
+  counter-increment:d;display:grid;grid-template-columns:19px minmax(0,1fr);gap:11px;
+  font-size:16px;line-height:1.55;
+}
+.deriv li::before{
+  content:counter(d);font-family:"DM Mono",monospace;font-size:10.5px;
+  color:var(--ink-3);padding-top:5px;
+}
+.deriv .paso{
+  font-family:"DM Mono",monospace;font-size:12.5px;line-height:1.85;white-space:pre;
+  overflow-x:auto;background:var(--surface-2);padding:8px 12px;border-radius:2px;
+  margin-top:6px;color:var(--ink);
+}
+.deriv .cierre{
+  border-top:1px solid var(--rule);padding:11px 18px;background:var(--accent-soft);
+  font-size:15.5px;color:var(--ink);
+}
+.deriv .cierre b{color:var(--accent)}
+
+/* Nexo: dónde vuelve a aparecer esto en el programa */
+.nexo{
+  max-width:var(--maxw);border-left:2px solid var(--accent);padding:1px 0 1px 15px;
+  font-size:15px;color:var(--ink-2);line-height:1.55;
+}
+.nexo b{color:var(--ink);font-weight:600}
+
+/* Aviso corto dentro del hilo de la prosa */
+.ojo{
+  max-width:var(--maxw);font-size:15.5px;color:var(--ink-2);line-height:1.6;
+  background:var(--surface-2);border-radius:3px;padding:11px 15px;
+}
+.ojo b{color:var(--ink)}
+
+/* Tarjeta del mapa del examen */
+.exammap{
+  max-width:var(--maxw);border:1px solid var(--rule-strong);border-radius:3px;
+  background:var(--surface);padding:16px 18px;margin-top:26px;
+}
+.exammap > b{
+  display:block;font-family:"DM Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:10px;
+}
+.exammap dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:7px 14px;align-items:baseline}
+.exammap dt{font-family:"DM Mono",monospace;font-size:12.5px;color:var(--ink-3);white-space:nowrap}
+.exammap dd{margin:0;font-size:15px;color:var(--ink-2);line-height:1.5}
+.exammap dd a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--rule-strong)}
+</style>
 
 <style id="arena-barra-estilo">
   .arena-volver{
@@ -361,6 +442,39 @@ footer{padding:28px 0 56px;color:var(--ink-3);font-size:14.5px;max-width:var(--m
 
   <div class="prose">
     <h3>Tasas forward: pactar hoy un préstamo futuro</h3>
+    <div class="defs">
+      <b>Notación del módulo</b>
+      <dl>
+        <dt>r_t</dt><dd>tasa <em>spot</em> a <em>t</em> periodos: la que rinde hoy un bono cero que vence en <em>t</em></dd>
+        <dt>B_t</dt><dd>precio hoy de un bono cero que paga $1 en <em>t</em>. <code>B_t = 1/(1+r_t)^t</code></dd>
+        <dt>f_t</dt><dd>tasa <em>forward</em> del periodo que va de <em>t−1</em> a <em>t</em>, pactable hoy</dd>
+        <dt>S₀, S_T</dt><dd>precio al contado del subyacente hoy y en el vencimiento</dd>
+        <dt>F_T</dt><dd>precio forward acordado hoy para entrega en <em>T</em></dd>
+        <dt>q</dt><dd>renta continua que paga el subyacente mientras lo tienes (dividendo, tasa extranjera)</dd>
+        <dt>y</dt><dd><em>convenience yield</em> neto de almacenaje, en materias primas</dd>
+        <dt>c</dt><dd>tasa fija del swap (<em>swap rate</em>)</dd>
+        <dt>N</dt><dd>nocional del swap o tamaño del contrato</dd>
+      </dl>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>la tasa forward f_t</em></b>
+      <ol>
+        <li><div>Quieres prestar $1 desde <code>t−1</code> hasta <code>t</code>, pero pactando la tasa <strong>hoy</strong>. Como no existe ese contrato, constrúyelo con los dos bonos cero que sí existen.</div></li>
+        <li><div>Compra un bono a <code>t−1</code> y véndete uno a <code>t</code>, en la proporción que deje caja cero hoy:
+          <div class="paso">hoy   comprar 1 bono a t−1      −B_{t−1}
+      vender x bonos a t        +x·B_t
+      ────────────────────────────────
+      caja hoy = 0   ⇒   x = B_{t−1}/B_t</div></div></li>
+        <li><div>Los flujos futuros quedan así:
+          <div class="paso">t−1   cobras el bono corto        +1
+t     pagas los x bonos largos  −B_{t−1}/B_t</div>
+          Eso es exactamente <em>prestar $1 en t−1 y recibir</em> <code>B_{t−1}/B_t</code> <em>en t</em>.</div></li>
+        <li><div>La tasa de esa operación, que no tiene ningún riesgo y no costó nada montar, es
+          <div class="paso">1 + f_t = B_{t−1}/B_t = (1+r_t)^t / (1+r_{t−1})^(t−1)</div></div></li>
+        <li><div>Si alguien cotizara otra tasa, tomarías la punta buena de este par de bonos contra su contrato y te llevarías la diferencia sin poner un peso.</div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> la tasa forward <strong>no es una opinión sobre el futuro, es un cociente de dos precios de hoy</strong>. Por eso se puede replicar, y por eso un banco la puede cotizar sin tomar riesgo. La prima de plazo aparece precisamente en la brecha entre este cociente y lo que el mercado <em>espera</em> que ocurra.</div>
+    </div>
     <div class="formula">
       <div class="f">Sin arbitraje entre dos estrategias de inversión:
 
@@ -374,6 +488,33 @@ Con precios de bonos cero:   f_t = B_{t−1}/B_t  −  1</div>
     <p>Bajo la hipótesis de expectativas, <code>f_{t+1} = E₀[r₁(t)]</code>: la forward sería un predictor insesgado de la spot futura. Empíricamente <strong>la sobreestima</strong>, porque incorpora además una prima de riesgo por plazo.</p>
 
     <h3>Precio de un forward sobre un activo financiero</h3>
+    <div class="deriv">
+      <b>De dónde sale · <em>F_T = S₀·e^((r−q)T)</em></b>
+      <ol>
+        <li><div>El precio forward se fija de modo que <strong>entrar al contrato cueste cero</strong>. Así que no hay que valorar el contrato: hay que encontrar el <code>F_T</code> que lo deja sin valor.</div></li>
+        <li><div>Replica la entrega. Si el activo no paga nada, para tener una unidad en <code>T</code> basta comprar una unidad hoy, financiada con un préstamo:
+          <div class="paso">t = 0   comprar el activo    −S₀
+        pedir prestado      +S₀
+        ──────────────────────────
+        caja hoy               0
+
+t = T   entregar y cobrar    +F_T
+        devolver el préstamo −S₀·e^(rT)</div></div></li>
+        <li><div>El resultado en <code>T</code> es cierto y el desembolso inicial fue nulo. Un flujo seguro y gratis sólo puede valer cero:
+          <div class="paso">F_T − S₀·e^(rT) = 0   ⇒   F_T = S₀·e^(rT)</div></div></li>
+        <li><div>Ahora el activo <strong>paga una renta continua q</strong> mientras lo tienes. Ya no necesitas comprar una unidad entera: compra <code>e^(−qT)</code> unidades y reinvierte la renta en más unidades del propio activo. En <code>T</code> tendrás exactamente una.
+          <div class="paso">comprar  e^(−qT) unidades  cuesta  S₀·e^(−qT)
+la renta reinvertida las multiplica por e^(qT)
+⇒ en T tienes 1 unidad, que es lo que debes entregar</div></div></li>
+        <li><div>Repite el paso 3 con ese desembolso menor:
+          <div class="paso">F_T = S₀·e^(−qT)·e^(rT) = S₀·e^((r−q)T)</div></div></li>
+        <li><div>Una divisa es el mismo caso: los euros que compras hoy <em>rinden r_ext</em> si los depositas, así que <code>q = r_ext</code>. Una materia prima invierte el signo del almacenaje y suma el <em>convenience yield</em> con signo de renta.</div></li>
+      </ol>
+      <div class="cierre"><b>El patrón único:</b> capitaliza el spot al tipo libre de riesgo y <strong>réstale todo lo que cobra quien tiene el físico</strong> (dividendo, tasa extranjera, convenience yield); <strong>súmale todo lo que le cuesta</strong> (almacenaje). Las tres fórmulas de arriba son esa frase escrita tres veces.</div>
+    </div>
+    <div class="ojo">
+      <b>El forward no predice el spot.</b> El spot esperado crece al retorno esperado del activo, <code>E[S_T] = S₀·e^(µT)</code>; el forward crece sólo a la tasa libre de riesgo. Como <code>µ &gt; r</code> por la prima de riesgo, <code>E[S_T] &gt; F_T</code> para una acción normal. Es la misma brecha que separa la tasa forward de la spot esperada dos secciones más arriba, y por la misma razón: <strong>replicar sólo fija el precio, no la expectativa</strong>.
+    </div>
     <div class="formula">
       <div class="f">Activo con dividend yield continuo q:
 
@@ -401,6 +542,25 @@ Backwardation: F_T < S₀   (y > r)</div>
     </ul>
 
     <h3>Swaps: una cartera de forwards disfrazada</h3>
+    <div class="deriv">
+      <b>De dónde sale · <em>c = (1 − B_N)/ΣB, el swap rate</em></b>
+      <ol>
+        <li><div>Un swap fijo-por-flotante intercambia, en cada fecha <code>t</code>, un pago fijo <code>N·c</code> contra uno flotante <code>N·r̃_t</code>. La tasa flotante del periodo <em>t</em> se fija al principio del periodo y se paga al final.</div></li>
+        <li><div>Valora cada pata por separado. La pata fija es un bono con cupón <code>c</code> <strong>sin devolución del principal</strong>:
+          <div class="paso">VP(fija) = N · c · Σ_{t=1..N} B_t</div></div></li>
+        <li><div>La pata flotante parece difícil porque no sabes las tasas futuras. Truco: por no arbitraje, cada pago flotante vale hoy lo mismo que su tasa forward, así que
+          <div class="paso">VP(flot) = N · Σ_{t=1..N} B_t · f_t</div></div></li>
+        <li><div>Sustituye <code>f_t = B_{t−1}/B_t − 1</code>. El <code>B_t</code> se cancela y la suma <strong>telescopea</strong>:
+          <div class="paso">Σ B_t·f_t = Σ B_t·(B_{t−1}/B_t − 1)
+          = Σ (B_{t−1} − B_t)
+          = B₀ − B_N
+          = 1 − B_N        (porque B₀ = 1)</div></div></li>
+        <li><div>El swap se pacta para que valga cero al inicio, así que iguala las dos patas:
+          <div class="paso">c · Σ B_t = 1 − B_N   ⇒   c = (1 − B_N) / Σ_{t=1..N} B_t</div></div></li>
+        <li><div>Lee el paso 4 al revés: <code>VP(flot) = 1 − B_N</code> significa que <strong>la pata flotante más el principal vale exactamente el par</strong>. De ahí la lectura de cartera: pagar fijo = estar corto en un bono a la par con cupón <code>c</code> y largo en un bono flotante.</div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> la fórmula <code>c = (1−B_N)/ΣB</code> es <strong>literalmente la del cupón que pone un bono a la par</strong>. Por eso el swap rate no necesita ningún pronóstico de tasas y por eso la curva swap se mueve pegada a la de bonos. Y explica el uso real: pagar fijo en un swap convierte deuda flotante en deuda fija <em>sin refinanciar</em>.</div>
+    </div>
     <div class="formula">
       <div class="f">Pata flotante = pata fija  ⇒  el swap vale 0 al inicio
 
@@ -414,6 +574,37 @@ Y usando f_t = B_{t−1}/B_t − 1, la suma telescopea:
 
 ⇒  el swap rate ES la tasa cupón del bono que cotiza a la par</div>
       <div class="cap">Es el resultado más útil del módulo: si sabes cotizar un bono a la par, ya sabes cotizar el swap. Y explica por qué la curva swap y la curva de bonos se mueven juntas.</div>
+    </div>
+    <div class="nexo">
+      Los tres resultados de este módulo son <b>el mismo argumento</b> aplicado tres veces: montar una cartera de instrumentos existentes que reproduzca el pago, y cobrar por ella lo que cuesta. Ese argumento es todo el módulo 12 (cotas y paridad put-call), todo el 13 (réplica dinámica y neutralidad al riesgo) y, con otra ropa, el módulo 17: <b>Modigliani-Miller es exactamente esto</b> — si dos carteras de títulos pagan lo mismo, valen lo mismo.
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Cuánto vale un swap que ya está vivo</span></header>
+    <div class="body">
+      <p class="given">Hace dos años pactaste pagar fijo <strong>6,906%</strong> sobre un nocional de <strong>$100M</strong> en un swap a 4 años. Quedan <strong>2 pagos</strong>. Hoy los bonos cero son B₁ = 0,9434 y B₂ = 0,8817 (tasas al 6% y 6,5%). ¿Cuánto vale tu posición?</p>
+      <ol class="steps">
+        <li><div><strong>El swap rate de hoy para 2 periodos.</strong> Es lo único que hace falta calcular.
+          <div class="work">ΣB = 0,9434 + 0,8817 = 1,8251
+c_hoy = (1 − 0,8817)/1,8251
+      = 0,1183/1,8251 = 6,482%</div></div></li>
+        <li><div><strong>El truco: añade el swap opuesto de hoy.</strong> Pactar hoy <em>recibir fijo</em> al 6,482% cuesta cero. Sumado a tu contrato viejo, las patas flotantes se cancelan y sólo queda una diferencia fija y conocida:
+          <div class="work">cada periodo:  recibes 6,482%  −  pagas 6,906%
+               = −0,424% del nocional
+               = −$424.000 al año, con certeza</div></div></li>
+        <li><div><strong>Descontar ese flujo cierto con los bonos cero.</strong>
+          <div class="work">V = −424.000 × (0,9434 + 0,8817)
+  = −424.000 × 1,8251
+  = −$773.842</div></div></li>
+        <li><div><strong>Comprobar por la ruta de las dos patas.</strong>
+          <div class="work">VP(fija)  = 100M × 0,06906 × 1,8251 = $12.606.242
+VP(flot)  = 100M × (1 − 0,8817)     = $11.830.000
+V (pago fijo) = 11.830.000 − 12.606.242 = −$776.242</div>
+          La diferencia de $2.400 es sólo redondeo de <code>c_hoy</code> a cuatro decimales. Las dos rutas son la misma.</div></li>
+        <li><div><strong>Qué enseña.</strong> Un swap nace valiendo cero pero <strong>deja de valerlo en cuanto la curva se mueve</strong>. Las tasas bajaron desde que lo pactaste, y tú te comprometiste a pagar fijo: pierdes. El valor de un swap vivo es siempre <em>la diferencia entre tu tasa y la de hoy, anualizada por la suma de descuentos</em> — la misma estructura que <code>(F_t − K)·e^(−r(T−t))</code> para un forward.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>Tu posición vale −$0,77M</span></div>
     </div>
   </div>
 
@@ -512,6 +703,22 @@ RUTA 2 — la suma telescopea
 
   <div class="prose">
     <h3>Los pagos, y qué hay que memorizar</h3>
+    <div class="defs">
+      <b>Notación del módulo</b>
+      <dl>
+        <dt>S₀, S_T</dt><dd>precio de la acción hoy y en el vencimiento</dd>
+        <dt>K</dt><dd><em>strike</em> o precio de ejercicio: el precio pactado al que se compra (call) o vende (put)</dd>
+        <dt>C, P</dt><dd>precio hoy de la call y de la put europeas</dd>
+        <dt>B_T</dt><dd>precio de un bono cero que paga $1 en <em>T</em>. <code>K·B_T</code> = valor presente del strike</dd>
+        <dt>u, d</dt><dd>factores multiplicativos de subida y bajada en el árbol (<code>S_u = uS₀</code>)</dd>
+        <dt>Δ</dt><dd>acciones que hay que tener por cada opción vendida: la <em>razón de cobertura</em></dd>
+        <dt>b</dt><dd>dinero prestado o invertido al tipo sin riesgo en la cartera réplica</dd>
+        <dt>V, E, D</dt><dd>valor de los activos, del patrimonio y de la deuda de la empresa</dd>
+      </dl>
+    </div>
+    <div class="ojo">
+      <b>Nunca confundas pago con beneficio.</b> El <em>pago</em> de una opción comprada nunca es negativo — como mucho es cero. El <em>beneficio</em> sí puede serlo, porque le restas la prima capitalizada. Todos los enunciados de cotas y de paridad hablan de <strong>pagos</strong>; todos los gráficos de estrategias, de <strong>beneficios</strong>. Leer uno como el otro es el error que arruina la pregunta de la breakeven.
+    </div>
     <div class="formula">
       <div class="f">Call:  max[S_T − K, 0]        Put:  max[K − S_T, 0]
 
@@ -553,6 +760,70 @@ Valor intrínseco (si ejerces ahora):
     </div>
 
     <h3>Cotas y paridad put-call</h3>
+    <div class="deriv">
+      <b>De dónde sale · <em>la cartera réplica: Δ y b</em></b>
+      <ol>
+        <li><div>La opción vale <code>V_u</code> si la acción sube y <code>V_d</code> si baja. Busca una cartera de <strong>acción y bono</strong> que pague exactamente eso, sin conocer ninguna probabilidad.</div></li>
+        <li><div>Llama <code>Δ</code> a las acciones y <code>b</code> al dinero prestado (negativo) o invertido. Impón que la cartera iguale a la opción en <em>los dos</em> estados:
+          <div class="paso">Δ·uS₀ + b(1+r) = V_u
+Δ·dS₀ + b(1+r) = V_d</div>
+          Dos ecuaciones, dos incógnitas. Nada más.</div></li>
+        <li><div>Resta la segunda de la primera. El término del bono desaparece porque paga lo mismo en ambos estados:
+          <div class="paso">Δ(u − d)S₀ = V_u − V_d
+
+        V_u − V_d      V_u − V_d
+Δ  =  ───────────  =  ───────────
+       (u − d)S₀       S_u − S_d</div>
+          El delta es literalmente <strong>la pendiente del pago de la opción sobre el pago de la acción</strong>.</div></li>
+        <li><div>Sustituye <code>Δ</code> en cualquiera de las dos y despeja <code>b</code>:
+          <div class="paso">b = (V_d − Δ·dS₀)/(1+r)</div></div></li>
+        <li><div>La cartera y la opción pagan lo mismo en <em>todos</em> los estados posibles. Por la ley de un solo precio tienen que costar lo mismo hoy:
+          <div class="paso">V₀ = Δ·S₀ + b</div>
+          Si costaran distinto, compras la barata, vendes la cara y te quedas con la diferencia sin riesgo.</div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> el precio de la opción <strong>no depende de la probabilidad de subida ni del retorno esperado de la acción</strong>. Dos inversionistas que discrepan violentamente sobre el futuro de la acción tienen que estar de acuerdo en el precio de la opción. Eso es lo que hace que el módulo 13 pueda cambiar las probabilidades reales por unas inventadas sin que cambie nada.</div>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>la cota C ≥ S − K·B_T</em></b>
+      <ol>
+        <li><div>La cota superior es trivial: la call da derecho a <em>comprar</em> la acción, así que nunca puede valer más que tener la acción. <code>C ≤ S</code>.</div></li>
+        <li><div>Para la cota inferior, compara dos carteras en <code>T</code>:
+          <div class="paso">Cartera A:  una call  +  K·B_T invertido al tipo sin riesgo
+Cartera B:  una acción</div></div></li>
+        <li><div>Tabula los pagos en <code>T</code>. El bono siempre entrega <code>K</code>:
+          <div class="paso">                 S_T ≤ K        S_T &gt; K
+Cartera A:      0 + K = K      (S_T−K)+K = S_T
+Cartera B:        S_T             S_T
+                 A ≥ B           A = B</div></div></li>
+        <li><div>A paga <strong>siempre al menos</strong> lo que paga B, y a veces más. Por dominancia tiene que costar al menos lo mismo hoy:
+          <div class="paso">C + K·B_T ≥ S   ⇒   C ≥ S − K·B_T</div></div></li>
+        <li><div>Y como una call nunca paga menos que cero, junta las dos cotas inferiores:
+          <div class="paso">max[S − K·B_T , 0]  ≤  C  ≤  S</div></div></li>
+      </ol>
+      <div class="cierre"><b>La consecuencia que se pregunta:</b> como <code>K·B_T &lt; K</code> siempre que <code>r &gt; 0</code>, la cota inferior <code>S − K·B_T</code> es <strong>estrictamente mayor</strong> que el valor intrínseco <code>S − K</code>. Vender la call en el mercado siempre da más que ejercerla, así que <strong>una call americana sin dividendos jamás se ejerce antes del vencimiento</strong> y vale igual que la europea. Con dividendos el argumento se rompe: justo antes de un dividendo grande puede convenir ejercer para cobrarlo.</div>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>la paridad put-call, C + K·B_T = P + S</em></b>
+      <ol>
+        <li><div>Repite el truco de las dos carteras, pero ahora buscando <strong>igualdad</strong> en vez de desigualdad.
+          <div class="paso">Cartera A:  call  +  K·B_T
+Cartera B:  put   +  acción</div></div></li>
+        <li><div>Pagos en <code>T</code>, caso por caso:
+          <div class="paso">                  S_T ≤ K            S_T &gt; K
+A:  call + bono   0 + K = K       (S_T−K) + K = S_T
+B:  put + acción  (K−S_T)+S_T = K   0 + S_T   = S_T
+                    IGUAL            IGUAL</div></div></li>
+        <li><div>Pagan lo mismo en todos los estados, luego valen lo mismo hoy:
+          <div class="paso">C + K·B_T = P + S</div></div></li>
+        <li><div>Despeja lo que necesites. Cada despeje es una operación real:
+          <div class="paso">P = C − S + K·B_T     ← put sintética
+C = P + S − K·B_T     ← call sintética
+S = C − P + K·B_T     ← acción sintética
+K·B_T = P − C + S     ← bono sintético</div></div></li>
+        <li><div>Es una <strong>identidad</strong>, no un modelo: no supone nada sobre la distribución de <code>S_T</code>, ni sobre volatilidad, ni sobre preferencias. Sólo exige que las opciones sean europeas, del mismo strike y plazo, y que la acción no pague dividendos antes de <code>T</code>.</div></li>
+      </ol>
+      <div class="cierre"><b>Por qué importa tanto:</b> cualquier violación es <strong>arbitraje puro y verificable con una tabla</strong> — por eso es la pregunta de examen más común del módulo. Y es también la herramienta de trabajo: la paridad es lo que permite valorar una put con Black-Scholes sin tener una fórmula propia para la put, y lo que en el módulo 17 convierte «la deuda es un bono seguro menos una put» en una identidad contable.</div>
+    </div>
     <div class="formula">
       <div class="f">Cotas de una call europea sobre acción sin dividendos:
 
@@ -566,6 +837,42 @@ Ejercicio anticipado:
   call americana sin dividendos → NUNCA conviene
   put americana                 → a veces SÍ conviene</div>
       <div class="cap">La call americana sin dividendos vale lo mismo que la europea: siempre es mejor <b>vender</b> la opción que ejercerla, porque el precio de mercado nunca es inferior a <code>S − K·B_T</code>, que ya supera al valor intrínseco.</div>
+    </div>
+    <div class="nexo">
+      Las dos ideas de este módulo se reparten el resto del programa. La <b>réplica</b> (Δ y b) se vuelve dinámica en el módulo 13 y produce Black-Scholes en el límite continuo. La <b>lectura de los títulos de la empresa como opciones</b> es la columna vertebral de los módulos 17 y 18: el spread de un bono corporativo es el precio de una put, el <em>risk shifting</em> es el vega de una call, y el <em>debt overhang</em> es lo que pasa cuando quien decide la inversión no es el dueño del pago marginal.
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Los títulos de una empresa, valorados como opciones</span></header>
+    <div class="body">
+      <p class="given">Los activos de una empresa valdrán en un año <strong>$120M</strong> o <strong>$60M</strong>, hoy valen <strong>$100M</strong>. Tiene un bono cero con nominal <strong>$80M</strong> que vence entonces. La tasa libre de riesgo es <strong>5%</strong>. Valora el patrimonio y la deuda sin usar ninguna probabilidad.</p>
+      <ol class="steps">
+        <li><div><strong>Escribir los pagos.</strong> El patrimonio es residual, y responsabilidad limitada significa que nunca es negativo:
+          <div class="work">Estado      Activos   Deuda        Patrimonio
+Alto         120     min(120,80)=80    120−80 = 40
+Bajo          60     min(60,80) =60     60−60 =  0</div>
+          Eso es exactamente <code>E = max[V − 80, 0]</code>: una <strong>call sobre los activos con strike 80</strong>.</div></li>
+        <li><div><strong>Replicar la call con los activos y el bono.</strong>
+          <div class="work">Δ = (40 − 0)/(120 − 60) = 40/60 = 0,6667
+b = (V_d − Δ·60)/1,05 = (0 − 40)/1,05 = −38,0952</div>
+          Es decir: comprar 2/3 de la empresa financiando $38,1M con deuda.</div></li>
+        <li><div><strong>Valorar el patrimonio.</strong>
+          <div class="work">E = Δ·V₀ + b = 0,6667 × 100 − 38,0952 = $28,57M</div></div></li>
+        <li><div><strong>La deuda, por diferencia y por réplica.</strong>
+          <div class="work">Por diferencia:  D = V − E = 100 − 28,57 = $71,43M
+
+Por la otra lectura, D = bono seguro − put(strike 80):
+  bono seguro = 80/1,05                  = 76,19
+  put:  pagos 0 (alto) y 80−60=20 (bajo)
+        Δ_put = (0−20)/60 = −0,3333
+        b_put = (20 − (−0,3333)(60))/1,05 = 38,0952
+        P = −0,3333(100) + 38,0952        =  4,76
+  D = 76,19 − 4,76                       = $71,43M ✓</div></div></li>
+        <li><div><strong>Leer el spread.</strong> El yield prometido de la deuda es <code>80/71,43 − 1 = 12,0%</code>, contra un 5% sin riesgo. Ese spread de 700 puntos base <strong>es el precio de la put dividido por el valor de la deuda</strong>: los acreedores le regalaron a los accionistas una opción de entregarles la empresa por $80M, y la cobran subiendo la tasa.</div></li>
+        <li><div><strong>El corolario incómodo.</strong> Si la empresa adopta un proyecto que deja el valor esperado igual pero abre los estados a $160M / $20M, la call vale más (más volatilidad) y la put también, así que <strong>el patrimonio sube y la deuda baja</strong> sin que se haya creado un peso de valor. Ése es el <em class="term">risk shifting</em> del módulo 18, y aquí queda demostrado con dos griegas.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>E = $28,57M · D = $71,43M · spread 700 pb</span></div>
     </div>
   </div>
 
@@ -670,6 +977,42 @@ EN UN AÑO   (el préstamo devuelve exactamente 100)
 
   <div class="prose">
     <h3>De la réplica a la probabilidad neutral al riesgo</h3>
+    <div class="defs">
+      <b>Notación del módulo</b>
+      <dl>
+        <dt>q</dt><dd>probabilidad <em>neutral al riesgo</em> de subida. <strong>No</strong> es la probabilidad real</dd>
+        <dt>p</dt><dd>probabilidad real (física) de subida. Sólo aparece si te preguntan un retorno <em>esperado</em></dd>
+        <dt>E^Q[·]</dt><dd>valor esperado calculado con <code>q</code> en vez de con <code>p</code></dd>
+        <dt>φ_estado</dt><dd>precio de estado o de Arrow-Debreu: lo que cuesta hoy $1 entregado en ese estado</dd>
+        <dt>σ</dt><dd>volatilidad anualizada del retorno de la acción</dd>
+        <dt>N(x)</dt><dd>acumulada de la normal estándar: probabilidad de que una normal salga por debajo de <em>x</em></dd>
+        <dt>d₁, d₂</dt><dd>los dos argumentos de BSM. <code>N(d₂)</code> es la probabilidad neutral al riesgo de terminar ITM</dd>
+        <dt>Δt</dt><dd>duración de un paso del árbol, en años</dd>
+      </dl>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>q = [(1+r) − d]/(u − d)</em></b>
+      <ol>
+        <li><div>Parte del precio de la réplica del módulo 12, sin ningún supuesto nuevo:
+          <div class="paso">V₀ = Δ·S₀ + b
+     con  Δ = (V_u − V_d)/[(u−d)S₀]
+     y    b = (V_d − Δ·dS₀)/(1+r)</div></div></li>
+        <li><div>Sustituye y saca factor común <code>1/(1+r)</code>. Es álgebra pura, tediosa una sola vez:
+          <div class="paso">           1   ⎡ (1+r) − d          u − (1+r)      ⎤
+V₀ =  ─────── ⎢ ───────── ·V_u  +  ───────── ·V_d ⎥
+         1+r  ⎣   u − d              u − d        ⎦</div></div></li>
+        <li><div>Bautiza el primer coeficiente como <code>q</code>. El segundo resulta ser exactamente <code>1 − q</code>:
+          <div class="paso">q = [(1+r) − d]/(u − d)
+1 − q = [u − (1+r)]/(u − d)     ← comprueba que suman 1</div></div></li>
+        <li><div>Con ese nombre, la fórmula del paso 2 <em>parece</em> un valor esperado descontado:
+          <div class="paso">V₀ = [ q·V_u + (1−q)·V_d ] / (1+r)  =  E^Q[V₁]/(1+r)</div></div></li>
+        <li><div>Los dos números <code>q</code> y <code>1−q</code> están entre 0 y 1 si y sólo si <code>d &lt; 1+r &lt; u</code>, que es <strong>justo la condición de no arbitraje</strong> entre la acción y el bono. Si la acción subiera siempre más que el bono, comprarías acción con dinero prestado y ganarías seguro.</div></li>
+        <li><div>Comprueba de dónde viene el nombre: aplica la fórmula a la propia acción, cuyo pago es <code>uS₀</code> o <code>dS₀</code>:
+          <div class="paso">[q·uS₀ + (1−q)·dS₀]/(1+r) = S₀   ⇒   E^Q[S₁] = S₀(1+r)</div>
+          Con estas probabilidades <strong>todo activo rinde exactamente r</strong>. De ahí «neutral al riesgo».</div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> <code>q</code> no es una creencia, es un <strong>cambio de variable</strong>. La réplica ya fijó el precio en el módulo 12; <code>q</code> sólo lo reescribe de una forma que se puede iterar hacia atrás por un árbol de veinte pasos sin resolver veinte sistemas de ecuaciones. Si alguna vez usas <code>q</code> para calcular un <em>retorno esperado</em>, te dará <code>r</code> siempre, y estará mal: para eso hacen falta las probabilidades reales.</div>
+    </div>
     <div class="formula">
       <div class="f">Con S₀ que va a uS₀ o dS₀, y  d < 1+r < u :
 
@@ -696,6 +1039,36 @@ Precio de cualquier pago = Σ φ_estado × pago_estado</div>
     </div>
 
     <h3>Black-Scholes-Merton: el límite de periodos infinitesimales</h3>
+    <div class="deriv">
+      <b>De dónde sale · <em>Black-Scholes como límite del árbol</em></b>
+      <ol>
+        <li><div>Parte un año en <code>n</code> pasos de largo <code>Δt = T/n</code> y calibra el árbol para que reproduzca la volatilidad de la acción en cada paso:
+          <div class="paso">u = e^(σ√Δt)      d = 1/u = e^(−σ√Δt)      r_paso = e^(rΔt) − 1</div>
+          Que <code>d = 1/u</code> es lo que hace <strong>recombinar</strong> el árbol: subir-bajar y bajar-subir llegan al mismo nodo, y hay <code>n+1</code> nodos finales en vez de <code>2ⁿ</code>.</div></li>
+        <li><div>Con <code>n</code> pasos, el precio de la call es la suma sobre todos los nodos finales, ponderada por la binomial neutral al riesgo:
+          <div class="paso">C₀ = (1+r_paso)^(−n) · Σ_{j=0..n} C(n,j)·q^j(1−q)^(n−j)·max[u^j d^(n−j)S₀ − K, 0]</div></div></li>
+        <li><div>Sólo sobreviven los nodos ITM. Parte la suma en dos trozos y descuenta cada uno:
+          <div class="paso">C₀ = S₀ · Prob*(ITM)  −  K·e^(−rT) · Prob^Q(ITM)</div>
+          donde <code>Prob^Q</code> usa <code>q</code> y <code>Prob*</code> usa una versión reponderada por el propio precio de la acción.</div></li>
+        <li><div>Haz <code>n → ∞</code>. El logaritmo del precio final es una suma de <code>n</code> variables iid, así que por el teorema central del límite converge a una <strong>normal</strong> — es decir, <code>S_T</code> es lognormal. Las dos binomiales del paso 3 se vuelven normales acumuladas:
+          <div class="paso">C₀ = S₀·N(d₁) − K·e^(−rT)·N(d₂)
+
+d₁ = [ln(S₀/K) + (r + σ²/2)T] / (σ√T)
+d₂ = d₁ − σ√T</div></div></li>
+        <li><div>Lee la fórmula como lo que es, <strong>la cartera réplica del módulo 12 escrita en continuo</strong>:
+          <div class="paso">Δ = N(d₁)          ← acciones que tienes
+b = −K·e^(−rT)N(d₂) ← dinero que debes</div>
+          Y por eso una call siempre es una <em>posición apalancada</em> en la acción: <code>Δ &gt; 0</code> y <code>b &lt; 0</code>, siempre.</div></li>
+        <li><div>El significado de los dos términos:
+          <div class="paso">N(d₂) = probabilidad NEUTRAL AL RIESGO de terminar ITM
+N(d₁) = la misma probabilidad, ponderada por cuánta acción
+        acabas teniendo en esos estados</div></div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> BSM no es un modelo distinto del árbol — <strong>es el mismo argumento de réplica con pasos infinitesimales</strong>. Todo lo que hace falta suponer es que el precio sigue un browniano geométrico (retornos normales, iid, σ constante) y que se puede rebalancear continuamente sin costos. Cada supuesto que falla en la realidad — la volatilidad no es constante, hay saltos, rebalancear cuesta — reaparece exactamente como la <em>sonrisa</em> de volatilidad implícita de la sección siguiente.</div>
+    </div>
+    <div class="ojo">
+      <b>Cuidado con μ.</b> El retorno esperado de la acción <strong>no aparece en la fórmula</strong>. No es que se haya cancelado por casualidad: es que la réplica lo elimina, porque la cartera y la opción se mueven juntas pase lo que pase. Si un enunciado te da μ y te pide el precio de una opción, μ es <em>ruido deliberado</em>; sólo lo necesitarás si además te piden el retorno esperado de la opción.
+    </div>
     <div class="formula">
       <div class="f">C₀ = S₀·N(d₁) − K·e^(−rT)·N(d₂)
 
@@ -726,6 +1099,67 @@ Calibración del árbol:  u = e^(σ√Δt),  d = 1/u</div>
       </table>
     </div>
     <p>Para usar BSM hace falta <code>σ</code>. Dos caminos: <strong>volatilidad histórica</strong> (desviación estándar de retornos diarios × √252) o <strong>volatilidad implícita</strong> (invertir BSM sobre el precio de mercado de otra opción). El problema es que la implícita <em>cambia según el strike y el plazo</em> — la <em class="term">sonrisa</em> o <em class="term">smirk</em> — lo que es una violación directa del modelo. Se corrige agregando volatilidad estocástica y saltos. Aun así BSM sobrevive como <strong>convención de cotización</strong>: la implícita siempre está bien definida aunque el modelo no lo esté. El VIX es justamente un resumen de implícitas del S&amp;P 500 a 30 días.</p>
+    <div class="nexo">
+      La valoración neutral al riesgo no se queda en las opciones financieras. En el <b>módulo 16</b> es la única forma honesta de valorar una opción real cuando el riesgo del proyecto es de mercado: se extrae <code>q</code> del precio de un activo que sí cotiza (el permiso de emisión, el cobre) y se descuenta al tipo sin riesgo. En el <b>módulo 17</b>, la misma <code>q</code> sacada del precio del patrimonio valora la deuda con riesgo. Y en el <b>18</b>, el valor presente de los costos de distress se calcula con la probabilidad <em>neutral al riesgo</em> de caer en distress, no con la real — un detalle que se pregunta y que casi nadie recuerda.
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Black-Scholes de punta a punta, y qué hacer con el número</span></header>
+    <div class="body">
+      <p class="given">Acción a <strong>$100</strong>, sin dividendos. Call europea con <strong>K = $95</strong> a <strong>6 meses</strong>. Tasa continua <strong>5%</strong>, volatilidad <strong>30%</strong> anual. Valora la call y la put, y monta la cobertura de una venta de 1.000 calls.</p>
+      <ol class="steps">
+        <li><div><strong>Los dos argumentos.</strong>
+          <div class="work">σ√T = 0,30 × √0,5 = 0,30 × 0,707107 = 0,212132
+
+      ln(100/95) + (0,05 + 0,30²/2)(0,5)
+d₁ = ─────────────────────────────────────
+                  0,212132
+
+      0,051293 + 0,047500     0,098793
+   = ───────────────────── = ────────── = 0,4657
+            0,212132          0,212132
+
+d₂ = 0,4657 − 0,212132 = 0,2536</div></div></li>
+        <li><div><strong>Las dos normales acumuladas.</strong>
+          <div class="work">N(d₁) = N(0,4657) = 0,6793
+N(d₂) = N(0,2536) = 0,6001</div></div></li>
+        <li><div><strong>Armar el precio.</strong>
+          <div class="work">K·e^(−rT) = 95 × e^(−0,025) = 95 × 0,975310 = 92,6544
+
+C = 100 × 0,6793  −  92,6544 × 0,6001
+  =     67,929    −     55,601
+  =  $12,33</div></div></li>
+        <li><div><strong>La put, sin fórmula nueva.</strong> Usa la paridad del módulo 12:
+          <div class="work">P = C − S + K·e^(−rT)
+  = 12,33 − 100 + 92,65 = $4,98</div>
+          No hace falta memorizar la fórmula de la put: <strong>la paridad es más corta y no se olvida</strong>.</div></li>
+        <li><div><strong>Leer la fórmula como cartera.</strong> Los dos sumandos son la réplica:
+          <div class="work">largo   0,6793 acciones  =  $67,93
+corto   un préstamo de     $55,60
+                          ────────
+valor de la call            $12,33</div>
+          La call está apalancada 67,93/12,33 = <strong>5,5 veces</strong>. Eso es la <em>omega</em>: si la acción sube 1%, la call sube ~5,5%.</div></li>
+        <li><div><strong>Cubrir una venta de 1.000 calls.</strong> Vendiste opciones por $12.330; para no quedar expuesto compra <code>Δ</code> acciones por opción:
+          <div class="work">acciones a comprar = 1.000 × 0,6793 = 679 acciones
+costo              = 679 × 100 = $67.900
+financiado con      $67.900 − $12.330 = $55.570 de deuda</div></div></li>
+        <li><div><strong>Comprobar que la cobertura funciona, y dónde falla.</strong> Si la acción sube a $101:
+          <div class="work">las 679 acciones ganan      679 × 1     = +$679
+las 1.000 calls valen ahora 13,0156 c/u
+   pérdida en la posición corta         = −$688
+                                        ─────────
+neto                                       −$9</div>
+          Casi cero, pero no cero: el delta subió de 0,6793 a 0,6959 <em>durante</em> el movimiento. Esa discrepancia es la <strong>gamma</strong> (0,0169 aquí), y por eso hay que rebalancear. Con un salto grande, la pérdida crece con el cuadrado del movimiento.</div></li>
+        <li><div><strong>Y al revés: la volatilidad implícita.</strong> Si el mercado cotizara esta call a <strong>$13,50</strong> en vez de $12,33, no hay nada que corregir en la fórmula — se despeja <code>σ</code>:
+          <div class="work">buscar σ tal que BSM(100, 95, 5%, σ, 0,5) = 13,50
+   σ = 20%  →  C =  9,87   (bajo)
+   σ = 40%  →  C = 14,89   (alto)
+   σ = 34,6% →  C = 13,50  ✓</div>
+          Ése 34,6% no es una predicción de la volatilidad: es <strong>el precio traducido a otras unidades</strong>. Si el mismo día la call de strike 80 implicara 40%, tendrías una sonrisa — y la prueba de que el modelo no describe el mercado, aunque sirva para hablar de él.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>C = $12,33 · P = $4,98 · cubrir con 679 acciones</span></div>
+    </div>
   </div>
 
   <div class="ex">
@@ -849,6 +1283,36 @@ prima de ejercicio anticipado = 5,17 − 3,10 = $2,07</div>
 
   <div class="prose">
     <h3>El problema y la frontera</h3>
+    <div class="defs">
+      <b>Notación del módulo</b>
+      <dl>
+        <dt>w, w_i</dt><dd>vector de pesos de la cartera y peso del activo <em>i</em>. Suman 1</dd>
+        <dt>r̄_i, σ_i</dt><dd>retorno esperado y desviación estándar del activo <em>i</em></dd>
+        <dt>σ_ij, ρ_ij</dt><dd>covarianza y correlación entre <em>i</em> y <em>j</em>. <code>σ_ij = ρ_ij·σ_i·σ_j</code></dd>
+        <dt>Σ</dt><dd>matriz de covarianzas de los activos riesgosos</dd>
+        <dt>r_f</dt><dd>tasa del activo libre de riesgo (σ = 0)</dd>
+        <dt>SR</dt><dd><em>Sharpe ratio</em>: <code>(r̄_p − r_f)/σ_p</code>. Retorno en exceso por unidad de riesgo total</dd>
+        <dt>T</dt><dd>cartera tangente: la de máximo Sharpe entre las de activos riesgosos</dd>
+        <dt>x</dt><dd>proporción invertida en la cartera riesgosa; <code>1−x</code> va al activo sin riesgo</dd>
+        <dt>β_iP</dt><dd><code>Cov(r_i,r_P)/σ²_P</code>: sensibilidad del activo <em>i</em> a la cartera <em>P</em></dd>
+      </dl>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>por qué diversificar funciona, y dónde deja de funcionar</em></b>
+      <ol>
+        <li><div>Toma <code>n</code> activos con la misma varianza <code>σ²</code> y la misma covarianza <code>c</code> entre cada par, con pesos iguales <code>1/n</code>.</div></li>
+        <li><div>La varianza de la cartera es la suma de la matriz de covarianzas ponderada. Separa la diagonal del resto:
+          <div class="paso">           n términos        n(n−1) términos
+           en la diagonal     fuera de ella
+σ²_p = (1/n²)·[  n·σ²      +   n(n−1)·c  ]</div></div></li>
+        <li><div>Simplifica:
+          <div class="paso">σ²_p = σ²/n + (1 − 1/n)·c</div></div></li>
+        <li><div>Haz <code>n → ∞</code>. El primer término se va a cero; el segundo, a <code>c</code>:
+          <div class="paso">σ²_p  →  c  =  ρ·σ²</div></div></li>
+        <li><div>Lee los dos límites. Si <code>ρ = 0</code>, el riesgo desaparece entero al diversificar. Si <code>ρ &gt; 0</code>, queda un <strong>piso irreducible</strong>: la covarianza promedio.</div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> lo que se diversifica es la <strong>varianza propia</strong>; lo que sobrevive es la <strong>covarianza</strong>. De ahí sale todo lo demás del bloque: si un inversionista puede eliminar gratis la parte propia, el mercado no puede pagarle por soportarla, y sólo queda pagar por la covarianza. Eso es el CAPM, dos módulos antes de escribirlo.</div>
+    </div>
     <div class="formula">
       <div class="f">min_w  σ²_p = Σ_i Σ_j w_i w_j σ_ij
 
@@ -862,6 +1326,29 @@ Dos activos:
     </div>
 
     <h3>Con activo libre de riesgo: todo se vuelve una recta</h3>
+    <div class="deriv">
+      <b>De dónde sale · <em>la separación en dos fondos</em></b>
+      <ol>
+        <li><div>Elige una cartera riesgosa cualquiera <code>P</code> y combínala con el activo sin riesgo en proporción <code>x</code>:
+          <div class="paso">r̄ = x·r̄_P + (1−x)·r_f = r_f + x(r̄_P − r_f)
+σ² = x²σ²_P + 0 + 0        ⇒   σ = x·σ_P</div>
+          El libre de riesgo no aporta varianza ni covarianza: por eso la segunda línea es tan corta.</div></li>
+        <li><div>Despeja <code>x = σ/σ_P</code> de la segunda y mételo en la primera:
+          <div class="paso">              r̄_P − r_f
+r̄ = r_f  +  ─────────── · σ
+                 σ_P</div>
+          Media y desviación son <strong>ambas lineales en x</strong>, así que el conjunto alcanzable es una <em>recta</em> que sale de <code>(0, r_f)</code> y pasa por <code>P</code>.</div></li>
+        <li><div>La pendiente de esa recta es el Sharpe de <code>P</code>. Cambiar de cartera riesgosa <strong>sólo cambia la pendiente</strong>: la recta siempre arranca en el mismo punto.</div></li>
+        <li><div>Como para un mismo riesgo prefieres más retorno, quieres <strong>la recta más empinada posible</strong> que todavía toque el conjunto de carteras riesgosas alcanzables. Esa recta es tangente a la frontera, y la toca en un solo punto: la cartera <code>T</code>.</div></li>
+        <li><div>La conclusión no depende de tus preferencias:
+          <div class="paso">TODO inversionista media-varianza tiene:
+   · la MISMA cartera de activos riesgosos, T
+   · una proporción x propia, según su aversión al riesgo
+
+x &lt; 1  presta      x = 1  todo en T      x &gt; 1  se apalanca</div></div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> el problema se parte en dos decisiones independientes — <strong>qué comprar</strong> (T, igual para todos) y <strong>cuánto arriesgar</strong> (x, personal). Es lo que justifica que exista un fondo indexado único para todo el mundo. Y es el paso 1 de la derivación del CAPM: si todos tienen la misma T, T tiene que ser el mercado.</div>
+    </div>
     <div class="formula">
       <div class="f">Cartera = x en la cartera riesgosa P + (1−x) en r_f
 
@@ -894,6 +1381,62 @@ igual al Sharpe de T:
 Equivalente:  α = 0 en la regresión
     r_i − r_f = α + β_iT (r_T − r_f) + ε</div>
       <div class="cap">Si algún activo tuviera <b>α ≠ 0</b>, moverle peso mejoraría el Sharpe y T no sería la tangente. Esta condición es <em>exactamente</em> la que en el módulo 15 se convierte en el CAPM, con sólo agregar equilibrio de mercado.</div>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>w ∝ Σ⁻¹(r̄ − r_f·1), y el atajo cuando ρ = 0</em></b>
+      <ol>
+        <li><div>Maximizar el Sharpe es maximizar <code>(w'r̄ − r_f)/√(w'Σw)</code>. Deriva respecto de cada <code>w_i</code> e iguala a cero. La condición de primer orden dice que <strong>la razón entre lo que el activo aporta al numerador y lo que aporta al denominador es la misma para todos</strong>:
+          <div class="paso">   r̄_i − r_f
+  ───────────  =  constante,  para todo i
+  Cov(r_i, r_T)</div></div></li>
+        <li><div>En notación matricial, <code>Cov(r, r_T) = Σw</code>, así que la condición es
+          <div class="paso">r̄ − r_f·1 = λ·Σ·w   ⇒   w ∝ Σ⁻¹·(r̄ − r_f·1)</div>
+          y la constante se fija al normalizar los pesos para que sumen 1.</div></li>
+        <li><div>Caso especial que aparece en casi todos los problemas: si <strong>las correlaciones son cero</strong>, <code>Σ</code> es diagonal, invertirla es dividir por cada varianza, y el vector se calcula de memoria:
+          <div class="paso">w_i  ∝  (r̄_i − r_f)/σ²_i     ← peso ANTES de normalizar
+w_i  =  ─────────────────────
+        Σ_j (r̄_j − r_f)/σ²_j</div></div></li>
+        <li><div>Con correlaciones cero también hay una fórmula cerrada para el Sharpe alcanzable, que ahorra montar la cartera entera:
+          <div class="paso">SR_T = √( Σ_i SR_i² )     con  SR_i = (r̄_i − r_f)/σ_i</div>
+          Comprueba lo que dice: dos activos con Sharpe 0,20 y 0,25 incorrelacionados dan <code>√(0,04+0,0625) = 0,3202</code> — <strong>más que cualquiera de los dos por separado</strong>.</div></li>
+        <li><div>Y una vez que tienes <code>SR_T</code>, el mínimo riesgo con el que puedes alcanzar cualquier retorno objetivo sale de despejar la ecuación de la recta:
+          <div class="paso">σ_min = (r̄_objetivo − r_f) / SR_T</div></div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> el peso de un activo <strong>no lo decide su Sharpe individual</strong>, sino su retorno en exceso <em>dividido por su contribución al riesgo de la cartera</em>. Por eso un activo mediocre pero incorrelacionado puede llevarse más peso que la estrella del grupo, y por eso agregar un activo con <code>α ≠ 0</code> respecto de la tangente actual <em>siempre</em> mejora el Sharpe — aunque su alfa sea negativo, en cuyo caso lo que mejora es venderlo en corto.</div>
+    </div>
+    <div class="ojo">
+      <b>CML y SML no son lo mismo.</b> La <b>CML</b> vive en el plano <code>(σ, r̄)</code> y sólo contiene carteras <em>eficientes</em>: un activo individual queda siempre por debajo de ella. La <b>SML</b> del módulo 15 vive en el plano <code>(β, r̄)</code> y contiene <em>todo</em> activo, eficiente o no. La misma acción que está muy por debajo de la CML está exactamente <em>sobre</em> la SML. Confundir los dos ejes es la trampa más repetida del bloque.
+    </div>
+    <div class="nexo">
+      Todo este módulo es <b>matemática, no economía</b>: dado un conjunto de retornos esperados y covarianzas, ésta es la cartera óptima, y punto. El <b>módulo 15</b> añade una sola frase de economía — «la oferta iguala a la demanda» — y con eso convierte la condición de tangencia en una teoría de <em>precios</em>. En el <b>módulo 19</b> reaparece por otra puerta: desapalancar una beta es exactamente reconocer que la empresa es una cartera de sus propios pasivos, con los mismos pesos y la misma aritmética.
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Hasta dónde llega la diversificación</span></header>
+    <div class="body">
+      <p class="given">Acciones con volatilidad individual del <strong>40%</strong> y correlación <strong>0,30</strong> entre cualquier par. ¿Cuánto riesgo se elimina comprando más nombres, y cuánto no se elimina nunca?</p>
+      <ol class="steps">
+        <li><div><strong>La covarianza común.</strong>
+          <div class="work">c = ρ·σ² = 0,30 × 0,40² = 0,30 × 0,16 = 0,048</div></div></li>
+        <li><div><strong>Aplicar la fórmula de la cartera equiponderada.</strong>
+          <div class="work">σ²_p = σ²/n + (1 − 1/n)·c
+     = 0,16/n + (1 − 1/n)(0,048)</div></div></li>
+        <li><div><strong>Tabular.</strong>
+          <div class="work">   n      σ²_p                        σ_p
+   1     0,160000                    40,00%
+   2     0,080000+0,024000=0,104000  32,25%
+   5     0,032000+0,038400=0,070400  26,53%
+  10     0,016000+0,043200=0,059200  24,33%
+  30     0,005333+0,046400=0,051733  22,75%
+   ∞     0        +0,048000=0,048000  21,91%</div></div></li>
+        <li><div><strong>Leer la tabla.</strong> De 40% a 21,9% se elimina el <strong>45% de la volatilidad</strong>, y la mitad de esa ganancia ya está con <em>cinco</em> acciones. Pasar de 30 a infinitas mejora menos de un punto: <strong>los rendimientos de diversificar se agotan muy rápido</strong>.</div></li>
+        <li><div><strong>El piso, y qué significa.</strong> Con <code>ρ = 0,30</code> el riesgo nunca baja de 21,91%. Ese piso es <em>exactamente</em> la covarianza promedio, y es lo que dos módulos más adelante se llamará riesgo de mercado.
+          <div class="work">Con ρ = 0   el piso sería  √0 = 0%
+Con ρ = 1   no hay diversificación: σ_p = 40% siempre</div></div></li>
+        <li><div><strong>El corolario que se pregunta.</strong> Para una acción dentro de una cartera grande, su <strong>varianza propia es irrelevante</strong> — se diluye con <code>1/n</code>. Lo único que aporta al riesgo es su covarianza con las demás. Por eso, dos módulos más adelante, la prima de riesgo dependerá de <code>β</code> y no de <code>σ</code>.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>40% → 21,9% · el piso es √(ρ)·σ</span></div>
     </div>
   </div>
 
@@ -980,6 +1523,44 @@ SR_T = 3,72 / 10,32 = 0,36</div>
 
   <div class="prose">
     <h3>La derivación en tres líneas</h3>
+    <div class="defs">
+      <b>Notación del módulo</b>
+      <dl>
+        <dt>M</dt><dd>cartera de mercado: todos los activos riesgosos ponderados por capitalización</dd>
+        <dt>β_i</dt><dd><code>Cov(r_i,r_M)/σ²_M</code>. Cuánto se mueve <em>i</em> cuando el mercado se mueve 1</dd>
+        <dt>r̄_M − r_f</dt><dd>prima de riesgo de mercado: el <em>precio</em> de una unidad de beta</dd>
+        <dt>α_i</dt><dd>retorno en exceso del que el CAPM no da cuenta. Debe ser cero</dd>
+        <dt>ε_i</dt><dd>residuo de la regresión: el riesgo idiosincrático, con <code>Cov(ε_i, r_M) = 0</code></dd>
+        <dt>σ(ε_i)</dt><dd>volatilidad de ese residuo. No se paga, porque se diversifica</dd>
+        <dt>R²</dt><dd>fracción de la varianza del activo que explica el mercado</dd>
+        <dt>β_A, β_E, β_D</dt><dd>betas de los activos, del patrimonio y de la deuda de una empresa</dd>
+        <dt>SML</dt><dd><em>Security Market Line</em>: la recta <code>r̄ = r_f + β(r̄_M − r_f)</code> en el plano (β, r̄)</dd>
+      </dl>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>el CAPM, con el álgebra a la vista</em></b>
+      <ol>
+        <li><div>Del módulo 14: en la cartera tangente <code>T</code>, todos los activos tienen la misma razón retorno-riesgo marginal. Escríbela para el activo <code>i</code> y para la propia <code>T</code>:
+          <div class="paso">   r̄_i − r_f          r̄_T − r_f
+ ─────────────  =  ───────────
+ Cov(r_i, r_T)        σ²_T</div>
+          El lado derecho es el caso <code>i = T</code>, porque <code>Cov(r_T,r_T) = σ²_T</code>.</div></li>
+        <li><div>Despeja <code>r̄_i</code> y reconoce el cociente de covarianzas:
+          <div class="paso">                Cov(r_i, r_T)
+r̄_i = r_f  +  ───────────── · (r̄_T − r_f)
+                    σ²_T
+     = r_f + β_iT·(r̄_T − r_f)</div>
+          Hasta aquí <strong>no hay ninguna economía</strong>: es la condición de optimalidad reescrita.</div></li>
+        <li><div>Ahora la única frase económica del módulo. Todo inversionista compra la misma <code>T</code>. Súmalas todas: la demanda agregada de activos riesgosos es un múltiplo de <code>T</code>. En equilibrio la demanda agregada tiene que ser <strong>la oferta agregada</strong>, que es el conjunto de todos los activos ponderados por su capitalización.
+          <div class="paso">T  =  M</div></div></li>
+        <li><div>Sustituye <code>T</code> por <code>M</code> en el paso 2 y ya está:
+          <div class="paso">r̄_i = r_f + β_i·(r̄_M − r_f)      β_i = Cov(r_i,r_M)/σ²_M</div></div></li>
+        <li><div>Comprueba que la beta es aditiva. La beta de una cartera es el promedio ponderado de las betas, porque la covarianza es lineal:
+          <div class="paso">β_p = Σ w_i·β_i        y en particular  β_M = 1</div>
+          Ese hecho es el que hace que toda la aritmética de betas de empresas funcione.</div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> el CAPM no supone que la gente sea racional de ninguna forma nueva, ni que los retornos sean normales, ni que nadie tenga información privada. Supone <strong>media-varianza más equilibrio</strong>. Por eso su falla empírica se puede leer de dos formas y las dos siguen abiertas: o los inversionistas no optimizan media-varianza, o la «cartera de mercado» que medimos (un índice de acciones) no es la verdadera — que incluiría capital humano, vivienda y empresas privadas.</div>
+    </div>
     <div class="formula">
       <div class="f">1. Con r_f disponible, todos tienen la cartera tangente T.
 2. Si todos tienen T, la suma de las carteras ES el mercado:
@@ -1036,6 +1617,27 @@ Si un activo tiene α ≠ 0, el Sharpe máximo alcanzable sube a:
     <p>Los retornos pueden tener estructura multifactorial y el CAPM seguir valiendo: bajo el CAPM el mercado también valora <em>a los propios factores</em>. La intuición compartida es la misma — <strong>sólo el riesgo sistemático se paga</strong>.</p>
 
     <h3>Beta de patrimonio contra beta de activos</h3>
+    <div class="deriv">
+      <b>De dónde sale · <em>β_E = β_A + (D/E)(β_A − β_D)</em></b>
+      <ol>
+        <li><div>Los activos de la empresa pagan a todos sus tenedores de títulos, sin excepción. Comprar toda la deuda y todo el patrimonio <strong>es</strong> comprar los activos:
+          <div class="paso">D + E = V        y        r_A·V = r_D·D + r_E·E</div></div></li>
+        <li><div>Así que la empresa es <em>literalmente una cartera</em> de sus propios pasivos, con pesos <code>D/V</code> y <code>E/V</code>. Y la beta de una cartera es el promedio ponderado de las betas:
+          <div class="paso">β_A = (D/V)·β_D + (E/V)·β_E</div></div></li>
+        <li><div>Despeja <code>β_E</code>. Multiplica por <code>V</code> y divide por <code>E</code>:
+          <div class="paso">β_A·V = β_D·D + β_E·E
+β_E = (V/E)·β_A − (D/E)·β_D
+    = ((D+E)/E)·β_A − (D/E)·β_D
+    = β_A + (D/E)·β_A − (D/E)·β_D
+    = β_A + (D/E)(β_A − β_D)</div></div></li>
+        <li><div>Con deuda sin riesgo, <code>β_D = 0</code>, y queda la versión que se usa en la práctica:
+          <div class="paso">β_E = β_A·(1 + D/E)        ⇒   β_A = β_E / (1 + D/E)</div></div></li>
+        <li><div>La misma cuenta con retornos en vez de betas da <strong>MM II</strong>, que es el módulo 17 entero:
+          <div class="paso">r_E = r_A + (D/E)(r_A − r_D)</div>
+          No es coincidencia: <code>r̄ = r_f + β·prima</code> es lineal en β, así que cualquier identidad entre betas se traduce en la misma identidad entre retornos esperados.</div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> el apalancamiento <strong>no crea ni destruye riesgo, lo concentra</strong>. La beta de los activos no se mueve; lo que sube es la beta de la porción cada vez más pequeña que se queda con el residuo. De aquí sale el procedimiento de tres pasos que domina los módulos 16 y 19: <em>desapalancar la beta de la comparable → obtener r_A → reapalancar a la estructura del proyecto</em>.</div>
+    </div>
     <div class="formula">
       <div class="f">Los activos pagan a TODOS los inversionistas:
 
@@ -1051,6 +1653,48 @@ Con deuda sin riesgo (β_D = 0):   β_E = β_A (1 + D/E)</div>
 
     <h3>El veredicto empírico</h3>
     <p>Black, Jensen y Scholes (1972) y sus réplicas modernas encuentran la relación correcta en signo pero <strong>la SML sale demasiado plana</strong>. Con datos 1931-2019 la pendiente estimada es ~3,5% anual, la mitad de la prima de mercado observada. Con datos desde 1963 la pendiente cae a ~0,43% y el intercepto implícito sube a 6,09%, muy por encima de cualquier tasa libre de riesgo real. A eso se suman las anomalías de Fama-French: las acciones pequeñas y las de alto book-to-market rinden más de lo que el beta justifica. Dos lecturas posibles, todavía abiertas: o esos activos están mal valorados, o al CAPM le faltan factores de riesgo. Aun así el CAPM sigue siendo el modelo estándar para presupuesto de capital, porque muchas de sus violaciones son transitorias y lo que se descuenta son flujos de largo plazo.</p>
+    <div class="ojo">
+      <b>Por qué una SML plana no invalida el uso práctico.</b> Estimar <code>β</code> con cinco años de datos mensuales deja un error estándar grande, y el error de medición en la variable explicativa <em>sesga la pendiente hacia cero</em> — exactamente el síntoma observado. Además la beta de una empresa cambia cuando cambia su apalancamiento o su mezcla de negocios, así que la beta histórica no es la beta futura. Es una razón para <strong>desapalancar comparables y promediar</strong> antes de usar una beta, no para abandonar el modelo.
+    </div>
+    <div class="nexo">
+      A partir de aquí el curso deja de preguntar «¿cuánto rinde este activo?» y empieza a preguntar «¿cuánto vale este proyecto?». La única pieza que cruza esa frontera es <code>β</code>: el <b>módulo 16</b> la usa para fijar la tasa de descuento de un proyecto (y advierte que es la del proyecto, no la de la empresa), el <b>17</b> la reparte entre deuda y patrimonio, y el <b>19</b> la desapalanca y la vuelve a apalancar para pasar de una comparable cotizada a tu proyecto. <b>Todo lo demás del curso se apoya en un número que este módulo enseña a estimar mal.</b>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Partir el riesgo de una acción en la parte que se paga y la que no</span></header>
+    <div class="body">
+      <p class="given">Una acción tiene <strong>β = 1,2</strong> y volatilidad total <strong>35%</strong>. El mercado tiene volatilidad <strong>18%</strong> y prima de riesgo <strong>6%</strong>; la tasa libre de riesgo es <strong>3%</strong>. Un analista proyecta un retorno esperado del <strong>13%</strong>. ¿Cuánto de ese 13% es riesgo pagado, y qué vale la diferencia?</p>
+      <ol class="steps">
+        <li><div><strong>Separar la varianza en dos.</strong> Como <code>Cov(ε, r_M) = 0</code>, las varianzas se suman sin término cruzado:
+          <div class="work">σ²_i = β²·σ²_M  +  σ²(ε)
+
+sistemática: 1,2² × 18² = 1,44 × 324 = 466,56   → 21,60%
+total:                     35²        = 1225,00 → 35,00%
+idiosincrática: 1225,00 − 466,56      =  758,44 → 27,54%</div></div></li>
+        <li><div><strong>Cuánto explica el mercado.</strong>
+          <div class="work">R² = 466,56 / 1.225 = 0,381</div>
+          El 62% de la varianza de esta acción es ruido propio. En una cartera de treinta nombres, ese 62% <strong>desaparece</strong> — y por eso el mercado no paga por él.</div></li>
+        <li><div><strong>Lo que el CAPM exige.</strong>
+          <div class="work">r̄_CAPM = 3% + 1,2 × 6% = 10,2%</div>
+          Fíjate en que la volatilidad del 35% <em>no entra en ningún lado</em>. Sólo entra la beta.</div></li>
+        <li><div><strong>El alfa, y qué riesgo hay que correr para cobrarlo.</strong>
+          <div class="work">α = 13,0% − 10,2% = 2,8%
+razón de información = α/σ(ε) = 2,8/27,54 = 0,102</div></div></li>
+        <li><div><strong>Cuánto mejora la cartera si el alfa es real.</strong>
+          <div class="work">SR_mercado = 6/18 = 0,3333
+SR_máximo  = √(0,3333² + 0,102²)
+           = √(0,11111 + 0,01034)
+           = √0,12145 = 0,3485</div>
+          Un alfa de 280 puntos base mejora el Sharpe apenas un <strong>4,5%</strong>, porque para cobrarlo hay que tragarse 27,5 puntos de riesgo que nadie remunera.</div></li>
+        <li><div><strong>Cuánto peso darle.</strong> La apuesta activa se dimensiona comparando alfa por unidad de varianza propia contra prima por unidad de varianza de mercado:
+          <div class="work">w ∝ (α/σ²ε) / ((r̄_M−r_f)/σ²_M)
+  = (2,8/758,44) / (6/324)
+  = 0,003692 / 0,018519 = 0,199 ≈ 20%</div>
+          Y ése es todo el argumento contra concentrar: incluso creyéndote el alfa entero, la respuesta óptima es <strong>un quinto de la cartera</strong>, no la cartera.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>α = 2,8% · R² = 0,38 · peso óptimo ≈ 20%</span></div>
+    </div>
   </div>
 
   <div class="ex">
@@ -1129,6 +1773,38 @@ Es el mismo argumento del módulo 14, leído al revés.</div>
 
   <div class="prose">
     <h3>Tasas de descuento: la del proyecto, no la de la empresa</h3>
+    <div class="defs">
+      <b>Notación del módulo</b>
+      <dl>
+        <dt>r_A</dt><dd>costo de capital de los <em>activos</em> del proyecto: el que corresponde a su riesgo, no al de la empresa</dd>
+        <dt>β_proyecto</dt><dd>beta del negocio en el que se entra, obtenida desapalancando una comparable <em>pure play</em></dd>
+        <dt>p</dt><dd>probabilidad real de un estado. Sirve para retornos esperados y para riesgo <em>idiosincrático</em></dd>
+        <dt>q</dt><dd>probabilidad neutral al riesgo, extraída de un activo que cotiza. Sirve para riesgo <em>de mercado</em></dd>
+        <dt>V₀, V₁</dt><dd>valor presente de los flujos del proyecto hoy y en el año 1, <em>sin contar la inversión</em></dd>
+        <dt>I</dt><dd>desembolso de inversión; el <em>strike</em> de la opción real</dd>
+        <dt>NPV estático</dt><dd>el que supone que el plan se ejecuta pase lo que pase</dd>
+        <dt>NPV ampliado</dt><dd><code>NPV estático + valor de la flexibilidad</code></dd>
+      </dl>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>qué probabilidades usar, y por qué la respuesta cambia el número</em></b>
+      <ol>
+        <li><div>Un flujo futuro incierto se puede valorar de dos maneras equivalentes:
+          <div class="paso">(A)  VP = E^p[flujo] / (1 + r_ajustado al riesgo)
+(B)  VP = E^q[flujo] / (1 + r_f)</div>
+          La (A) mete el riesgo en el <em>denominador</em>; la (B), en las <em>probabilidades</em>.</div></li>
+        <li><div>Si el riesgo es <strong>puramente idiosincrático</strong> — que llueva, que la patente se apruebe, que el gobierno legisle — no hay prima que cobrar por él, así que <code>q = p</code> y las dos rutas coinciden. Usa las probabilidades reales, y descuenta al riesgo que <em>sí</em> tenga el flujo.</div></li>
+        <li><div>Si el riesgo es <strong>de mercado</strong>, <code>q ≠ p</code>, y la ruta (A) exige conocer una tasa ajustada que casi nunca se conoce: la de una <em>opción</em> cambia en cada nodo del árbol y no es la del proyecto subyacente.</div></li>
+        <li><div>La salida es no adivinar la tasa y extraer <code>q</code> de un activo <strong>que cotice y esté expuesto al mismo riesgo</strong>: el cobre, el permiso de emisión, la acción de la comparable. Impón que ese activo rinda <code>r_f</code> bajo <code>q</code>:
+          <div class="paso">S₀·(1 + r_f) = q·S_alto + (1 − q)·S_bajo
+
+           S₀(1+r_f) − S_bajo
+  ⇒  q =  ────────────────────
+             S_alto − S_bajo</div></div></li>
+        <li><div>Con esa <code>q</code> ya puedes valorar cualquier pago que dependa de ese activo — incluida una decisión que aún no has tomado — descontando siempre al tipo sin riesgo.</div></li>
+      </ol>
+      <div class="cierre"><b>El error que hay que evitar:</b> tomar el valor esperado de la opción con las <em>probabilidades reales</em> y descontarlo al <em>costo de capital del proyecto</em>. Mezcla las dos rutas y da un número que no es ninguno de los dos. La opción es más riesgosa que el proyecto (está apalancada sobre él), así que ese atajo la <strong>sobrevalora</strong>. Si el riesgo es de mercado: <code>q</code> y <code>r_f</code>, siempre juntos.</div>
+    </div>
     <div class="formula">
       <div class="f">r_proyecto = r_f + β_proyecto · (r̄_M − r_f)
 
@@ -1144,6 +1820,22 @@ Si no conoces β_proyecto:
 
     <h3>Identificar la opción antes de valorarla</h3>
     <p>Dos condiciones, ambas necesarias: <strong>(1)</strong> llegará información nueva en el futuro, y <strong>(2)</strong> esa información puede cambiar la decisión. Si el plan no va a cambiar pase lo que pase, no hay opción que valorar.</p>
+    <div class="deriv">
+      <b>De dónde sale · <em>por qué esperar puede batir a un NPV positivo</em></b>
+      <ol>
+        <li><div>La regla clásica dice: invierte si <code>NPV = V₀ − I &gt; 0</code>. Pero invertir hoy <strong>mata la posibilidad de invertir mañana con más información</strong>. Ese descarte es un costo que el NPV estático no cobra.</div></li>
+        <li><div>Escribe la decisión como una opción. Esperar un año y decidir entonces vale
+          <div class="paso">Valor de esperar = E^q[ max(V₁ − I, 0) ] / (1 + r_f)</div>
+          mientras que invertir hoy vale <code>V₀ − I</code>, sin el <code>max</code>.</div></li>
+        <li><div>Compara las dos. Como <code>max(x,0) ≥ x</code> siempre, y bajo <code>q</code> el proyecto rinde <code>r_f</code>:
+          <div class="paso">E^q[max(V₁−I,0)]/(1+r_f)  ≥  E^q[V₁−I]/(1+r_f)
+                          =  V₀ − I/(1+r_f)
+                          ≥  V₀ − I</div></div></li>
+        <li><div>La cadena dice dos cosas a la vez. La primera desigualdad es el <strong>valor del seguro</strong>: esperar te deja no invertir si el mundo se pone feo. La segunda es el <strong>valor del dinero en el tiempo</strong>: pagar <code>I</code> más tarde cuesta menos.</div></li>
+        <li><div>Cuándo <em>no</em> conviene esperar: si el proyecto genera flujos mientras tanto (dividendos del activo subyacente), esperar los pierde, y eso resta. La regla completa es la de una <strong>call americana</strong>: ejerce anticipadamente sólo si lo que dejas de cobrar supera lo que ganas por esperar.</div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> un NPV estático negativo <strong>no cierra la puerta</strong>, y uno positivo <strong>no obliga a entrar hoy</strong>. Lo que decide es la comparación entre el NPV de actuar ahora y el valor de la opción de actuar después. El caso del examen de muestra es exactamente ése: un proyecto de −$17,4M que, con la opción de esperar un año, pasa a valer positivo.</div>
+    </div>
     <div class="tablewrap">
       <table>
         <thead><tr><th>Tipo</th><th>Análoga a</th><th>Dónde aparece</th></tr></thead>
@@ -1155,6 +1847,44 @@ Si no conoces β_proyecto:
           <tr><td class="k">Cambio de insumo/producto</td><td>opción de intercambio</td><td>plantas dual-fuel, líneas flexibles</td></tr>
         </tbody>
       </table>
+    </div>
+    <div class="ojo">
+      <b>Dos cosas que el enunciado nunca dice y hay que fijar tú.</b> Primero, <strong>sobre cuántos años se deprecia</strong> cuando la inversión se pospone: si la planta muere en una fecha fija, instalar un año más tarde deja un año menos de depreciación, y el escudo cambia. Segundo, <strong>a qué tasa se descuenta el valor esperado de la opción</strong> cuando el riesgo es idiosincrático: al tipo sin riesgo si el pago ya está expresado como un NPV cierto en cada estado, o al costo de capital del proyecto si lo que es incierto son los flujos mismos. Ninguna de las dos elecciones es «la correcta» en abstracto — <strong>lo que se corrige en un examen es no declararla</strong>.
+    </div>
+    <div class="nexo">
+      Este módulo es donde se junta todo el curso: la <b>beta</b> del 15 fija la tasa, la <b>neutralidad al riesgo</b> del 13 valora la flexibilidad, y las <b>estrategias de opciones</b> del 12 dan el vocabulario (esperar es una call, abandonar es una put, cambiar de insumo es una opción de intercambio). Lo que queda para el <b>19</b> es la otra mitad de la pregunta: hasta aquí el proyecto se valora <em>como si estuviera financiado 100% con patrimonio</em>. Meter la deuda dentro es lo que hacen el APV y el WACC.
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>La opción de abandonar: una put que nadie compró</span></header>
+    <div class="body">
+      <p class="given">Una planta cuesta <strong>$100M</strong> y el valor presente de sus flujos es hoy también <strong>$100M</strong>: NPV exactamente cero. En un año ese valor será <strong>$140M</strong> o <strong>$80M</strong>, con igual probabilidad real. El riesgo es <strong>de mercado</strong>. La planta se puede vender en un año a un tercero por <strong>$95M</strong>. Tasa libre de riesgo <strong>5%</strong>; el costo de capital del proyecto es 12%.</p>
+      <ol class="steps">
+        <li><div><strong>Ver que la opción existe.</strong> Llegará información (el valor se resuelve en 140 u 80) y esa información cambia la decisión (a 80 conviene vender por 95, a 140 no). Se cumplen las dos condiciones.</div></li>
+        <li><div><strong>Extraer q del propio proyecto.</strong> El riesgo es de mercado, así que hay que sacar la probabilidad neutral al riesgo del activo subyacente, cuyo precio hoy conocemos:
+          <div class="work">100 × 1,05 = q(140) + (1 − q)(80)
+105 = 80 + 60q
+q = 25/60 = 0,4167</div>
+          Fíjate en que <code>q = 0,42 &lt; 0,50 = p</code>: el mercado sobrepondera el estado malo, que es justo lo que significa cobrar una prima de riesgo.</div></li>
+        <li><div><strong>Los pagos de la opción de abandono.</strong>
+          <div class="work">Estado alto: max(95 − 140, 0) = 0    → sigues operando
+Estado bajo: max(95 −  80, 0) = 15   → vendes la planta</div>
+          Es literalmente una <strong>put con strike 95</strong> sobre el valor del proyecto.</div></li>
+        <li><div><strong>Valorarla.</strong>
+          <div class="work">Valor = [0,4167(0) + 0,5833(15)] / 1,05
+      = 8,75 / 1,05 = $8,33M</div></div></li>
+        <li><div><strong>Comprobar con la cartera réplica</strong>, para no depender de haber recordado la fórmula:
+          <div class="work">Δ = (0 − 15)/(140 − 80) = −0,25
+b = (15 − (−0,25)(80))/1,05 = 35/1,05 = 33,33
+V = −0,25(100) + 33,33 = $8,33M  ✓</div>
+          El delta negativo dice lo obvio: la opción de abandonar <strong>cubre</strong> la posición larga en el proyecto.</div></li>
+        <li><div><strong>El error tentador.</strong> Usar las probabilidades reales y el costo de capital del proyecto:
+          <div class="work">MAL:  [0,5 × 15]/1,12 = 7,5/1,12 = $6,70M</div>
+          Da 20% menos, y está mal por partida doble: las probabilidades reales exigen una tasa ajustada al riesgo <em>de la opción</em>, que no es el 12% del proyecto — una put está apalancada <em>al revés</em> sobre el subyacente, así que su tasa correcta es <strong>menor</strong> que la libre de riesgo, no mayor.</div></li>
+        <li><div><strong>Leer el resultado.</strong> El NPV estático era cero; el ampliado es <strong>+$8,33M</strong>. Todo ese valor viene de una cláusula contractual que probablemente nadie negoció: <em>poder vender la planta</em>. La lección práctica del módulo es que la flexibilidad hay que <strong>diseñarla y pagarla al principio</strong>, cuando todavía es barata.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>La opción de abandono vale $8,33M · NPV ampliado +$8,33M</span></div>
     </div>
   </div>
 
@@ -1296,6 +2026,42 @@ q(bajan) = [(1 + 0,08) − 0,9673] / (1,2978 − 0,9673)
 
   <div class="prose">
     <h3>El teorema, y su demostración de dos líneas</h3>
+    <div class="defs">
+      <b>Notación del módulo</b>
+      <dl>
+        <dt>V, V_U, V_L</dt><dd>valor de la empresa; con subíndice, la versión sin deuda (<em>unlevered</em>) y con deuda (<em>levered</em>)</dd>
+        <dt>D, E</dt><dd>valor de <em>mercado</em> de la deuda y del patrimonio. Nunca el valor libro</dd>
+        <dt>X</dt><dd>flujo de caja operativo antes de intereses. Lo genera el activo, no el pasivo</dd>
+        <dt>r_A</dt><dd>costo de capital de los activos; con mercados perfectos, igual al WACC</dd>
+        <dt>r_D, r_E</dt><dd>retornos esperados exigidos a la deuda y al patrimonio</dd>
+        <dt>y</dt><dd>yield <em>prometido</em> de la deuda: el que se cobra si no hay default</dd>
+        <dt>π</dt><dd>probabilidad de default en el periodo</dd>
+        <dt>λ</dt><dd>tasa de pérdida dado el default: la fracción de lo prometido que no se recupera</dd>
+        <dt>πλ</dt><dd>pérdida esperada por peso prometido. Es la pieza que separa yield prometido de esperado</dd>
+      </dl>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>MM I, con el arbitraje explícito</em></b>
+      <ol>
+        <li><div>Supón que se viola: dos empresas con activos idénticos, la apalancada vale más. <code>V_L &gt; V_U</code>. Vamos a construir dinero gratis.</div></li>
+        <li><div>Compra el 1% de la empresa <strong>barata</strong> y vende en corto el 1% del patrimonio de la <strong>cara</strong>. Para que los flujos calcen, pide prestado por tu cuenta el 1% de la deuda de L — es el <em class="term">apalancamiento casero</em>:
+          <div class="paso">comprar 1% de U           −0,01·V_U
+vender en corto 1% de E_L +0,01·E_L
+pedir prestado             +0,01·D_L</div></div></li>
+        <li><div>Mira los flujos futuros, año por año, en <em>cualquier</em> estado del mundo:
+          <div class="paso">1% de U te paga              +0,01·X
+el corto en E_L te cuesta    −0,01·(X − r_D·D_L)
+tu propio préstamo te cuesta −0,01·r_D·D_L
+─────────────────────────────────────────────
+neto                              0</div>
+          Se cancela <strong>entero</strong>, y sin usar ninguna probabilidad: la cancelación es estado por estado.</div></li>
+        <li><div>Suma la caja de hoy:
+          <div class="paso">−0,01·V_U + 0,01·E_L + 0,01·D_L = 0,01·(V_L − V_U) &gt; 0</div>
+          Cobras hoy y nunca pagas nada. Es arbitraje puro.</div></li>
+        <li><div>Todo el mundo lo hace, el precio de L cae y el de U sube, hasta que <code>V_L = V_U</code>. Si la desigualdad fuera al revés, la operación se hace en espejo (compra L apalancada, vende U).</div></li>
+      </ol>
+      <div class="cierre"><b>Dónde está la carne del teorema:</b> en el paso 2. Lo que hace la empresa al endeudarse, <strong>el inversionista lo puede deshacer o rehacer por su cuenta</strong>, y a los mismos precios. La estructura de capital sólo puede importar si el inversionista <em>no</em> puede replicarla: porque le cobran otra tasa, porque el fisco lo trata distinto, o porque hay algo que él no sabe. Cada excepción de los módulos 18 y 20 es exactamente eso — una razón por la que el paso 2 falla.</div>
+    </div>
     <div class="formula">
       <div class="f">Supuestos: mercado completo y eficiente, sin impuestos,
 sin costos de transacción ni de quiebra, INVERSIÓN FIJA.
@@ -1328,6 +2094,29 @@ En betas:   β_E = β_A + (D/E)(β_A − β_D)</div>
     <p>Comparando dos empresas con activos idénticos, una sin deuda (U) y otra apalancada (L): <code>r_E^U</code> compensa sólo el <strong>riesgo de negocio</strong>. <code>r_E^L</code> compensa además el <strong>riesgo financiero</strong> creado por el apalancamiento. Por eso empresas del mismo sector pueden tener betas de patrimonio muy distintas, y por eso hay que desapalancar antes de comparar.</p>
 
     <h3>Deuda con riesgo: tres rendimientos distintos</h3>
+    <div class="deriv">
+      <b>De dónde sale · <em>c = (y + πλ)/(1 − πλ), el cupón que coloca a la par</em></b>
+      <ol>
+        <li><div>Quieres emitir un bono a un año que se venda <strong>exactamente a la par</strong>. La incógnita es el cupón prometido <code>c</code>; el dato es <code>y</code>, el retorno que el mercado <em>espera</em> ganar con este riesgo.</div></li>
+        <li><div>El bono promete <code>1 + c</code>. Con probabilidad <code>π</code> hay default y se pierde la fracción <code>λ</code> de lo prometido. El pago esperado es entonces
+          <div class="paso">E[pago] = (1+c)·(1 − π) + (1+c)(1−λ)·π
+        = (1+c)·(1 − πλ)</div>
+          Los dos casos se juntan en un solo factor: <strong>la pérdida esperada por peso prometido es πλ</strong>.</div></li>
+        <li><div>Colocar a la par significa que el precio es 1, y descontar el pago esperado al retorno esperado <code>y</code>:
+          <div class="paso">1 = (1+c)(1 − πλ)/(1 + y)</div></div></li>
+        <li><div>Despeja <code>c</code>:
+          <div class="paso">(1+y) = (1+c)(1 − πλ)
+1 + c = (1+y)/(1 − πλ)
+
+        1 + y            y + πλ
+c  =  ───────── − 1  =  ─────────
+       1 − πλ            1 − πλ</div></div></li>
+        <li><div>Comprueba los casos extremos. Sin riesgo de default (<code>πλ = 0</code>): <code>c = y</code>, el cupón par es el yield, como en Fundamentos I. Con <code>πλ = 0,10</code> e <code>y = 6%</code>:
+          <div class="paso">c = (0,06 + 0,10)/0,90 = 17,8%</div>
+          Un spread de casi 1.200 puntos base que <strong>no contiene ninguna prima de riesgo</strong>: es todo pérdida esperada.</div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> el yield prometido de un bono corporativo <strong>no es lo que esperas ganar</strong>, y la diferencia no es un detalle. Ordena los tres números y no te confundirás nunca: <code>y_prometido &gt; y_esperado &gt; r_f</code>, donde el primer salto es <em>pérdida esperada</em> y el segundo es <em>prima de riesgo</em>. Es el mismo error que hace que las carteras de <em>high yield</em> parezcan batir al mercado hasta que llega la primera recesión.</div>
+    </div>
     <div class="formula">
       <div class="f">Yield PROMETIDO   : el que se cobra si no hay default
 Yield ESPERADO    : promedio ponderado por probabilidad
@@ -1341,6 +2130,51 @@ Cupón par con default (π = prob., λ = tasa de pérdida):
 
     c = (y + πλ) / (1 − πλ)</div>
       <div class="cap">El spread de un bono corporativo <b>no</b> es todo prima de riesgo: la mayor parte suele ser compensación por pérdida esperada. Confundirlas es el error que hace que los bonos <em>high yield</em> parezcan mejores de lo que son.</div>
+    </div>
+    <div class="ojo">
+      <b>«Inversión fija» es el supuesto que hace todo el trabajo.</b> MM no dice que financiarse no importe: dice que, <em>manteniendo el activo idéntico</em>, repartir sus flujos de otra forma es una transacción de NPV cero. En cuanto la estructura de capital <strong>cambia qué proyectos se hacen</strong> — porque el <em>debt overhang</em> mata proyectos buenos, porque el efectivo disponible financia proyectos malos, porque el distress espanta clientes — el supuesto se rompe y el teorema deja de aplicar. Casi todo el módulo 18 es el catálogo de esas roturas.
+    </div>
+    <div class="nexo">
+      Este módulo es el <b>caso base</b>, no la respuesta. Su función es la de un experimento de control: una vez que sabes que con mercados perfectos <code>V</code> no depende de <code>D/E</code>, cualquier afirmación sobre estructura de capital tiene que nombrar <em>qué imperfección concreta</em> invoca. El <b>18</b> nombra dos (impuestos y distress), el <b>19</b> las mete en una valoración, y el <b>20</b> aplica exactamente el mismo argumento a dividendos y a coberturas. Y la lectura de la deuda como <em>bono seguro menos una put</em> viene directo del módulo 12.
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>El arbitraje que fuerza a MM, con números</span></header>
+    <div class="body">
+      <p class="given">Dos empresas con activos idénticos que generan <strong>$1.000M</strong> perpetuos antes de intereses. <strong>U</strong> no tiene deuda y su patrimonio vale <strong>$8.000M</strong>. <strong>L</strong> tiene <strong>$4.000M</strong> de deuda perpetua sin riesgo al <strong>5%</strong> y su patrimonio cotiza a <strong>$5.000M</strong>. No hay impuestos. ¿Hay algo que hacer?</p>
+      <ol class="steps">
+        <li><div><strong>Comparar los dos valores de empresa.</strong>
+          <div class="work">V_U = 8.000
+V_L = 4.000 + 5.000 = 9.000
+V_L − V_U = $1.000M de diferencia por los MISMOS activos</div>
+          L está cara. Hay que venderla y comprar U — pero <em>replicando su apalancamiento</em>, o quedaría expuesto al negocio.</div></li>
+        <li><div><strong>Montar la operación al 1%.</strong>
+          <div class="work">vender en corto 1% de E_L    +50,0
+pedir prestado 1% de D_L     +40,0
+comprar 1% de U              −80,0
+─────────────────────────────────
+caja HOY                     +$10,0M</div></div></li>
+        <li><div><strong>Verificar que los flujos futuros se cancelan.</strong> El interés de L es <code>0,05 × 4.000 = $200M</code> al año, y tu préstamo personal de $40M cuesta <code>0,05 × 40 = $2M</code>:
+          <div class="work">1% de U te paga                 0,01 × 1.000      = +10,0
+el corto en E_L te cuesta       0,01 × (1.000−200) =  −8,0
+tu préstamo personal            0,05 × 40          =  −2,0
+──────────────────────────────────────────────────────────
+neto cada año, para siempre                            0,0</div></div></li>
+        <li><div><strong>Comprobar que se cancela en TODOS los estados</strong>, no sólo en el esperado. Si el flujo fuera <code>X</code> en vez de 1.000:
+          <div class="work">0,01X − 0,01(X − 200) − 2 = 0,01X − 0,01X + 2 − 2 = 0</div>
+          El <code>X</code> desaparece: <strong>la posición no tiene riesgo de ningún tipo</strong>. Ni siquiera hizo falta suponer que la deuda es segura para el argumento; sólo que ambas empresas la tengan al mismo precio.</div></li>
+        <li><div><strong>El resultado.</strong> $10M hoy, cero para siempre, repetible. La presión vendedora sobre L y compradora sobre U cierra la brecha hasta que <code>V_L = V_U = 8.000</code>, momento en el que <code>E_L = 4.000</code>.</div></li>
+        <li><div><strong>Leer los costos de capital en el equilibrio.</strong> Con <code>E_L = 4.000</code>:
+          <div class="work">r_A = 1.000/8.000 = 12,5%
+r_E^L = (1.000 − 200)/4.000 = 20,0%
+comprobar MM II:
+   r_E = 12,5 + (4.000/4.000)(12,5 − 5,0) = 20,0%  ✓
+comprobar el WACC:
+   0,5(5%) + 0,5(20%) = 12,5% = r_A       ✓</div>
+          El patrimonio de L exige un 20% contra el 12,5% de U. <strong>Ese 7,5% extra no es valor creado: es exactamente el precio del riesgo financiero que asumió.</strong></div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>+$10M por cada 1% · el equilibrio exige E_L = $4.000M</span></div>
     </div>
   </div>
 
@@ -1461,6 +2295,61 @@ c = (0,10 + 0,006)/(1 − 0,006)
 
   <div class="prose">
     <h3>Impuestos: por qué la deuda agrega valor</h3>
+    <div class="defs">
+      <b>Notación del módulo</b>
+      <dl>
+        <dt>τ, τ_C</dt><dd>tasa de impuesto <em>corporativa marginal</em>. Marginal, no efectiva ni media</dd>
+        <dt>τ_E</dt><dd>impuesto personal efectivo sobre el retorno del patrimonio (dividendos y ganancias de capital)</dd>
+        <dt>τ_D</dt><dd>impuesto personal sobre los intereses. Suele ser el más alto de los tres</dd>
+        <dt>PVTS</dt><dd><em>present value of tax shield</em>: valor presente del escudo fiscal</dd>
+        <dt>r_D·D</dt><dd>gasto de interés anual: la base sobre la que se calcula el escudo</dd>
+        <dt>τ·r_D·D</dt><dd>escudo fiscal de un año: impuesto que <em>no</em> se paga por deducir el interés</dd>
+        <dt>C_FD</dt><dd>costos de dificultades financieras si se llega a ellas</dd>
+        <dt>q_FD</dt><dd>probabilidad <strong>neutral al riesgo</strong> de caer en distress. No la real</dd>
+      </dl>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>V_L = V_U + τ·D</em></b>
+      <ol>
+        <li><div>Escribe lo que reciben <strong>todos</strong> los tenedores de títulos, que es lo que da el valor de la empresa. Sin deuda, el fisco se lleva <code>τX</code>:
+          <div class="paso">Firma U:  accionistas reciben (1 − τ)·X</div></div></li>
+        <li><div>Con deuda, los intereses se deducen antes de calcular el impuesto. Suma lo que reciben acreedores y accionistas:
+          <div class="paso">accionistas  (1 − τ)(X − r_D·D)
+acreedores               r_D·D
+──────────────────────────────────────
+total        (1 − τ)X + τ·r_D·D</div></div></li>
+        <li><div>Resta las dos líneas. La empresa apalancada entrega <strong>exactamente <code>τ·r_D·D</code> más al año</strong>, y esa plata sale del bolsillo del fisco, no de ningún accionista:
+          <div class="paso">diferencia anual = τ · r_D · D</div></div></li>
+        <li><div>Ese flujo extra hay que valorarlo con <em>su</em> riesgo. Si la deuda es perpetua y segura, el escudo también lo es, y se descuenta a <code>r_D</code>:
+          <div class="paso">PVTS = τ·r_D·D / r_D = τ·D</div>
+          El <code>r_D</code> se cancela: <strong>el valor del escudo no depende de la tasa de interés</strong>, sólo del monto de deuda y de la tasa de impuesto.</div></li>
+        <li><div>Y por lo tanto:
+          <div class="paso">V_L = V_U + τ·D</div>
+          Con <code>τ = 21%</code>, cada peso de deuda perpetua vale 21 centavos de empresa. Llevado al extremo, la estructura óptima sería 100% deuda — y ahí es donde tiene que entrar algo que lo frene.</div></li>
+      </ol>
+      <div class="cierre"><b>Las tres condiciones que se olvidan:</b> la fórmula exige deuda <strong>perpetua</strong> (si se amortiza, hay que descontar el escudo año a año), <strong>utilidades suficientes</strong> para usar la deducción (una empresa que pierde plata no tiene escudo que ganar) y que la deuda sea <strong>segura</strong> (si puede caer en default, algunos años no habrá interés que deducir). Cambiar cualquiera de las tres cambia el número, y las tres se preguntan.</div>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>la corrección por impuestos personales</em></b>
+      <ol>
+        <li><div>El escudo del bloque anterior sólo cuenta el impuesto <em>corporativo</em>. Pero el inversionista también paga: por los intereses que cobra y por lo que gana con la acción. Sigue un peso de utilidad operativa hasta su bolsillo, por las dos rutas.</div></li>
+        <li><div>Ruta patrimonio: paga el impuesto corporativo primero y el personal después.
+          <div class="paso">$1  →  (1 − τ_C)  →  (1 − τ_C)(1 − τ_E)</div></div></li>
+        <li><div>Ruta deuda: se deduce en la empresa, así que sólo paga el personal sobre intereses.
+          <div class="paso">$1  →  (1 − τ_D)</div></div></li>
+        <li><div>La ventaja de un peso financiado con deuda es el cociente entre las dos rutas, menos uno:
+          <div class="paso">                (1 − τ_C)(1 − τ_E)
+ventaja = 1 − ─────────────────────
+                     (1 − τ_D)
+
+V_L = V_U + ventaja · D</div></div></li>
+        <li><div>Prueba los casos límite y verás por qué esto no es una nota al pie:
+          <div class="paso">τ_E = τ_D = 0        ventaja = τ_C        (el caso clásico)
+τ_E = τ_D            ventaja = τ_C        (se cancelan)
+τ_D alto, τ_E ≈ 0    ventaja NEGATIVA</div></div></li>
+      </ol>
+      <div class="cierre"><b>Por qué τ_E puede ser casi cero:</b> las ganancias de capital sólo tributan cuando se <em>realizan</em>. Un accionista que no vende difiere el impuesto indefinidamente, y un impuesto diferido para siempre vale cero. Los intereses, en cambio, tributan cada año como renta ordinaria y a la tasa más alta. Con esos números <strong>la deuda puede destruir valor</strong> — que es el argumento de Miller (1977) y una de las salidas al problema de por qué las empresas no se endeudan mucho más.</div>
+    </div>
     <div class="formula">
       <div class="f">Flujo después de impuestos:
    Firma U:  (1 − τ)·X
@@ -1498,6 +2387,44 @@ MM I con impuestos personales:
 Óptimo: donde el beneficio marginal del escudo iguala
 al costo marginal esperado del distress.</div>
       <div class="cap">Predice bien las diferencias <b>gruesas</b> entre industrias (eléctricas y gas 43% de deuda contra software 3,5%), y mal las diferencias finas o las variaciones de corto plazo.</div>
+    </div>
+    <div class="ojo">
+      <b>La probabilidad de distress va en versión neutral al riesgo.</b> El distress llega en los estados malos del mundo — recesión, colapso del sector — que son precisamente los estados que el mercado sobrepondera. Por eso <code>q_FD &gt; p_FD</code>, a veces por mucho, y usar la probabilidad histórica de quiebra <strong>subestima el costo esperado</strong>. Es el mismo cambio de probabilidades del módulo 13, aplicado a un flujo que a nadie se le ocurre pensar como un derivado.
+    </div>
+    <div class="nexo">
+      El trade-off contesta <em>cuánta</em> deuda, pero no contesta <em>cómo se valora un proyecto</em> teniendo deuda. Eso es el <b>módulo 19</b>: el escudo fiscal que aquí se suma como <code>τ·D</code> se convierte allá en el término <code>PV(escudo)</code> del APV, o se esconde dentro del <code>(1−τ)</code> del WACC. Y las imperfecciones de este módulo son las que en el <b>20</b> justifican cubrirse: si el distress cuesta, reducir su probabilidad con derivados <em>sí</em> crea valor, aunque MM diga que la cobertura es irrelevante.
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Una recapitalización, y adónde va el escudo fiscal</span></header>
+    <div class="body">
+      <p class="given">Una empresa sin deuda vale <strong>$1.000M</strong> y tiene <strong>50 millones</strong> de acciones. Anuncia que emitirá <strong>$400M</strong> de deuda perpetua al 5% y usará todo el dinero en recomprar acciones. Impuesto corporativo <strong>21%</strong>. ¿Quién gana, y cuánto?</p>
+      <ol class="steps">
+        <li><div><strong>El precio antes del anuncio.</strong>
+          <div class="work">P₀ = 1.000/50 = $20,00 por acción</div></div></li>
+        <li><div><strong>El valor de la empresa después.</strong>
+          <div class="work">V_L = V_U + τ·D = 1.000 + 0,21 × 400 = $1.084M</div>
+          Los activos no cambiaron. Los $84M salen enteros del fisco.</div></li>
+        <li><div><strong>El precio en el momento del anuncio</strong>, antes de recomprar nada. Todavía hay 50 millones de acciones, y ya vale 1.084:
+          <div class="work">P₁ = 1.084/50 = $21,68 por acción</div>
+          <strong>Aquí es donde el accionista gana.</strong> Los $84M se los llevan quienes ya eran dueños <em>antes</em> de la recompra, no quienes venden ni quienes se quedan.</div></li>
+        <li><div><strong>La recompra, al precio nuevo.</strong>
+          <div class="work">acciones recompradas = 400/21,68 = 18,45M
+acciones que quedan  = 50 − 18,45 = 31,55M</div></div></li>
+        <li><div><strong>Comprobar que el precio no se mueve con la recompra.</strong>
+          <div class="work">E = V_L − D = 1.084 − 400 = $684M
+P = 684/31,55 = $21,68  ✓</div>
+          Recomprar a precio de mercado es una transacción de <strong>NPV cero</strong> — MM del módulo 20, ya en acción. Todo el valor se creó en el paso 3.</div></li>
+        <li><div><strong>Ahora los impuestos personales.</strong> Con <code>τ_C = 21%</code>, <code>τ_D = 37%</code> sobre intereses y <code>τ_E</code> sobre el retorno de la acción:
+          <div class="work">ventaja = 1 − (1−0,21)(1−τ_E)/(1−0,37)
+
+τ_E = 0,20  → 1 − (0,79)(0,80)/0,63 = −0,3%   ⇒ V_L ≈ 999
+τ_E = 0     → 1 − (0,79)(1,00)/0,63 = −25,4%  ⇒ V_L =  898</div>
+          Con una tributación personal realista <strong>el escudo se esfuma</strong>, y si el accionista puede diferir sus ganancias de capital indefinidamente, endeudarse <em>destruye</em> valor.</div></li>
+        <li><div><strong>Qué hacer con esto en un examen.</strong> Si el enunciado no menciona impuestos personales, usa <code>τ·D</code> y sigue. Si los menciona, es <em>señal deliberada</em> de que quiere la fórmula larga — y casi siempre de que el resultado va a salir contraintuitivo.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>+$84M para el accionista original · el precio salta a $21,68 al anunciar</span></div>
     </div>
   </div>
 
@@ -1606,6 +2533,41 @@ CON EL PROYECTO los activos pasan a 120 y 30.
 
   <div class="prose">
     <h3>Las dos rutas</h3>
+    <div class="defs">
+      <b>Notación del módulo</b>
+      <dl>
+        <dt>X_t</dt><dd>flujo operativo antes de impuestos e <strong>antes de intereses</strong> del año <em>t</em></dd>
+        <dt>(1−τ)X_t</dt><dd><em>free cash flow</em> sin apalancar: el que se descuenta en las dos rutas</dd>
+        <dt>r_A</dt><dd>costo de capital de los activos, sin apalancar. La tasa del APV</dd>
+        <dt>r_E, r_D</dt><dd>retornos exigidos al patrimonio y a la deuda de la empresa <em>apalancada</em></dd>
+        <dt>L = D/V</dt><dd>razón de endeudamiento a valor de mercado. El WACC exige que sea <strong>constante</strong></dd>
+        <dt>PVTS</dt><dd>valor presente del escudo fiscal, calculado aparte en el APV</dd>
+        <dt>r_PVTS</dt><dd>tasa a la que se descuenta el escudo. <strong>La decisión clave del módulo</strong></dd>
+        <dt>V_U, V_L</dt><dd>valor sin apalancar y con apalancamiento. <code>V_L = V_U + PVTS</code></dd>
+      </dl>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>que APV y WACC den el mismo número</em></b>
+      <ol>
+        <li><div>Toma el caso más simple donde se puede ver todo: flujo perpetuo <code>(1−τ)X</code> y razón de endeudamiento <code>L = D/V</code> constante, mantenida rebalanceando cada año.</div></li>
+        <li><div>Ruta APV. El escudo anual es <code>τ·r_D·D</code>. Con rebalanceo continuo, la deuda sube y baja con el valor de la empresa, así que el escudo <strong>hereda el riesgo de los activos</strong> y se descuenta a <code>r_A</code>:
+          <div class="paso">V_L = (1−τ)X/r_A  +  τ·r_D·D / r_A</div></div></li>
+        <li><div>Sustituye <code>D = L·V_L</code> — ahí está el rebalanceo — y despeja <code>V_L</code>:
+          <div class="paso">V_L = (1−τ)X/r_A + τ·r_D·L·V_L/r_A
+V_L·(1 − τ·r_D·L/r_A) = (1−τ)X/r_A
+V_L·(r_A − τ·r_D·L) = (1−τ)X
+
+              (1−τ)X
+V_L  =  ──────────────────
+         r_A − τ·r_D·(D/V)</div></div></li>
+        <li><div>Ruta WACC. Por definición <code>V_L = (1−τ)X/WACC</code>, así que comparando denominadores:
+          <div class="paso">WACC = r_A − τ·r_D·(D/V)</div></div></li>
+        <li><div>Comprueba que eso es la fórmula de siempre. Parte de que la empresa es una cartera de sus pasivos, <code>r_A = (D/V)r_D + (E/V)r_E</code>, y réstale el término del escudo:
+          <div class="paso">WACC = (D/V)r_D + (E/V)r_E − τ(D/V)r_D
+     = (D/V)·r_D·(1 − τ)  +  (E/V)·r_E   ✓</div></div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> el <code>(1−τ)</code> pegado a <code>r_D</code> en la fórmula del WACC <strong>es el escudo fiscal, escondido</strong>. Por eso los flujos que se descuentan con WACC son los del proyecto <em>sin</em> apalancar: si además le restas los intereses al flujo, cuentas el escudo dos veces. Y por eso el paso 3 exige <code>D/V</code> constante — es el único supuesto que separa a las dos rutas.</div>
+    </div>
     <div class="formula">
       <div class="f">APV — valor presente ajustado
 
@@ -1624,6 +2586,24 @@ Supuesto para que WACC funcione:
     </div>
 
     <h3>Cómo desapalancar cuando hay impuestos</h3>
+    <div class="deriv">
+      <b>De dónde sale · <em>por qué el escudo comparte el riesgo de los activos</em></b>
+      <ol>
+        <li><div>La pregunta es una sola: <strong>¿a qué tasa se descuenta <code>τ·r_D·D</code>?</strong> Todo lo demás del módulo se sigue de la respuesta, y la respuesta depende de <em>cómo se gestiona la deuda</em>.</div></li>
+        <li><div>Política A — <strong>deuda fija en dólares</strong>. Sabes hoy que deberás $300M los próximos tres años, pase lo que pase. El escudo es entonces tan seguro como la propia deuda:
+          <div class="paso">r_PVTS = r_D      ⇒   con deuda perpetua, PVTS = τ·D</div></div></li>
+        <li><div>Política B — <strong>razón D/V constante</strong>. Cada año se rebalancea: si la empresa vale más, se emite más deuda; si vale menos, se amortiza. Entonces la deuda futura <em>no</em> se conoce hoy: depende del valor futuro de la empresa.
+          <div class="paso">D_t = L · V_t      con V_t incierto</div></div></li>
+        <li><div>Y si el escudo de cada año es proporcional a <code>V_t</code>, su riesgo <strong>es el riesgo de V_t</strong>, que es el de los activos:
+          <div class="paso">r_PVTS = r_A        y        β_PVTS = β_A</div></div></li>
+        <li><div>De ahí sale el resultado cómodo: si el escudo tiene la misma beta que los activos, se puede meter dentro de la cartera de pasivos sin corregir nada, y la fórmula de desapalancar <strong>no cambia respecto del mundo sin impuestos</strong>:
+          <div class="paso">r_A = (D/V)·r_D + (E/V)·r_E
+r_E = r_A + (D/E)(r_A − r_D)
+β_A = (D/V)·β_D + (E/V)·β_E</div></div></li>
+        <li><div>Bajo la política A, en cambio, la fórmula sí cambia (aparece un <code>1 + (1−τ)D/E</code>). El curso usa la política B, que es la que hace consistente al WACC.</div></li>
+      </ol>
+      <div class="cierre"><b>La regla práctica:</b> <strong>WACC y la fórmula simple de desapalancar van juntos, y ambos suponen rebalanceo</strong>. Si el enunciado te da un <em>calendario de amortización</em> en dólares — un LBO, un crédito sindicado, un bono que vence — la política es A, el WACC deja de ser válido y hay que usar APV descontando cada escudo a <code>r_D</code>. Reconocer cuál de las dos políticas describe el enunciado es, literalmente, la mitad de la nota de este módulo.</div>
+    </div>
     <div class="formula">
       <div class="f">Si la empresa rebalancea para mantener D/E constante,
 el escudo fiscal tiene el MISMO riesgo que los activos:
@@ -1647,6 +2627,49 @@ el escudo fiscal tiene el MISMO riesgo que los activos:
           <tr><td class="k">Elección</td><td>estructura estable y sencilla</td><td>LBO, deuda que se amortiza, estructura cambiante</td></tr>
         </tbody>
       </table>
+    </div>
+    <div class="ojo">
+      <b>Tres formas de contar el escudo dos veces</b>, en orden de frecuencia. <strong>(1)</strong> Descontar flujos <em>después de intereses</em> con el WACC. <strong>(2)</strong> Hacer APV y además usar un WACC en vez de <code>r_A</code> para el <code>V_U</code>. <strong>(3)</strong> Sumar el escudo aparte y encima meter la deuda como flujo positivo del año 0. El antídoto es siempre el mismo: <strong>escribe primero el flujo del proyecto como si no existiera la deuda</strong>, y sólo después decide por qué puerta entra el financiamiento.
+    </div>
+    <div class="nexo">
+      Este módulo cierra el arco que empezó en el <b>15</b>: la beta permitía obtener una tasa; el <b>17</b> mostró cómo se reparte entre deuda y patrimonio; el <b>18</b> puso el escudo fiscal sobre la mesa; y aquí el escudo entra en una valoración concreta. Lo que queda en el <b>20</b> es la última vuelta de la misma tuerca — payout y cobertura son también decisiones de financiamiento, y también son irrelevantes salvo que muerdan una imperfección.
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Cuando el WACC se rompe: deuda que se amortiza</span></header>
+    <div class="body">
+      <p class="given">Un proyecto cuesta <strong>$500M</strong> y genera un FCF sin apalancar de <strong>$80M perpetuos</strong> después de impuestos. Su costo de capital sin apalancar es <strong>12%</strong> y el impuesto es <strong>30%</strong>. Se financia con <strong>$300M</strong> de deuda al <strong>6%</strong>, que se amortiza en tres cuotas iguales de $100M. ¿Cuánto vale?</p>
+      <ol class="steps">
+        <li><div><strong>Reconocer la política de deuda.</strong> El calendario está fijado en dólares: $300M, $200M, $100M, y luego nada. No hay rebalanceo. Eso descarta el WACC de entrada.</div></li>
+        <li><div><strong>El proyecto sin apalancar.</strong>
+          <div class="work">V_U   = 80/0,12 = $666,67M
+NPV_U = 666,67 − 500 = $166,67M</div></div></li>
+        <li><div><strong>El escudo, año por año.</strong> Cada año es <code>τ·r_D·D_t</code>, con el saldo de <em>ese</em> año:
+          <div class="work">año 1:  0,30 × 0,06 × 300 = $5,40M
+año 2:  0,30 × 0,06 × 200 = $3,60M
+año 3:  0,30 × 0,06 × 100 = $1,80M
+año 4+: no hay deuda        =  $0</div></div></li>
+        <li><div><strong>Descontarlo a r_D</strong>, porque el calendario es conocido y el escudo es tan seguro como la deuda:
+          <div class="work">5,40/1,06     = 5,0943
+3,60/1,06²    = 3,2040
+1,80/1,06³    = 1,5113
+─────────────────────────
+PVTS          = $9,81M</div></div></li>
+        <li><div><strong>El APV.</strong>
+          <div class="work">APV = 166,67 + 9,81 = $176,48M
+V_L = 666,67 + 9,81 = $676,48M</div></div></li>
+        <li><div><strong>Qué habría pasado usando WACC.</strong> Calcúlalo con el apalancamiento <em>inicial</em>, que es lo que casi todo el mundo hace:
+          <div class="work">D/V = 300/676,48 = 0,4435
+r_E = 0,12 + (300/376,48)(0,12 − 0,06) = 16,78%
+WACC = 0,4435(0,06)(0,70) + 0,5565(0,1678) = 11,20%
+V = 80/0,1120 = $714,17M</div></div></li>
+        <li><div><strong>El tamaño del error.</strong>
+          <div class="work">714,17 − 676,48 = $37,7M  de sobrevaloración (5,6%)</div>
+          Y el error tiene un sentido claro: el WACC supone que <strong>ese 44% de deuda se mantiene para siempre</strong>, cuando en realidad desaparece en tres años. Está valorando un escudo fiscal perpetuo que nadie va a cobrar.</div></li>
+        <li><div><strong>La moraleja operativa.</strong> El WACC no es «la forma general» con el APV como caso particular: son dos supuestos <em>distintos</em> sobre la política de deuda. Cuando el enunciado te da un calendario, la respuesta es APV; cuando te da una razón objetivo, es WACC. Si te da las dos cosas, están describiendo escenarios distintos y hay que decir cuál se usa.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>APV = $176,48M · el WACC ingenuo sobrevalora en $37,7M</span></div>
     </div>
   </div>
 
@@ -1746,6 +2769,35 @@ acertarle a la tasa de descuento del negocio.</div>
 
   <div class="prose">
     <h3>MM aplicado al payout</h3>
+    <div class="defs">
+      <b>Notación del módulo</b>
+      <dl>
+        <dt>P_cum, P_ex</dt><dd>precio de la acción <em>con</em> derecho al dividendo y <em>sin</em> él (ex-dividendo)</dd>
+        <dt>Div</dt><dd>dividendo por acción</dd>
+        <dt>n</dt><dd>número de acciones en circulación</dd>
+        <dt>MD</dt><dd>duración modificada: cambio porcentual de precio por punto de cambio en la tasa</dd>
+        <dt>P·MD</dt><dd><em>duración en dólares</em>: la sensibilidad en pesos. Es lo que hay que igualar al cubrir</dd>
+        <dt>N</dt><dd>número de contratos de futuro o forward de la cobertura</dd>
+        <dt>τ(·)</dt><dd>función de impuestos. Es <strong>convexa</strong> si la tasa marginal sube con la utilidad</dd>
+      </dl>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>que el dividendo no cambia la riqueza del accionista</em></b>
+      <ol>
+        <li><div>La empresa tiene un valor total <code>V</code> repartido en <code>n</code> acciones, y su política de inversión está fija: pagar el dividendo no cambia ningún proyecto.</div></li>
+        <li><div>Justo antes del pago, cada acción vale <code>P_cum = V/n</code>. La empresa paga <code>Div</code> por acción, y para hacerlo saca <code>n·Div</code> de la caja.</div></li>
+        <li><div>El valor de la empresa cae exactamente en lo que salió por la puerta:
+          <div class="paso">V_ex = V − n·Div     ⇒     P_ex = V/n − Div = P_cum − Div</div></div></li>
+        <li><div>Suma lo que tiene el accionista antes y después. Tenía una acción; ahora tiene una acción más caja:
+          <div class="paso">antes:    P_cum
+después:  P_ex + Div = (P_cum − Div) + Div = P_cum</div>
+          <strong>Idéntico.</strong> El dividendo movió riqueza de un bolsillo (la acción) a otro (la caja), sin crear nada.</div></li>
+        <li><div>Ahora al revés: un accionista que quiere efectivo y la empresa no paga dividendo. Vende acciones por el monto que necesita — es el <em class="term">dividendo casero</em>. Y uno que recibe un dividendo que no quiere, lo reinvierte comprando más acciones. Ambos replican cualquier política <strong>a precios de mercado</strong>.</div></li>
+        <li><div>La recompra es el mismo argumento con otro reparto: el precio <em>no</em> baja, porque bajan a la vez el valor y el número de acciones. Lo que sube es el dividendo por acción futuro.
+          <div class="paso">P_después = (V − caja)/(n − caja/P) = P</div></div></li>
+      </ol>
+      <div class="cierre"><b>Dónde muerde el resultado:</b> el paso 4 mata de un golpe la falacia del «pájaro en mano» — que un dividendo cierto valdría más que una ganancia futura incierta. No: <strong>el dividendo sale del mismo activo cuya incertidumbre se quiere evitar</strong>. Y el paso 5 explica por qué el <em>dividend puzzle</em> es un problema real: si el inversionista puede fabricarse el dividendo gratis, y encima tributa peor, ¿por qué las empresas los pagan?</div>
+    </div>
     <div class="formula">
       <div class="f">Con política de inversión FIJA y mercado perfecto:
 
@@ -1770,6 +2822,25 @@ acertarle a la tasa de descuento del negocio.</div>
     <p>Las explicaciones candidatas: <strong>señalización</strong> (sólo la empresa con buenas perspectivas puede sostener el dividendo, así que pagarlo es una señal costosa y creíble), <strong>flujo de caja libre</strong> (repartir disciplina a la gerencia y evita que financie proyectos malos), y costos de transacción de vender acciones en montos pequeños.</p>
 
     <h3>Gestión de riesgo: cuándo cubrirse agrega valor</h3>
+    <div class="deriv">
+      <b>De dónde sale · <em>que cubrirse baje el impuesto esperado</em></b>
+      <ol>
+        <li><div>El punto de partida es que la función de impuestos <strong>no es una recta</strong>: por debajo de cero no te devuelven plata, las pérdidas sólo se arrastran (y pierden valor por el tiempo), y hay tramos y créditos que se agotan. La tasa marginal <em>sube</em> con la utilidad.</div></li>
+        <li><div>Llama <code>τ(X)</code> al impuesto pagado con utilidad <code>X</code>. Que la tasa marginal suba significa que <code>τ(·)</code> es <strong>convexa</strong>.</div></li>
+        <li><div>Aplica la desigualdad de Jensen a una función convexa:
+          <div class="paso">E[ τ(X) ]  ≥  τ( E[X] )</div>
+          El lado izquierdo es lo que pagas <strong>sin cubrir</strong> (la utilidad fluctúa). El derecho es lo que pagas <strong>cubierto</strong> (la utilidad es su promedio, con certeza).</div></li>
+        <li><div>Restándolos, la cobertura ahorra
+          <div class="paso">ahorro = E[τ(X)] − τ(E[X])  ≥  0</div>
+          y el ahorro es estrictamente positivo siempre que haya alguna curvatura y algo de volatilidad.</div></li>
+        <li><div>El mismo argumento, con otra función convexa, produce las demás razones para cubrirse:
+          <div class="paso">costos de distress    → convexos en las pérdidas
+inversión con caja    → cóncava si hay racionamiento
+compensación gerencial → convexa en el resultado</div>
+          En todos los casos, <strong>la volatilidad cuesta plata porque la función que la traduce en valor está curvada</strong>.</div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> con mercados perfectos la cobertura es una transacción de NPV cero, igual que el dividendo y que la deuda. Sólo crea valor cuando <strong>hay una no linealidad entre el flujo bruto y lo que llega al accionista</strong>. Nombrar esa no linealidad — el impuesto, el distress, la restricción de caja — es la respuesta que se busca; «reducir el riesgo» por sí solo no es una razón, porque el accionista ya diversificó.</div>
+    </div>
     <p>Bajo MM, cubrirse es irrelevante: el accionista puede hacerlo por su cuenta. Cubrirse agrega valor cuando <strong>reduce impuestos</strong> (con una función tributaria convexa), cuando <strong>la gerencia tiene mejor acceso o información</strong> que los accionistas, cuando <strong>reduce la probabilidad de distress</strong>, o cuando <strong>mitiga costos de agencia</strong>.</p>
     <div class="formula">
       <div class="f">MECÁNICA DE COBERTURA
@@ -1784,6 +2855,63 @@ Tasas:        igualar la DURACIÓN EN DÓLARES
 Con futuros hay tres desajustes posibles:
     vencimiento · tamaño del contrato · activo subyacente</div>
       <div class="cap">Con futuros aparece además <b>riesgo de liquidez</b>: la marca a mercado exige efectivo <em>hoy</em> mientras la posición física entrega flujos más adelante. Una cobertura perfecta en valor de mercado puede quebrar a una empresa con restricción de caja.</div>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>la razón de cobertura por duración en dólares</em></b>
+      <ol>
+        <li><div>Tienes una cartera de bonos que vale <code>P_A</code> con duración modificada <code>MD_A</code>. Ante un cambio de tasa <code>Δy</code>, pierdes
+          <div class="paso">ΔP_A = −MD_A · P_A · Δy</div></div></li>
+        <li><div>Vendes <code>N</code> contratos sobre un bono entregable que vale <code>P_B</code> por contrato y tiene duración <code>MD_B</code>. La posición corta gana
+          <div class="paso">ΔF = + N · MD_B · P_B · Δy</div></div></li>
+        <li><div>Para que la suma sea cero <em>para cualquier</em> <code>Δy</code>, iguala las dos sensibilidades. El <code>Δy</code> se cancela — que es justo lo que se quiere:
+          <div class="paso">N · MD_B · P_B  =  MD_A · P_A
+
+           MD_A · P_A
+     N =  ────────────
+           MD_B · P_B</div>
+          A cada lado hay una <strong>duración en dólares</strong>, <code>P·MD</code>: sensibilidad en pesos, no en porcentaje.</div></li>
+        <li><div>Un ajuste que se olvida: un <em>forward</em> se liquida en <code>T</code>, así que su ganancia hay que traerla a hoy. Si la tasa del periodo es <code>r</code>, el valor presente de la pata del forward es <code>ΔF/(1+r)</code>, y hay que compensarlo:
+          <div class="paso">N · (1/(1+r)) · MD_B · P_B = MD_A · P_A
+
+  ⇒  N = (1+r) · MD_A·P_A / (MD_B·P_B)</div></div></li>
+        <li><div>Comprueba la dirección y las unidades. Si <code>MD_B &gt; MD_A</code>, cada contrato es más sensible que tu cartera y necesitas <strong>menos</strong> nocional. Y si estás largo en el activo, vas <strong>corto</strong> en los contratos.</div></li>
+      </ol>
+      <div class="cierre"><b>La misma idea, tres veces en el programa:</b> es el <em>ratio de cobertura</em> <code>N_S/N_F = E(dF)/E(dS)</code> del módulo 11, es el <code>Δ = N(d₁)</code> del delta hedge del módulo 13, y es esto. Siempre: <strong>divide la sensibilidad de lo que tienes por la sensibilidad de lo que usas para cubrirlo</strong>. Lo único que cambia es qué se deriva respecto de qué.</div>
+    </div>
+    <div class="ojo">
+      <b>Una cobertura contable no es una cobertura económica.</b> Igualar duración protege contra un desplazamiento <em>paralelo y pequeño</em> de la curva. No protege contra un cambio de pendiente, ni contra un movimiento grande (para eso está la convexidad), ni contra el riesgo de base si el bono entregable no es el tuyo. Toda cobertura del curso es una <strong>derivada primera</strong>, y toda derivada primera es local.
+    </div>
+    <div class="nexo">
+      El módulo cierra el curso volviendo al principio: dividendos, recompras y coberturas son <b>transacciones financieras a precios de mercado</b>, y por tanto de NPV cero — el mismo argumento de MM del módulo 17, y en el fondo el mismo de no arbitraje del módulo 11. Los veinte módulos se sostienen sobre una sola frase: <b>si dos carteras pagan lo mismo en todos los estados, valen lo mismo</b>. Todo lo demás — el CAPM, Black-Scholes, el APV — es esa frase aplicada a un objeto distinto.
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Cuánto vale cubrirse cuando el impuesto es convexo</span></header>
+    <div class="body">
+      <p class="given">Una empresa tendrá el año que viene una utilidad antes de impuestos de <strong>+$100M</strong> o <strong>−$40M</strong>, con igual probabilidad. La tasa de impuesto es <strong>25%</strong>, y las pérdidas <strong>no dan devolución</strong>. Un forward le permite fijar hoy el resultado en su valor esperado. ¿Le conviene?</p>
+      <ol class="steps">
+        <li><div><strong>Ver la convexidad.</strong> El impuesto no es <code>0,25·X</code> para todo <code>X</code>: es <code>0,25·X</code> si <code>X &gt; 0</code> y <strong>cero</strong> si <code>X &lt; 0</code>. Esa esquina en el origen es toda la curvatura que hace falta.</div></li>
+        <li><div><strong>Sin cobertura.</strong>
+          <div class="work">Estado bueno:  100 − 0,25(100) = 75
+Estado malo:   −40 − 0        = −40
+
+E[antes de impuestos]  = 0,5(100) + 0,5(−40) = $30M
+E[impuesto]            = 0,5(25)  + 0,5(0)   = $12,5M
+E[después de impuestos]= 0,5(75)  + 0,5(−40) = $17,5M</div></div></li>
+        <li><div><strong>Con cobertura perfecta.</strong> El resultado queda fijo en su media, $30M, con certeza:
+          <div class="work">impuesto            = 0,25 × 30 = $7,5M
+después de impuestos = 30 − 7,5 = $22,5M</div></div></li>
+        <li><div><strong>La diferencia.</strong>
+          <div class="work">22,5 − 17,5 = $5,0M al año</div>
+          El flujo antes de impuestos es <em>idéntico</em> en los dos casos ($30M esperados). Los $5M salen enteros de pagar menos impuesto: <strong>Jensen, cobrado en efectivo</strong>.</div></li>
+        <li><div><strong>De dónde viene exactamente.</strong> Es el impuesto que se pierde por no poder usar la pérdida:
+          <div class="work">0,5 × 0,25 × 40 = $5,0M  ✓</div>
+          La mitad de las veces hay $40M de pérdida que valdrían $10M de escudo y no se cobran.</div></li>
+        <li><div><strong>Qué lo reduciría.</strong> Si la ley permitiera arrastrar la pérdida y usarla al año siguiente, el escudo no se pierde: sólo se retrasa, y la ganancia de cubrirse cae al valor del tiempo. Con arrastre completo e inmediato, el impuesto se vuelve <em>lineal</em> y la ganancia desaparece por completo — <strong>MM otra vez</strong>.</div></li>
+        <li><div><strong>El contraste que hay que saber decir.</strong> Un accionista diversificado no puede replicar este ahorro por su cuenta: la no linealidad está en <em>la contabilidad tributaria de la empresa</em>, no en su cartera. Ésa es la prueba de que la cobertura crea valor aquí y no en el caso general.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>Cubrirse vale $5,0M al año · todo es impuesto ahorrado</span></div>
     </div>
   </div>
 
@@ -1921,7 +3049,7 @@ IGUALANDO EN VALOR PRESENTE
 divisa:  F = S₀·e^((r_d − r_f)T)
 commodity: F = S₀·e^((r−y)T)
 f_t = B_{t−1}/B_t − 1
-contango F>S · backwardation F<S</div>
+contango F&gt;S · backwardation F&lt;S</div>
     </div>
     <div class="card">
       <h4>Swaps</h4>
@@ -2019,6 +3147,20 @@ Vol. de cartera ≠ promedio de vol.
 β mide covarianza, no volatilidad
 MM: si algo importa, nombra la fricción</div>
     </div>
+  </div>
+
+  <div class="exammap">
+    <b>Dónde está cada pregunta del examen de muestra</b>
+    <dl>
+      <dt>P1 · 15 pts</dt><dd>Opción barrera en un árbol de dos periodos, probabilidad neutral al riesgo, precio de estado y retorno esperado de la opción y de su réplica → <a href="#m13">módulo 13</a>, en el reto.</dd>
+      <dt>P2 · 20 pts</dt><dd>Sharpe de dos activos incorrelacionados, cartera tangente, eficiencia media-varianza y qué aporta un tercer activo con alfa → <a href="#m14">módulo 14</a>, en el reto.</dd>
+      <dt>P3 · 15 pts</dt><dd>Sharpe del mercado, beta y alfa de una acción, y si la cartera de mercado es eficiente → <a href="#m15">módulo 15</a>, en el reto.</dd>
+      <dt>P4 · 20 pts</dt><dd>Western Company: NPV de instalar scrubbers, escudo de la depreciación y valor de la opción de esperar con riesgo idiosincrático → <a href="#m16">módulo 16</a>, en el reto, partes (a) y (b).</dd>
+      <dt>P5 · 15 pts</dt><dd>La misma Western, ahora con el precio de los permisos afectado: probabilidades neutrales al riesgo extraídas del permiso y revaluación de la opción → <a href="#m16">módulo 16</a>, en el reto, parte (c).</dd>
+      <dt>P6 · 15 pts</dt><dd>Bono senior, bono junior y patrimonio de una empresa con default: pagos, <em>q</em> implícita en el patrimonio, precios, yields prometidos y retornos esperados → <a href="#m17">módulo 17</a>, en el reto.</dd>
+      <dt>P7 · 20 pts</dt><dd>Gordon para el costo del patrimonio de una comparable, WACC, desapalancar, NPV sin deuda y escudo fiscal de deuda perpetua → <a href="#m19">módulo 19</a>, en el reto.</dd>
+    </dl>
+    <p style="margin:12px 0 0;font-size:14.5px;color:var(--ink-3);line-height:1.55">Las 120 puntos del examen se concentran en los módulos 13 a 19. Los módulos 11, 12, 18 y 20 no tienen pregunta propia, pero sostienen las que sí la tienen: sin la réplica del 12 no hay P1, sin el trade-off del 18 no se lee P6, y sin el no arbitraje del 11 no hay nada.</p>
   </div>
 
   <footer>

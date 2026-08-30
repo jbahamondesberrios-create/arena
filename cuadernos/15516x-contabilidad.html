@@ -221,6 +221,97 @@ table.data td.k{font-weight:600}
   white-space:pre;overflow-x:auto;color:var(--ink-2)}
 footer{padding:28px 0 56px;color:var(--ink-3);font-size:13.5px;max-width:var(--maxw)}
 </style>
+<style>
+/* ============ COMPONENTES DE PROFUNDIDAD ============ */
+
+.mod-num b{color:var(--accent);font-weight:600}
+
+/* Notación: qué significa cada término antes de usarlo */
+.defs{
+  max-width:var(--maxw);border:1px solid var(--rule);background:var(--surface-2);
+  padding:14px 18px;
+}
+.defs > b{
+  display:block;font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:12.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:9px;
+}
+.defs dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline}
+.defs dt{
+  font-family:"Roboto Mono",monospace;font-size:12.8px;font-weight:500;
+  color:var(--accent);white-space:nowrap;
+}
+.defs dd{margin:0;font-size:14.5px;color:var(--ink-2);line-height:1.5}
+
+/* Derivación: de dónde sale el asiento, línea por línea */
+.deriv{
+  max-width:var(--maxw);border:1px solid var(--rule);border-left:3px solid var(--blue);
+  background:var(--surface);overflow:hidden;margin:2px 0;
+}
+.deriv > b{
+  display:block;padding:12px 18px 0;
+  font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:12.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+}
+.deriv > b em{font-style:normal;color:var(--ink-2);text-transform:none;letter-spacing:.02em;font-size:13.5px}
+.deriv ol{
+  list-style:none;margin:0;padding:10px 18px 16px;counter-reset:d;
+  display:flex;flex-direction:column;gap:11px;
+}
+.deriv li{
+  counter-increment:d;display:grid;grid-template-columns:19px minmax(0,1fr);gap:11px;
+  font-size:15.5px;line-height:1.55;
+}
+.deriv li::before{
+  content:counter(d);font-family:"Roboto Mono",monospace;font-size:11px;
+  color:var(--ink-3);padding-top:5px;
+}
+.deriv .paso{
+  font-family:"Roboto Mono",monospace;font-size:12.6px;line-height:1.85;white-space:pre;
+  overflow-x:auto;background:var(--surface-2);padding:8px 12px;
+  margin-top:6px;color:var(--ink);
+}
+.deriv .cierre{
+  border-top:1px solid var(--rule);padding:11px 18px;background:var(--blue-soft);
+  font-size:15px;color:var(--ink);
+}
+.deriv .cierre b{color:var(--blue)}
+
+/* Nexo: dónde vuelve a aparecer esto en el curso */
+.nexo{
+  max-width:var(--maxw);border-left:2px solid var(--accent);padding:1px 0 1px 15px;
+  font-size:14.5px;color:var(--ink-2);line-height:1.55;
+}
+.nexo b{color:var(--ink);font-weight:600}
+
+/* Aviso corto dentro del hilo de la prosa */
+.ojo{
+  max-width:var(--maxw);font-size:15px;color:var(--ink-2);line-height:1.6;
+  background:var(--surface-2);padding:11px 15px;
+}
+.ojo b{color:var(--ink)}
+
+/* Tarjeta del guion del examen */
+.exammap{
+  max-width:var(--maxw);border:1px solid var(--rule-strong);background:var(--surface);
+  padding:16px 18px;margin-top:26px;
+}
+.exammap > b{
+  display:block;font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:12.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;
+}
+.exammap dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:7px 14px;align-items:baseline}
+.exammap dt{font-family:"Roboto Mono",monospace;font-size:12.4px;color:var(--ink-3);white-space:nowrap}
+.exammap dd{margin:0;font-size:14.5px;color:var(--ink-2);line-height:1.5}
+.exammap dd a{color:var(--accent)}
+.exammap p{margin:12px 0 0;font-size:14px;color:var(--ink-3);line-height:1.55}
+
+/* Índice agrupado por bloques */
+nav.toc .blk{
+  font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:11.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+  margin:14px 0 4px;
+}
+</style>
 
 <style id="arena-barra-estilo">
   .arena-volver{
@@ -269,16 +360,29 @@ footer{padding:28px 0 56px;color:var(--ink-3);font-size:13.5px;max-width:var(--m
 
 <nav class="toc" aria-label="Índice de módulos">
   <h2>Índice</h2>
+  <div class="blk">La máquina</div>
   <ol>
     <li><a href="#m1"><span>01</span>Devengo y la BSE</a></li>
+  </ol>
+  <div class="blk">El lado del activo</div>
+  <ol>
     <li><a href="#m2"><span>02</span>Ingresos e incobrables</a></li>
     <li><a href="#m3"><span>03</span>Inventarios y PPE</a></li>
     <li><a href="#m4"><span>04</span>Intangibles y flujo de caja</a></li>
     <li><a href="#m5"><span>05</span>Adquisiciones e inversiones</a></li>
+  </ol>
+  <div class="blk">Lectura</div>
+  <ol>
     <li><a href="#m6"><span>06</span>Ratios y DuPont</a></li>
+  </ol>
+  <div class="blk">El lado del pasivo</div>
+  <ol>
     <li><a href="#m7"><span>07</span>Impuestos diferidos</a></li>
     <li><a href="#m8"><span>08</span>Deuda y arrendamientos</a></li>
     <li><a href="#m9"><span>09</span>Patrimonio y BPA</a></li>
+  </ol>
+  <div class="blk">Aplicación</div>
+  <ol>
     <li><a href="#m10"><span>10</span>Bancos y repaso Tesla</a></li>
     <li><a href="#chuleta"><span>★</span>Mapa de reglas</a></li>
   </ol>
@@ -295,7 +399,7 @@ footer{padding:28px 0 56px;color:var(--ink-3);font-size:13.5px;max-width:var(--m
 <!-- ============ M1 ============ -->
 <section class="module" id="m1">
   <div class="mod-head">
-    <div class="mod-num">Módulo 01</div>
+    <div class="mod-num">Módulo 01 · <b>La máquina</b></div>
     <h2>Contabilidad de devengo y la ecuación del balance</h2>
   </div>
 
@@ -310,6 +414,51 @@ footer{padding:28px 0 56px;color:var(--ink-3);font-size:13.5px;max-width:var(--m
     <p>La tensión <strong>relevancia vs. fiabilidad</strong> recorre todo el curso. Reconocer antes = más útil y más manipulable. Esperar al efectivo = más fiable y más tarde.</p>
 
     <h3>Las tres ecuaciones</h3>
+    <div class="defs">
+      <b>Notación del curso entero</b>
+      <dl>
+        <dt>A = L + SE</dt><dd>la <em>Balance Sheet Equation</em> (BSE). Activo = Pasivo + Patrimonio. Toda la asignatura se responde escribiendo una línea de esta tabla</dd>
+        <dt>RE</dt><dd><em>retained earnings</em>, reservas. La única columna del patrimonio por la que pasa el resultado</dd>
+        <dt>CC</dt><dd><em>contributed capital</em>: lo aportado por los accionistas (nominal + prima). <strong>Nunca</strong> toca la cuenta de resultados</dd>
+        <dt>AOCI</dt><dd><em>other comprehensive income</em>: la tercera columna del patrimonio, donde aterrizan ganancias no realizadas que aún no pasan por resultados</dd>
+        <dt>Devengo</dt><dd><em>accrual</em>: la diferencia entre beneficio y caja de un periodo. Siempre revierte</dd>
+        <dt>AR / DR</dt><dd>cuentas a cobrar (<em>accounts receivable</em>) e ingresos diferidos (<em>deferred revenue</em>)</dd>
+        <dt>PE / AE</dt><dd>gastos anticipados (<em>prepaid expenses</em>) y gastos a pagar (<em>accrued expenses</em>)</dd>
+        <dt>Contra-cuenta</dt><dd>cuenta que resta de otra sin borrarla: amortización acumulada, provisión de insolvencias, autocartera</dd>
+      </dl>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>que la BSE no se pueda romper</em></b>
+      <ol>
+        <li><div>El patrimonio <strong>no se define, se calcula</strong>: es lo que queda de los activos después de pagar a todos los acreedores.
+          <div class="paso">SE ≡ A − L     ⇒     A = L + SE   por definición</div>
+          Que «cuadre» no es un logro contable: es una tautología.</div></li>
+        <li><div>Entonces, ¿qué información hay en un asiento? La que está en <strong>qué cuentas</strong> se mueven, no en si cuadra. Cada transacción hace exactamente una de tres cosas:
+          <div class="paso">(1) mueve activo contra activo      A↑ y A↓
+(2) mueve activo contra pasivo      A↑ y L↑
+(3) mueve activo o pasivo contra
+    patrimonio                      A↑ y SE↑</div></div></li>
+        <li><div>Sólo el tercer tipo puede tocar el resultado, y ni siquiera siempre: dentro del patrimonio hay tres columnas y <strong>sólo una de ellas es la cuenta de resultados</strong>.
+          <div class="paso">SE = CC  +  RE  +  AOCI
+           ↑     ↑      ↑
+      emisión  resultado  ganancias no
+      y prima  y dividendos  realizadas</div></div></li>
+        <li><div>De ahí la pregunta que resuelve el 80% del curso: ante cualquier hecho, <strong>¿esto entra por CC, por RE o por AOCI?</strong>
+          <div class="paso">emitir acciones      → CC    (no es un ingreso)
+recomprar acciones   → CC    (no es un gasto)
+pagar dividendos     → RE    (pero NO por resultados)
+vender mercancía     → RE    (por resultados)
+revaluar un AFS      → AOCI  (por ahora)</div></div></li>
+        <li><div>Y el formato de trabajo del curso es esa misma tabla con una fila por transacción:
+          <div class="paso">           ACTIVO      =   PASIVO   +   PATRIMONIO
+Caja  Otros act.       Pasivo      CC   RE   AOCI
+────────────────────────────────────────────────
+ +100                              +100          ← emisión
+        +60            +60                       ← compra a crédito
+ −20                                     −20     ← dividendo</div></div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> en el examen no se pide «hacer contabilidad», se pide <strong>rellenar una fila de esa tabla</strong>. Y la fila se rellena contestando dos preguntas en orden: <em>¿qué activo o pasivo cambió, y por cuánto?</em> y <em>¿el cuadre entra por resultados o directo al patrimonio?</em> Si la segunda respuesta es «por resultados», ya sabes el efecto en el beneficio.</div>
+    </div>
     <div class="rule">
       <div class="f">1) Balance      Activo = Pasivo + Patrimonio
 2) Resultado    Beneficio = Ingresos − Gastos + Ganancias − Pérdidas
@@ -323,6 +472,35 @@ footer{padding:28px 0 56px;color:var(--ink-3);font-size:13.5px;max-width:var(--m
     </ul>
 
     <h3>Los dos principios del devengo</h3>
+    <div class="deriv">
+      <b>De dónde sale · <em>las cuatro cuentas puente, y por qué son cuatro</em></b>
+      <ol>
+        <li><div>El devengo aparece cuando <strong>el reconocimiento y la caja no coinciden en el tiempo</strong>. Hay dos cosas que reconocer (ingreso o gasto) y dos órdenes posibles (la caja antes o después). Dos por dos: <strong>cuatro casos, ni uno más</strong>.</div></li>
+        <li><div>Ingreso reconocido <em>antes</em> de cobrar. Tienes un derecho: es un <strong>activo</strong>.
+          <div class="paso">venta a crédito     AR ↑ 100  |  RE ↑ 100  (ingreso)
+cobro posterior     Caja ↑ 100, AR ↓ 100  |  nada</div>
+          Fíjate en la segunda línea: <strong>cobrar no genera ingreso</strong>. El ingreso ya se reconoció.</div></li>
+        <li><div>Caja cobrada <em>antes</em> de reconocer el ingreso. Debes un servicio: es un <strong>pasivo</strong>.
+          <div class="paso">cobro anticipado    Caja ↑ 1.200  |  DR ↑ 1.200
+prestas el servicio DR ↓ 300  |  RE ↑ 300  (ingreso)</div></div></li>
+        <li><div>Caja pagada <em>antes</em> del gasto. Tienes un derecho a recibir algo: <strong>activo</strong>.
+          <div class="paso">seguro pagado por año  Caja ↓ 1.200, PE ↑ 1.200
+consumo del trimestre  PE ↓ 300  |  RE ↓ 300  (gasto)</div></div></li>
+        <li><div>Gasto reconocido <em>antes</em> de pagar. Debes dinero: <strong>pasivo</strong>.
+          <div class="paso">sueldos devengados  AE ↑ 500  |  RE ↓ 500  (gasto)
+pago posterior      Caja ↓ 500, AE ↓ 500  |  nada</div></div></li>
+        <li><div>Súmalos y aparece la ley de conservación del curso: cada cuenta puente <strong>nace en un periodo y muere en otro</strong>, y al morir no toca el resultado. Por eso, acumulado sobre toda la vida de la empresa,
+          <div class="paso">Σ beneficios  =  Σ flujos de caja</div>
+          El devengo <strong>reparte</strong> el mismo total entre periodos: nunca lo crea.</div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> todo devengo revierte. De ahí las dos consecuencias prácticas que se preguntan una y otra vez: <strong>(1)</strong> un beneficio inflado hoy es un beneficio deprimido mañana, y <strong>(2)</strong> la diferencia entre beneficio y flujo de caja operativo <em>es</em> la suma de los devengos del periodo — que es exactamente lo que reconstruye el método indirecto del módulo 4.</div>
+    </div>
+    <div class="ojo">
+      <b>Reconocer no es cobrar, y cobrar no es reconocer.</b> Es el error número uno de los enunciados con fechas. Cuando leas «cobra $1.200 el 1 de octubre por doce meses de servicio», la caja entra entera en octubre y el ingreso entra <em>a razón de $100 al mes</em>. Al 31 de diciembre hay $300 de ingreso y <strong>$900 de pasivo</strong>, no de activo. Si te sale un activo, has confundido la dirección de la deuda.
+    </div>
+    <div class="nexo">
+      Esta tabla de cuatro casillas reaparece con otros nombres en todo el curso: la <b>provisión de insolvencias</b> del módulo 2 es un gasto reconocido antes de que se sepa quién no pagará; el <b>impuesto diferido</b> del módulo 7 es exactamente un gasto anticipado (DTA) o una factura pendiente (DTL) con Hacienda; el <b>pasivo por arrendamiento</b> del módulo 8 es un gasto reconocido antes de pagar; y la <b>provisión bancaria</b> del módulo 10 es el mismo mecanismo aplicado a préstamos. <b>Si reconoces la casilla, ya sabes el asiento.</b>
+    </div>
     <div class="rule">
       <div class="f">Reconocimiento de ingresos
   · Proceso de generación sustancialmente completo  (EARNED)
@@ -427,7 +605,7 @@ Balance a 31/12:
 <!-- ============ M2 ============ -->
 <section class="module" id="m2">
   <div class="mod-head">
-    <div class="mod-num">Módulo 02</div>
+    <div class="mod-num">Módulo 02 · <b>El lado del activo</b></div>
     <h2>Reconocimiento de ingresos e incobrables</h2>
   </div>
 
@@ -456,6 +634,54 @@ Balance a 31/12:
     <p><strong>Señal de alerta práctica:</strong> compara el ingreso con el <em>cambio en ingresos diferidos</em> a lo largo del tiempo. En Autonomy pasó del 10,0% de las ventas en 2009 al 0,5% en 2010 — el diferido dejó de crecer mientras el ingreso se disparaba.</p>
 
     <h3>Cuentas a cobrar e incobrables</h3>
+    <div class="defs">
+      <b>Notación del módulo</b>
+      <dl>
+        <dt>AR bruto</dt><dd>lo que los clientes deben según factura</dd>
+        <dt>ADA</dt><dd><em>allowance for doubtful accounts</em>: provisión de insolvencias. Contra-cuenta del AR</dd>
+        <dt>AR neto</dt><dd><code>AR bruto − ADA</code>. Es lo que sale en el balance</dd>
+        <dt>Gasto por incobrables</dt><dd><em>bad debt expense</em>: la <strong>estimación</strong> del periodo. Va a resultados</dd>
+        <dt>Write-off</dt><dd>dar de baja un saldo concreto que ya se sabe incobrable. <strong>No</strong> toca resultados</dd>
+        <dt>Devolución</dt><dd>estimación de ventas que volverán. Misma mecánica, contra ingresos en vez de contra gastos</dd>
+        <dt>Obligación de desempeño</dt><dd>cada promesa distinguible dentro de un contrato. Es la unidad de reconocimiento de ASU 2014-09</dd>
+        <dt>SSP</dt><dd><em>standalone selling price</em>: el precio al que se vendería cada obligación por separado. Es el repartidor del paso 4</dd>
+      </dl>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>que dar de baja un cliente no afecte al beneficio</em></b>
+      <ol>
+        <li><div>El resultado tiene que reflejar el desempeño del periodo. Si esperas a saber <em>quién</em> no paga, reconoces la pérdida uno o dos años después de la venta que la causó — y rompes la correlación.</div></li>
+        <li><div>Así que el gasto se reconoce por <strong>estimación</strong>, en el mismo periodo de la venta, contra una contra-cuenta y no contra clientes concretos:
+          <div class="paso">estimar        ADA ↑ 50     |  RE ↓ 50   (gasto)
+               (ADA resta del activo, así que A ↓ 50)</div></div></li>
+        <li><div>Cuando más tarde identificas al moroso, la pérdida <strong>ya está reconocida</strong>. Lo único que queda es mover el saldo de la cuenta genérica a la concreta:
+          <div class="paso">dar de baja 30   AR bruto ↓ 30
+                 ADA      ↓ 30
+                 ─────────────────
+                 AR neto  sin cambio
+                 RE       SIN CAMBIO</div></div></li>
+        <li><div>Comprueba que el activo neto no se mueve. Con AR bruto 1.000 y ADA 50:
+          <div class="paso">antes:   1.000 − 50 = 950
+después: 970   − 20 = 950   ✓</div>
+          Por eso un write-off <strong>no baja el beneficio, no baja el activo y no baja el patrimonio</strong>. Es una pregunta de examen casi garantizada.</div></li>
+        <li><div>La estimación se calibra al revés: primero decides cuánto <em>debe quedar</em> en la ADA al cierre, y el gasto es lo que falte para llegar ahí.
+          <div class="paso">gasto = ADA objetivo − ADA antes del ajuste
+
+ADA inicial              50
+− bajas del año         (30)
+= saldo antes del ajuste 20
+ADA objetivo             45
+────────────────────────────
+gasto del periodo        25</div></div></li>
+      </ol>
+      <div class="cierre"><b>La secuencia que hay que memorizar:</b> <strong>estimar afecta al resultado, dar de baja no; recuperar un saldo ya dado de baja tampoco</strong>. Y la palanca de manipulación está en el primer paso: subestimar la ADA infla el beneficio de hoy y obliga a un cargo mayor mañana. Comparar el ratio <code>ADA / AR bruto</code> año a año es la forma directa de detectarlo, y sale de un dato que la memoria está obligada a publicar.</div>
+    </div>
+    <div class="ojo">
+      <b>La pregunta encadenada del examen.</b> Un formato clásico: «se da de baja $200M de golpe y la provisión debe quedar en $100M tras la baja; registra las transacciones». Son <strong>dos filas, no una</strong>. Primero la baja (AR bruto −200, ADA −200, resultado sin cambio); después, si la ADA quedó por debajo de los $100M objetivo, el <em>ajuste</em> por la diferencia, que sí es gasto. Contestar sólo la primera fila cuesta la mitad de los puntos.
+    </div>
+    <div class="nexo">
+      La provisión de insolvencias es el <b>prototipo de todas las contra-cuentas del curso</b>, y conviene verlas juntas porque se comportan igual: la <b>amortización acumulada</b> (módulo 3) resta del PPE, la <b>provisión de valoración</b> (módulo 7) resta del DTA, la <b>autocartera</b> (módulo 9) resta del patrimonio, y la <b>provisión por insolvencias de un banco</b> (módulo 10) resta de la cartera de préstamos. En las cuatro: se dota contra resultados por estimación, se consume sin tocar resultados.
+    </div>
     <div class="rule">
       <div class="f">Método DIRECTO (obligatorio para Hacienda)
   Se reconoce la pérdida cuando se da por incobrable
@@ -472,6 +698,49 @@ Ecuación BASE (vale para CUALQUIER cuenta de balance)
 
     <h3>Devoluciones: la hermana gemela</h3>
     <p>Si el cliente puede devolver, el vendedor <strong>estima las devoluciones y reduce el ingreso</strong>. Se usa un pasivo, <em>Liability for Return Allowances</em>. Diferencia clave con los incobrables: la provisión de devoluciones <strong>reduce el ingreso</strong>; el gasto por incobrables <strong>aumenta los gastos</strong>. Distinto sitio en la cuenta de resultados, mismo efecto en el beneficio.</p>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>La cadena completa: dotación, baja y reajuste</span></header>
+    <div class="body">
+      <p class="given">Una empresa abre el año con <strong>AR bruto $3.000M</strong> y <strong>provisión $220M</strong>. Durante el año da de baja <strong>$180M</strong> y cierra con una provisión de <strong>$250M</strong>. Después, el 1 de enero siguiente, una auditoría obliga a dar de baja <strong>$200M</strong> de golpe, y estima que la provisión debe quedar en <strong>$100M</strong> tras la baja. Registra todo.</p>
+      <ol class="steps">
+        <li><div><strong>El gasto del año, deducido hacia atrás.</strong> La provisión es una cuenta de saldo: entra por dotación, sale por bajas.
+          <div class="work">ADA final = ADA inicial + gasto − bajas
+250       = 220         + gasto − 180
+gasto     = 250 − 220 + 180 = $210M</div>
+          Ésta es la pregunta «registra el gasto por incobrables del ejercicio»: <strong>casi nunca te dan el gasto, te dan los otros tres números</strong>.</div></li>
+        <li><div><strong>El asiento de la dotación.</strong>
+          <div class="work">           ACTIVO   =   PASIVO   +   PATRIMONIO
+ADA (contra) −210        —            RE −210</div>
+          Baja el activo neto y baja el beneficio. Es el único momento del ciclo en que el resultado se entera.</div></li>
+        <li><div><strong>Comprobar el saldo neto al cierre.</strong>
+          <div class="work">AR bruto  3.000 − 180 (bajas) + ventas del año…
+ADA         220 + 210 − 180 = 250  ✓</div></div></li>
+        <li><div><strong>Ahora la auditoría. Primera fila: la baja.</strong> Supón que se llega con AR bruto $3.000M y ADA $250M.
+          <div class="work">           ACTIVO   =   PASIVO   +   PATRIMONIO
+AR bruto   −200          —              —
+ADA        +200          —              —
+   (la contra-cuenta baja 200, luego el activo sube 200)
+──────────────────────────────────────────────────
+efecto neto en el activo: CERO
+efecto en el resultado:   CERO</div>
+          AR neto antes: 3.000 − 250 = 2.750. Después: 2.800 − 50 = <strong>2.750</strong>. Idéntico.</div></li>
+        <li><div><strong>Segunda fila: el reajuste.</strong> La provisión quedó en $50M y debe quedar en $100M.
+          <div class="work">dotación adicional = 100 − 50 = $50M
+
+           ACTIVO   =   PASIVO   +   PATRIMONIO
+ADA (contra) −50         —            RE −50</div>
+          <strong>Ésta es la fila que la mayoría olvida</strong>, y es donde está la mitad de los puntos: el enunciado dice «registra la baja <em>y cualquier otra transacción</em>».</div></li>
+        <li><div><strong>El estado final.</strong>
+          <div class="work">AR bruto   2.800
+ADA          100
+─────────────────
+AR neto    2.700   (era 2.750; bajó por la dotación, no por la baja)</div></div></li>
+        <li><div><strong>Lo que hay que poder decir en una frase.</strong> Dar de baja un cliente <strong>no cambia el activo neto ni el beneficio</strong> — la pérdida ya se había reconocido al estimar. Lo que sí los cambia es <em>revisar la estimación</em>. Por eso el ratio <code>ADA / AR bruto</code> año contra año es el indicador que hay que mirar: aquí pasó de 8,3% a 3,6%, una caída fuerte que exige una explicación.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>Gasto del año $210M · la baja no toca resultados · reajuste $50M</span></div>
+    </div>
   </div>
 
   <div class="ex">
@@ -556,7 +825,7 @@ Provisión por devoluciones a 31/12      =  20</div>
 <!-- ============ M3 ============ -->
 <section class="module" id="m3">
   <div class="mod-head">
-    <div class="mod-num">Módulo 03</div>
+    <div class="mod-num">Módulo 03 · <b>El lado del activo</b></div>
     <h2>Inventarios y activos fijos</h2>
   </div>
 
@@ -584,6 +853,53 @@ CÓMO SE REPARTE ese total entre las dos salidas.</div>
     </ul>
 
     <h3>La reserva LIFO: cómo comparar empresas</h3>
+    <div class="defs">
+      <b>Notación del módulo</b>
+      <dl>
+        <dt>COGS</dt><dd>coste de las ventas. La salida del inventario que va a resultados</dd>
+        <dt>Reserva LIFO</dt><dd><code>Inv_FIFO − Inv_LIFO</code>. Lo que el balance LIFO tiene «de menos». Se publica obligatoriamente</dd>
+        <dt>VNC</dt><dd>valor neto contable: <code>coste − amortización acumulada</code></dd>
+        <dt>Valor residual</dt><dd><em>salvage value</em>: lo que se espera recuperar al final. No se amortiza</dd>
+        <dt>Vida útil</dt><dd>periodos sobre los que se reparte. <strong>Es una estimación del gestor</strong></dd>
+        <dt>Deterioro</dt><dd><em>impairment</em>: rebaja del VNC cuando el valor razonable cae por debajo. Nunca se revierte al alza en US GAAP</dd>
+        <dt>Rotación</dt><dd><code>COGS / inventario</code>. Cuántas veces al año se renueva la existencia</dd>
+      </dl>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>Δ Reserva LIFO = COGS_LIFO − COGS_FIFO</em></b>
+      <ol>
+        <li><div>Parte de la ecuación del inventario, que vale igual bajo <em>cualquier</em> supuesto de flujo porque es pura aritmética de almacén:
+          <div class="paso">Inv_inicial + Compras = COGS + Inv_final</div>
+          Las compras del periodo son un hecho, no una elección: <strong>son idénticas bajo LIFO y bajo FIFO</strong>.</div></li>
+        <li><div>Escríbela dos veces, una por método, y resta:
+          <div class="paso">LIFO:  Inv_i^L + C = COGS^L + Inv_f^L
+FIFO:  Inv_i^F + C = COGS^F + Inv_f^F
+       ─────────────────────────────────── restando
+       (Inv_i^L − Inv_i^F) = (COGS^L − COGS^F)
+                           + (Inv_f^L − Inv_f^F)</div></div></li>
+        <li><div>Ahora sustituye la definición <code>Reserva = Inv^F − Inv^L</code>, que cambia los signos:
+          <div class="paso">−Reserva_inicial = (COGS^L − COGS^F) − Reserva_final
+
+⇒  COGS^L − COGS^F = Reserva_final − Reserva_inicial
+                   = Δ Reserva LIFO</div></div></li>
+        <li><div>Despeja lo que necesitas para comparar empresas, que es siempre pasar de lo publicado (LIFO) a la base común (FIFO):
+          <div class="paso">Inv_FIFO  = Inv_LIFO  + Reserva
+COGS_FIFO = COGS_LIFO − Δ Reserva
+Beneficio_FIFO = Beneficio_LIFO + Δ Reserva × (1 − τ)
+Ahorro fiscal acumulado = Reserva × τ</div></div></li>
+        <li><div>Y de ahí sale la respuesta a la pregunta de rotación que aparece en el examen. Pasar de LIFO a FIFO <strong>sube mucho el denominador y baja poco el numerador</strong>:
+          <div class="paso">rotación = COGS / Inventario
+
+FIFO:  COGS un poco MENOR
+       Inventario bastante MAYOR
+       ⇒ rotación MENOR bajo FIFO</div>
+          La razón es la asimetría de acumulación: la reserva es un saldo acumulado durante años, mientras que su <em>variación</em> anual es pequeña.</div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> la reserva LIFO no es un ajuste técnico, es <strong>el único puente entre dos empresas que no se pueden comparar de otra forma</strong> — y sólo funciona en un sentido. Una empresa LIFO se puede reexpresar a FIFO porque publica la reserva; una FIFO <strong>no</strong> se puede reexpresar a LIFO, porque nadie publica el dato que haría falta. Por eso la convención de todo analista es llevarlo todo a FIFO.</div>
+    </div>
+    <div class="ojo">
+      <b>Liquidación de capas LIFO.</b> Si una empresa LIFO vende más de lo que compra, el COGS empieza a sacar unidades de capas antiguas y baratísimas, y el beneficio <strong>se dispara sin que haya mejorado nada</strong> — más un golpe fiscal, porque ese beneficio sí tributa. Es una de las pocas cosas que un gestor puede hacer a fin de año para inflar el resultado, y la memoria está obligada a revelarla. Cuando veas un salto de margen bruto en una empresa LIFO, esto es lo primero que hay que descartar.
+    </div>
     <div class="rule">
       <div class="f">Reserva LIFO = Inv. final FIFO − Inv. final LIFO
 
@@ -596,6 +912,32 @@ CÓMO SE REPARTE ese total entre las dos salidas.</div>
     </div>
 
     <h3>Los cuatro parámetros de la amortización</h3>
+    <div class="deriv">
+      <b>De dónde sale · <em>que alargar la vida útil suba el beneficio y no mueva el flujo de caja</em></b>
+      <ol>
+        <li><div>La amortización no es un pago: es el reparto contable de un desembolso que ya ocurrió. El asiento anual no toca la caja:
+          <div class="paso">Amort. acumulada ↑ 100  (A ↓ 100)  |  RE ↓ 100</div></div></li>
+        <li><div>Si alargas la vida útil de 10 a 15 años sobre un activo de 1.000 sin residual, el gasto anual cae:
+          <div class="paso">antes:  1.000/10 = 100 al año
+después: 1.000/15 =  66,7 al año
+⇒ beneficio antes de impuestos +33,3</div></div></li>
+        <li><div>Con impuestos a cero, ése es todo el efecto en resultados. Ahora el flujo de caja operativo, por el método indirecto:
+          <div class="paso">CFO = Beneficio + Amortización ± Δ circulante
+    = (BN + 33,3) + (Amort − 33,3)
+    = SIN CAMBIO</div>
+          El aumento del beneficio y la reducción del ajuste <strong>se cancelan exactamente</strong>, porque son el mismo número con signos opuestos.</div></li>
+        <li><div>Es el mismo argumento para <em>cualquier</em> partida que sea a la vez un gasto no monetario y su propio ajuste: deterioros, provisiones, retribución en acciones. <strong>Cambiar la estimación mueve el beneficio y deja el CFO donde estaba.</strong></div></li>
+        <li><div>La excepción hay que decirla, porque es la que se pregunta: <strong>si hay impuestos</strong>, el mayor beneficio contable no cambia la base fiscal (Hacienda tiene su propio calendario), así que tampoco cambian los impuestos pagados. El CFO sigue igual. Pero si el cambio <em>sí</em> afectara al impuesto pagado, el CFO se movería en la dirección contraria a la intuición: más beneficio, menos caja.</div></li>
+        <li><div>Y el cambio de estimación es <strong>prospectivo</strong>: no se retoca el pasado. La fórmula que hay que aplicar en el examen es siempre la misma:
+          <div class="paso">nuevo gasto = (VNC actual − nuevo residual)
+              ────────────────────────────
+                 vida útil RESTANTE</div></div></li>
+      </ol>
+      <div class="cierre"><b>La pregunta tipo:</b> «si alarga las vidas útiles, ¿el beneficio y el flujo operativo del año siguiente son mayores, menores o iguales?». La respuesta es <strong>beneficio mayor, flujo operativo igual</strong>, y la razón se dice en una frase: la amortización es un gasto que no se paga, así que sale del resultado y vuelve a entrar en el ajuste. Es el mejor ejemplo de por qué el flujo de caja es más difícil de manipular que el beneficio.</div>
+    </div>
+    <div class="nexo">
+      Esta cancelación entre gasto y ajuste es el <b>eje del módulo 4</b>: el método indirecto entero consiste en deshacer todos los devengos del periodo, uno por uno. También explica un resultado del <b>módulo 6</b>: alargar vidas útiles sube el ROE por dos vías a la vez — más beneficio en el numerador y menos activo amortizado en el denominador — lo que lo convierte en la palanca cosmética más eficiente que existe, y en la primera que hay que mirar al comparar dos empresas del mismo sector.
+    </div>
     <div class="rule">
       <div class="f">Gasto anual (lineal) = (Coste − Valor residual) / Vida útil
 
@@ -729,7 +1071,7 @@ Rotación = COGS / Inventario  →  SUBE por ambos lados</div>
 <!-- ============ M4 ============ -->
 <section class="module" id="m4">
   <div class="mod-head">
-    <div class="mod-num">Módulo 04</div>
+    <div class="mod-num">Módulo 04 · <b>El lado del activo</b></div>
     <h2>Intangibles y estado de flujos de efectivo</h2>
   </div>
 
@@ -757,6 +1099,76 @@ $934.000 M de valor NO están en el activo:
     <p>En software la discrecionalidad es enorme: el 71% de las empresas de software estadounidenses <strong>no capitaliza nada</strong> (asumen que todo el coste ocurre antes de que la finalización sea probable). Bajo IFRS, que anima a capitalizar más, más del 60% tampoco lo hace. ¿Dónde acaba la investigación y empieza el desarrollo? Es un juicio.</p>
 
     <h3>Estado de flujos de efectivo</h3>
+    <div class="defs">
+      <b>Notación del módulo</b>
+      <dl>
+        <dt>CFO</dt><dd>flujo de caja de <em>operaciones</em>. El que importa: mide si el negocio genera efectivo</dd>
+        <dt>CFI / CFF</dt><dd>flujos de <em>inversión</em> (comprar y vender activos) y de <em>financiación</em> (deuda, acciones, dividendos)</dd>
+        <dt>Método indirecto</dt><dd>reconstruir el CFO partiendo del beneficio y deshaciendo todos los devengos</dd>
+        <dt>Capitalizar</dt><dd>registrar un desembolso como activo y llevarlo a resultados a lo largo de varios años</dd>
+        <dt>Llevar a gasto</dt><dd><em>expense</em>: registrarlo entero en el resultado del periodo</dd>
+        <dt>Intangible generado</dt><dd>marca, I+D, cartera de clientes propios. <strong>No</strong> se activa en US GAAP salvo excepciones tasadas</dd>
+        <dt>Intangible adquirido</dt><dd>el mismo activo, comprado a un tercero. <strong>Sí</strong> se activa: hay un precio verificable</dd>
+      </dl>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>el método indirecto, línea por línea</em></b>
+      <ol>
+        <li><div>Objetivo: pasar del beneficio (base devengo) a la variación de caja de operaciones. Empieza por la ecuación del balance y desglosa el activo:
+          <div class="paso">Caja + Otros activos = Pasivo + SE</div></div></li>
+        <li><div>Toma variaciones de un periodo y despeja la caja, que es lo que se busca:
+          <div class="paso">ΔCaja = ΔPasivo + ΔSE − ΔOtros activos</div>
+          Ya está: <strong>el estado de flujos completo cabe en esta línea</strong>. Lo demás es clasificar.</div></li>
+        <li><div>Descompón el patrimonio. La única parte que interesa al CFO es el beneficio:
+          <div class="paso">ΔSE = Beneficio − Dividendos + Emisiones − Recompras
+                          └──── esto es CFF ────┘</div></div></li>
+        <li><div>Sustituye y agrupa lo que queda por naturaleza:
+          <div class="paso">ΔCaja = Beneficio
+      − Δ(activos operativos no caja)   ← AR, inventario, PE
+      + Δ(pasivos operativos)           ← proveedores, AE, DR
+      − Δ(activos fijos)                ← CFI
+      + Δ(deuda) + emisiones − dividendos ← CFF</div></div></li>
+        <li><div>Falta un ajuste, y es el que confunde. Los gastos <strong>no monetarios</strong> (amortización, deterioros, retribución en acciones) ya redujeron el beneficio pero nunca tocaron la caja: hay que devolverlos.
+          <div class="paso">CFO = Beneficio
+    + gastos no monetarios
+    − Δ activos circulantes operativos
+    + Δ pasivos circulantes operativos</div></div></li>
+        <li><div>Y de ahí la regla de signos, que se recuerda por lo que significa y no de memoria:
+          <div class="paso">sube un ACTIVO   ⇒ pusiste caja ahí     ⇒ RESTA
+sube un PASIVO   ⇒ alguien te financió  ⇒ SUMA</div></div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> el método indirecto no es una receta arbitraria — es <strong>la ecuación del balance despejada para la caja</strong>. Y explica el fenómeno que hace atractivo el estado de flujos: una empresa puede elegir cuándo reconoce un ingreso, pero no puede elegir cuándo entra el dinero. La brecha entre beneficio y CFO <em>es</em> el devengo del periodo, y una brecha que crece año tras año en la misma dirección es la señal de alerta más antigua del análisis.</div>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>que capitalizar mejore el beneficio y el CFO a la vez</em></b>
+      <ol>
+        <li><div>Una empresa gasta 300 en desarrollar software. Tiene dos tratamientos posibles y la elección cambia <strong>tres</strong> cifras, no una.</div></li>
+        <li><div>Si lo lleva a gasto:
+          <div class="paso">Caja ↓ 300  |  RE ↓ 300
+CFO = −300      CFI = 0</div></div></li>
+        <li><div>Si lo capitaliza con vida de 3 años:
+          <div class="paso">año 1  Caja ↓ 300, Activo ↑ 300   |  RE sin cambio
+       amortización: Activo ↓ 100 | RE ↓ 100
+CFO = 0         CFI = −300</div></div></li>
+        <li><div>Compara el año 1. Capitalizar mejora <strong>las dos</strong> métricas que se miran:
+          <div class="paso">              a gasto   capitalizado
+beneficio      −300        −100
+CFO            −300           0
+caja total     −300        −300   ← IDÉNTICA</div>
+          El desembolso es el mismo. Lo que cambió es <strong>en qué sección del estado de flujos aparece</strong>.</div></li>
+        <li><div>En un régimen estacionario (se capitaliza lo mismo cada año) las dos rutas convergen: la amortización acumulada iguala al desembolso anual y el beneficio coincide. La ventaja de capitalizar es <strong>transitoria y crece mientras crece el gasto</strong>, que es justo la situación de una empresa en expansión.</div></li>
+        <li><div>De ahí el ajuste que hace un analista para comparar dos empresas con políticas distintas: recalcular la amortización con la vida útil de la otra.
+          <div class="paso">amortización pro forma del año t con vida n
+  = (1/n) × Σ de los últimos n desembolsos capitalizados</div></div></li>
+      </ol>
+      <div class="cierre"><b>La consecuencia práctica:</b> «CFO creciente» no es prueba de nada si la empresa cambió lo que capitaliza. Antes de comparar dos empresas del mismo sector hay que <strong>igualar la política de capitalización y la vida útil</strong> — y los dos datos están en la memoria. Es el ejercicio de Athena contra Cerner del reto de este módulo, y una de las preguntas de análisis más frecuentes del curso.</div>
+    </div>
+    <div class="ojo">
+      <b>La asimetría que parece incoherente y no lo es.</b> Una marca comprada aparece en el balance; la misma marca construida en casa, no. El criterio no es económico sino <strong>de fiabilidad</strong>: la compra tiene un precio negociado entre dos partes independientes, y el desarrollo interno sólo tiene la estimación del propio gestor. Es la tensión relevancia-fiabilidad del módulo 1 resuelta a favor de la fiabilidad — y la razón por la que el balance de una empresa de software se parece tan poco a su valor de mercado.
+    </div>
+    <div class="nexo">
+      Esta asimetría es exactamente lo que crea el <b>fondo de comercio</b> del módulo 5: cuando compras una empresa entera, pagas por sus intangibles no reconocidos, y ese exceso <em>sí</em> entra al balance porque ahora tiene precio. También conecta con el <b>módulo 6</b>: un sector que no puede activar sus intangibles muestra ROE altísimos con activos casi vacíos, y compararlo con un sector intensivo en capital es comparar dos cosas distintas.
+    </div>
     <div class="rule">
       <div class="f">A = L + SE   ⇒   ΔCaja = −ΔActivos no caja + ΔPasivo + ΔPatrimonio
 
@@ -868,7 +1280,7 @@ FCF                 −18,8%     7,1%</div>
 <!-- ============ M5 ============ -->
 <section class="module" id="m5">
   <div class="mod-head">
-    <div class="mod-num">Módulo 05</div>
+    <div class="mod-num">Módulo 05 · <b>El lado del activo</b></div>
     <h2>Adquisiciones e inversiones financieras</h2>
   </div>
 
@@ -879,6 +1291,68 @@ FCF                 −18,8%     7,1%</div>
 
   <div class="prose">
     <h3>Contabilidad de adquisiciones (purchase accounting)</h3>
+    <div class="defs">
+      <b>Notación del módulo</b>
+      <dl>
+        <dt>Precio pagado</dt><dd>lo que entrega el comprador: caja, acciones o ambas, a valor razonable</dd>
+        <dt>Valor razonable neto</dt><dd><em>fair value</em> de los activos identificables menos los pasivos asumidos, revalorizados a la fecha de compra</dd>
+        <dt>Fondo de comercio</dt><dd><em>goodwill</em>: <code>precio − valor razonable neto</code>. El residuo, no una partida que se estime</dd>
+        <dt>Intangibles identificables</dt><dd>marcas, patentes, cartera de clientes de la adquirida. Se reconocen y <strong>sí</strong> se amortizan</dd>
+        <dt>Deterioro del goodwill</dt><dd>única forma en que el goodwill baja. No se amortiza sistemáticamente</dd>
+        <dt>Coste</dt><dd>método para participaciones bajo 20%: se mantiene a valor razonable</dd>
+        <dt>Puesta en equivalencia</dt><dd><em>equity method</em>, entre 20% y 50%: se reconoce la parte proporcional del resultado</dd>
+        <dt>Consolidación</dt><dd>por encima del 50%: se suman línea a línea los estados de la filial, con interés minoritario</dd>
+      </dl>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>el fondo de comercio como residuo</em></b>
+      <ol>
+        <li><div>Comprar una empresa es comprar una cesta de cosas. La contabilidad exige repartir el precio entre esas cosas, y lo hace en un orden estricto: <strong>primero todo lo identificable, y el goodwill es lo que sobre</strong>.</div></li>
+        <li><div>Paso 1: revaloriza a valor razonable los activos y pasivos que la adquirida <em>ya tenía en su balance</em>. Su valor contable es irrelevante para el comprador.
+          <div class="paso">PPE en libros de la adquirida  1.000
+valor razonable                1.400   ← entra 1.400</div></div></li>
+        <li><div>Paso 2: reconoce los intangibles identificables que la adquirida <strong>no podía activar</strong> porque los generó ella misma — marcas, cartera de clientes, tecnología. Ahora sí se activan: hay una transacción que les pone precio.</div></li>
+        <li><div>Paso 3: resta los pasivos asumidos, también a valor razonable. Y ahora sí, el residuo:
+          <div class="paso">Precio pagado                        7.358
+− valor razonable de activos ident.  (5.900)
++ valor razonable de pasivos asum.    1.200
+──────────────────────────────────────────
+Fondo de comercio                    2.658</div></div></li>
+        <li><div>El asiento en la BSE del comprador, si paga en efectivo, no toca el resultado en absoluto:
+          <div class="paso">Caja           ↓ 7.358
+Activos ident. ↑ 5.900
+Goodwill       ↑ 2.658
+Pasivos        ↑ 1.200
+──────────────────────────────
+A: −7.358 +8.558 = +1.200 = ΔL  ✓
+RE: sin cambio</div></div></li>
+        <li><div>Después de la compra, cada pieza sigue su propio camino, y <strong>ahí está el efecto en resultados de los años siguientes</strong>:
+          <div class="paso">PPE revalorizado    → más amortización que antes
+Intangibles ident.  → se amortizan (vida definida)
+Goodwill            → NO se amortiza; sólo deteriora</div></div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> el goodwill <strong>no se calcula, se descubre</strong>: es lo que queda cuando ya no hay nada más que nombrar. Por eso un goodwill enorme respecto del precio significa una de dos cosas — o se compró algo cuyo valor no cabe en ninguna categoría (sinergias, equipo, posición competitiva), o <strong>se pagó de más</strong>. Y como no se amortiza, la única manera en que un sobreprecio aparece en resultados es de golpe, años después, vía deterioro: el caso HP-Autonomy.</div>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>la escalera del control (10% · 40% · 100%)</em></b>
+      <ol>
+        <li><div>La pregunta que decide todo es <strong>cuánta influencia tienes sobre las decisiones de la participada</strong>, y la norma la aproxima con umbrales de porcentaje.</div></li>
+        <li><div>Bajo 20% — <strong>ninguna influencia</strong>. Eres un inversor más, así que el mejor dato es lo que el mercado dice que vale. Se lleva a valor razonable, y desde 2018 los cambios pasan por resultados:
+          <div class="paso">compra 10% por 740      Caja ↓ 740, Inversión ↑ 740
+cae a 700 al cierre     Inversión ↓ 40 | RE ↓ 40</div></div></li>
+        <li><div>Entre 20% y 50% — <strong>influencia significativa</strong>. Ya no eres un espectador: puedes condicionar el dividendo, así que el valor de mercado deja de ser un dato limpio. Se reconoce la parte proporcional del <em>resultado</em>:
+          <div class="paso">compra 40% por 2.950    Caja ↓ 2.950, Inversión ↑ 2.950
+la participada gana 500 Inversión ↑ 200 | RE ↑ 200
+reparte dividendo 100   Caja ↑ 40, Inversión ↓ 40 | nada</div>
+          <strong>El dividendo no es ingreso</strong>: sólo convierte inversión en caja. Es la misma lógica de cobrar una cuenta a cobrar.</div></li>
+        <li><div>Por encima del 50% — <strong>control</strong>. La participada ya no es una inversión, es una parte de la empresa: se consolida línea a línea, y la porción ajena aparece como <em>interés minoritario</em> dentro del patrimonio.</div></li>
+        <li><div>Comprueba la coherencia del sistema: en los tres casos, <strong>cuanto más control tienes, más profundo entra la participada en tus estados</strong>. Con 10% sólo ves un activo; con 40%, un activo y una línea de resultado; con 100%, todo.</div></li>
+      </ol>
+      <div class="cierre"><b>La trampa que se pregunta:</b> los tres tratamientos aplicados a la <em>misma</em> compra dan beneficios distintos, y el examen suele pedir precisamente eso — «registra la misma operación como 100%, como 40% y como 10%». Lo que hay que tener claro es qué mueve el resultado en cada caso: en el 100% nada al comprar; en el 40% <strong>el resultado de la participada, no su dividendo</strong>; en el 10% <strong>el cambio de valor de mercado, no su resultado</strong>.</div>
+    </div>
+    <div class="nexo">
+      La escalera del control es el módulo 5, pero su ingrediente viene del <b>módulo 4</b>: lo que hace que aparezca goodwill es precisamente que los intangibles generados internamente <em>no</em> estaban en el balance de la adquirida. Y su consecuencia se cobra en el <b>módulo 6</b>: una empresa que ha crecido comprando arrastra un activo enorme (goodwill más intangibles revalorizados) que una empresa que creció orgánicamente no tiene, así que su rotación de activos y su ROE salen estructuralmente más bajos. <b>No se pueden comparar sin ajustar.</b>
+    </div>
     <div class="rule">
       <div class="f">Todo el precio pagado entra en el balance del comprador, repartido en:
 
@@ -961,6 +1435,54 @@ Patrimonio neto      −3.463  +51.226      47.763</div>
   </div>
 
   <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>La misma compra al 100%, al 40% y al 10%</span></header>
+    <div class="body">
+      <p class="given">En agosto, una empresa entra en el capital de otra. Sus activos identificables valen <strong>$5.900M</strong> a valor razonable y sus pasivos asumidos <strong>$1.200M</strong>. Registra tres escenarios alternativos: comprar el <strong>100% por $7.358M</strong>, el <strong>40% por $2.950M</strong> o el <strong>10% por $740M</strong>, todo en efectivo. Y en el tercer caso, la participación vale <strong>$700M</strong> al cierre del ejercicio. <em>(Es la estructura de la pregunta 3 del examen de muestra.)</em></p>
+      <ol class="steps">
+        <li><div><strong>Escenario A — 100%: consolidación.</strong> Primero el reparto del precio, en el orden obligatorio:
+          <div class="work">Precio pagado                       7.358
+− activos identificables a v.r.    (5.900)
++ pasivos asumidos a v.r.           1.200
+────────────────────────────────────────
+Fondo de comercio (residuo)         2.658</div></div></li>
+        <li><div><strong>El asiento del escenario A.</strong> Desaparece la «inversión» y entran los activos y pasivos uno a uno:
+          <div class="work">           ACTIVO   =   PASIVO   +   PATRIMONIO
+Caja      −7.358      Pasivos +1.200        —
+Act. ident.+5.900
+Goodwill  +2.658
+──────────────────────────────────────────
+A: +1.200  =  L: +1.200   ✓   RE: sin cambio</div>
+          <strong>Comprar no genera resultado.</strong> El efecto llega después, vía más amortización de los activos revalorizados.</div></li>
+        <li><div><strong>Escenario B — 40%: puesta en equivalencia.</strong> No hay consolidación ni goodwill separado: una sola línea de activo.
+          <div class="work">           ACTIVO   =   PASIVO   +   PATRIMONIO
+Caja      −2.950          —              —
+Inversión +2.950</div>
+          El sobreprecio implícito (2.950 − 40%×4.700 = 1.070) queda <em>dentro</em> de la cuenta de inversión, sin desglosar.</div></li>
+        <li><div><strong>Qué pasa después en el escenario B.</strong> Aquí está lo que se pregunta:
+          <div class="work">la participada gana 500  →  Inversión +200 | RE +200
+la participada reparte
+   un dividendo de 100  →  Caja +40, Inversión −40 | nada</div>
+          <strong>El resultado entra, el dividendo no.</strong> Cobrar un dividendo es convertir inversión en caja, exactamente igual que cobrar una cuenta a cobrar.</div></li>
+        <li><div><strong>Escenario C — 10%: valor razonable.</strong> Sin influencia, el mejor dato es el mercado.
+          <div class="work">           ACTIVO   =   PASIVO   +   PATRIMONIO
+Caja        −740          —              —
+Inversión   +740</div></div></li>
+        <li><div><strong>El cierre del ejercicio en el escenario C.</strong> La participación vale 700:
+          <div class="work">           ACTIVO   =   PASIVO   +   PATRIMONIO
+Inversión   −40           —          RE −40</div>
+          Una pérdida de $40M <strong>sin haber vendido nada</strong>. Desde 2018 estos cambios de valor pasan por resultados y no por AOCI, lo que hace mucho más volátil el beneficio de las empresas con carteras grandes.</div></li>
+        <li><div><strong>Los tres juntos, que es lo que hay que ver.</strong>
+          <div class="work">              qué mueve el resultado después
+100%   los resultados de la filial, línea a línea
+ 40%   el RESULTADO de la participada (no su dividendo)
+ 10%   el VALOR DE MERCADO (no su resultado)</div>
+          Tres tratamientos para el mismo negocio, y la única variable que decide es <strong>cuánta influencia tienes</strong>. Contestar «depende del porcentaje» sin nombrar qué mueve el resultado en cada caso deja la mitad de los puntos sobre la mesa.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>Goodwill $2.658M · el 40% reconoce resultados · el 10% reconoce precio</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
     <header><b>Ejemplo resuelto</b><span>Deterioro del fondo de comercio: HP y Autonomy</span></header>
     <div class="body">
       <p class="given">2011: HP compra Autonomy por $11.000 M en efectivo; registra $6.600 M de fondo de comercio y $4.600 M de intangibles amortizables. 2012: HP anuncia un saneamiento de $8.800 M.</p>
@@ -1037,7 +1559,7 @@ AVAILABLE FOR SALE — lo no realizado va a OCI
 <!-- ============ M6 ============ -->
 <section class="module" id="m6">
   <div class="mod-head">
-    <div class="mod-num">Módulo 06</div>
+    <div class="mod-num">Módulo 06 · <b>Lectura</b></div>
     <h2>Análisis de estados financieros y DuPont</h2>
   </div>
 
@@ -1069,6 +1591,74 @@ EFICIENCIA — ¿gestiona bien sus recursos?
     </div>
 
     <h3>La descomposición DuPont</h3>
+    <div class="defs">
+      <b>Notación del módulo</b>
+      <dl>
+        <dt>ROE</dt><dd><code>Beneficio neto / Patrimonio</code>. Lo que gana el accionista por peso invertido</dd>
+        <dt>ROA</dt><dd><code>Beneficio neto / Activo</code>. Lo que rinde el negocio, sin mirar cómo se financia</dd>
+        <dt>Margen neto</dt><dd><code>Beneficio / Ventas</code>. Cuánto queda de cada peso vendido</dd>
+        <dt>Rotación de activos</dt><dd><code>Ventas / Activo</code>. Cuántas ventas saca de cada peso de activo</dd>
+        <dt>Apalancamiento</dt><dd><code>Activo / Patrimonio</code>. Cuántos pesos de activo sostiene cada peso propio</dd>
+        <dt>Liquidez</dt><dd>corriente = <code>AC/PC</code>; ácida = <code>(caja + AR)/PC</code>. Capacidad de pagar a corto</dd>
+        <dt>Solvencia</dt><dd><code>Deuda/Patrimonio</code>, cobertura de intereses. Capacidad de pagar a largo</dd>
+      </dl>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>ROE = margen × rotación × apalancamiento</em></b>
+      <ol>
+        <li><div>El truco es multiplicar por uno, dos veces. Parte del ROE y mete las ventas y el activo como factores que se cancelan:
+          <div class="paso">        Beneficio     Beneficio   Ventas   Activo
+ROE  =  ───────── =  ───────── × ────── × ────────
+        Patrimonio     Ventas    Activo  Patrimonio</div>
+          Tacha Ventas contra Ventas y Activo contra Activo: vuelve el ROE. La identidad es exacta, no una aproximación.</div></li>
+        <li><div>Los tres factores no son tres números cualesquiera: son <strong>tres decisiones distintas de tres personas distintas</strong>.
+          <div class="paso">margen        → política de precios y costes  (comercial)
+rotación      → eficiencia del activo       (operaciones)
+apalancamiento→ estructura de capital       (finanzas)</div></div></li>
+        <li><div>Los dos primeros forman el ROA, que mide el negocio sin el financiamiento:
+          <div class="paso">ROA = margen × rotación
+ROE = ROA × apalancamiento</div>
+          De ahí la lectura: <strong>el ROE se puede subir sin mejorar el negocio</strong>, simplemente endeudándose. El ROA no.</div></li>
+        <li><div>Y de ahí el patrón sectorial que hay que reconocer de un vistazo, porque los dos primeros factores se compensan:
+          <div class="paso">                   margen  rotación   ROA
+supermercado        1-2%     3,0     3-6%
+software           25%       0,5    12,5%
+banco              25%       0,04     1%   ← ROE vía apalancamiento</div></div></li>
+        <li><div>El caso del banco es el que cierra el arco del curso: un ROA del 1% con apalancamiento de 12 da un ROE del 12%. <strong>Todo el retorno del accionista bancario viene del tercer factor</strong> — y por eso el módulo 10 dedica el tiempo que dedica a las provisiones, que es lo único que puede borrar ese patrimonio delgadísimo.</div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> dos empresas con el mismo ROE pueden ser negocios opuestos, y la descomposición dice cuál es cuál. Un ROE del 15% con margen 1%, rotación 3,0 y apalancamiento 5,0 es <strong>frágil</strong>: depende de mantener el volumen y de que nadie le corte el crédito. El mismo 15% con margen 10%, rotación 0,75 y apalancamiento 2,0 tiene <strong>colchón</strong> por los dos lados. La pregunta «¿cuál prefieres?» siempre se contesta nombrando los tres factores, nunca el ROE.</div>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>la regla de sumar lo mismo arriba y abajo</em></b>
+      <ol>
+        <li><div>Muchas preguntas de examen son de la forma «sube esta partida, ¿qué le pasa al ratio?». Casi todas son el mismo caso: sumar <code>x</code> al numerador y al denominador de un cociente.</div></li>
+        <li><div>Compara <code>a/b</code> con <code>(a+x)/(b+x)</code>. La diferencia tiene un signo predecible:
+          <div class="paso">a + x     a      x·(b − a)
+─────  −  ─  =  ───────────
+b + x     b      b·(b + x)</div></div></li>
+        <li><div>Como <code>b</code> y <code>b+x</code> son positivos, el signo lo pone <code>(b − a)</code>:
+          <div class="paso">si a/b < 1  ⇒  el ratio SUBE  (se acerca a 1 desde abajo)
+si a/b > 1  ⇒  el ratio BAJA  (se acerca a 1 desde arriba)</div>
+          Sumar lo mismo arriba y abajo <strong>siempre empuja el ratio hacia 1</strong>.</div></li>
+        <li><div>Aplícalo al ratio de liquidez corriente, que es el caso favorito del examen:
+          <div class="paso">empresa líquida (AC/PC = 2,0)
+  pedir prestado a corto: AC +100, PC +100
+  ⇒ el ratio BAJA hacia 1
+
+empresa apretada (AC/PC = 0,7)
+  la misma operación
+  ⇒ el ratio SUBE hacia 1</div>
+          La misma transacción mejora a una y empeora a la otra. <strong>La respuesta correcta es siempre «depende de si el ratio está por encima o por debajo de 1»</strong>.</div></li>
+        <li><div>Y el corolario incómodo: si el ratio corriente es la métrica de un covenant, la empresa apretada puede cumplirlo <strong>endeudándose más</strong>. Es la razón por la que los covenants modernos usan cobertura de intereses y deuda sobre EBITDA, que no tienen esta patología.</div></li>
+      </ol>
+      <div class="cierre"><b>Regla de bolsillo:</b> ante cualquier «¿sube o baja?», identifica si la transacción suma lo mismo a los dos lados. Si es así, <strong>la respuesta no depende de la transacción sino del punto de partida</strong>. Y si sólo toca a uno de los dos lados, la respuesta es inmediata y no hace falta pensar.</div>
+    </div>
+    <div class="ojo">
+      <b>Fin de ejercicio o media del año.</b> Casi todos los ratios se pueden calcular con el saldo <em>final</em> o con la <em>media</em> del año, y dan números distintos. El curso — y el examen — usan los <strong>saldos finales</strong>, y lo dicen explícitamente en la definición de cada ratio. Lo importante en la práctica es otra cosa: <strong>usar el mismo criterio en las dos empresas que comparas</strong>. Una empresa que hizo una adquisición grande en diciembre tiene el activo entero en el denominador y sólo un mes de sus ventas en el numerador, y su rotación sale artificialmente hundida.
+    </div>
+    <div class="nexo">
+      El DuPont es el punto donde se cobran todas las decisiones contables de los módulos anteriores. <b>Alargar vidas útiles</b> (módulo 3) sube el margen y baja el activo: el ROE sube por dos vías. <b>Capitalizar</b> (módulo 4) hace lo mismo. <b>Crecer comprando</b> (módulo 5) hunde la rotación por el goodwill. <b>Recomprar acciones</b> (módulo 9) sube el apalancamiento sin tocar el negocio. Por eso el DuPont no es una herramienta de valoración sino de <b>diagnóstico</b>: dice por dónde entrar a mirar la memoria.
+    </div>
     <div class="rule">
       <div class="f">     BN         BN          Ventas        Activo
 ROE = ──── = ────────  ×  ─────────  ×  ─────────
@@ -1180,7 +1770,7 @@ B:  ROA = 10% × 0,75 = 7,5% apalancamiento 2,0  →  ROE 15%</div>
 <!-- ============ M7 ============ -->
 <section class="module" id="m7">
   <div class="mod-head">
-    <div class="mod-num">Módulo 07</div>
+    <div class="mod-num">Módulo 07 · <b>El lado del pasivo</b></div>
     <h2>Impuesto sobre beneficios</h2>
   </div>
 
@@ -1210,6 +1800,76 @@ DIFERENCIA PERMANENTE — nunca revierte
     </div>
 
     <h3>Tipo efectivo y bases imponibles negativas</h3>
+    <div class="defs">
+      <b>Notación del módulo</b>
+      <dl>
+        <dt>PTI</dt><dd><em>pre-tax income</em>: resultado <strong>contable</strong> antes de impuestos</dd>
+        <dt>Base imponible</dt><dd>el resultado según las reglas de Hacienda. Otro libro, otras reglas</dd>
+        <dt>Gasto por impuestos</dt><dd>lo que aparece en la cuenta de resultados. <strong>No</strong> es lo que se paga</dd>
+        <dt>Impuesto a pagar</dt><dd><em>taxes payable</em>: lo que se le debe a Hacienda por el ejercicio. Sí es caja (o pasivo corriente)</dd>
+        <dt>DTL</dt><dd>pasivo por impuesto diferido. Nace cuando el gasto contable va por detrás del fiscal</dd>
+        <dt>DTA</dt><dd>activo por impuesto diferido. Nace cuando el gasto contable va por delante del fiscal</dd>
+        <dt>NOL</dt><dd><em>net operating loss</em>: pérdida fiscal que se compensa con beneficios futuros. Crea DTA</dd>
+        <dt>Provisión de valoración</dt><dd>contra-cuenta del DTA cuando no se espera poder usarlo</dd>
+        <dt>Tipo efectivo</dt><dd><code>gasto por impuestos / PTI</code>. El único número comparable entre empresas</dd>
+      </dl>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>el asiento del impuesto, y por qué tiene tres piezas</em></b>
+      <ol>
+        <li><div>Hay dos contabilidades sobre los mismos hechos: la contable, que sigue el devengo, y la fiscal, que sigue el código tributario. <strong>El asiento del impuesto es el que reconcilia ambas.</strong></div></li>
+        <li><div>El principio de correlación exige que el gasto por impuestos acompañe al <em>resultado contable</em>, no al fiscal. Si no, un año con mucha deducción fiscal mostraría un margen neto absurdo:
+          <div class="paso">Gasto por impuestos ≈ τ × PTI (corregido por permanentes)</div></div></li>
+        <li><div>Pero a Hacienda hay que pagarle según <em>su</em> cuenta:
+          <div class="paso">Impuesto a pagar = τ × base imponible</div></div></li>
+        <li><div>Las dos cifras rara vez coinciden, y la diferencia es exactamente lo que se aparca en el diferido. De ahí las tres piezas del asiento:
+          <div class="paso">Gasto por impuestos = Impuesto a pagar + Δ DTL − Δ DTA
+      (resultado)         (caja/pasivo)   (puente)</div></div></li>
+        <li><div>El caso canónico: activo de 100.000, contable lineal a 2 años, fiscal deducible entero en el año 1, tipo 35%. PTI antes de amortizar = 100.000 los dos años.
+          <div class="paso">                        año 1     año 2
+PTI contable            50.000    50.000
+base imponible               0   100.000
+──────────────────────────────────────────
+gasto por impuestos     17.500    17.500  ← igual
+impuesto a pagar             0    35.000  ← distinto
+Δ DTL                  +17.500   −17.500</div>
+          El beneficio neto es 32.500 los dos años: <strong>el gasto queda liso aunque la caja no lo esté</strong>. Eso es exactamente para lo que existe el diferido.</div></li>
+        <li><div>Y la comprobación que evita equivocarse de signo: mira siempre <strong>quién cobra primero</strong>.
+          <div class="paso">Hacienda cobra DESPUÉS  ⇒ le debes  ⇒ DTL (pasivo)
+Hacienda cobra ANTES    ⇒ te debe  ⇒ DTA (activo)</div></div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> el diferido es una cuenta puente idéntica en espíritu a «clientes» o «gastos anticipados» del módulo 1 — sólo que el contrapartida es Hacienda. Un <strong>DTA es un gasto pagado por adelantado</strong> al fisco; un <strong>DTL es una factura pendiente</strong>. Y como toda cuenta puente, revierte: por eso una diferencia temporal <em>no</em> mueve el tipo efectivo, y una permanente sí.</div>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>que el tipo efectivo se separe del legal</em></b>
+      <ol>
+        <li><div>Si todas las diferencias fueran temporales, el gasto por impuestos sería <code>τ × PTI</code> exacto y el tipo efectivo sería el legal, año tras año. Que no lo sea significa que hay algo que <strong>nunca revierte</strong>.</div></li>
+        <li><div>Escribe el gasto separando los dos tipos de diferencia:
+          <div class="paso">Gasto = τ × (PTI − permanentes) ± ajustes
+tipo efectivo = Gasto / PTI
+              = τ − τ×(permanentes/PTI) ± ajustes/PTI</div></div></li>
+        <li><div>Cada término tiene un nombre concreto en la memoria fiscal, y son <strong>los mismos cuatro sospechosos siempre</strong>:
+          <div class="paso">· diferencias permanentes
+    ingresos exentos (bonos municipales)   → baja el tipo
+    gastos no deducibles (multas)          → sube el tipo
+· filiales extranjeras con tipos menores   → baja el tipo
+· cambio de tipo legal: hay que revalorizar
+    TODO el stock de DTA/DTL de golpe      → salto puntual
+· retribución en acciones                  → cualquiera de los dos</div></div></li>
+        <li><div>El tercer punto es el que produce los saltos raros y el que hay que saber explicar: <strong>cuando cambia el tipo legal, los diferidos acumulados valen otra cosa</strong>, y el ajuste entero cae en el resultado del año del cambio.
+          <div class="paso">tipo baja de 35% a 21%
+ · un DTL grande se reduce ⇒ ingreso extraordinario
+ · un DTA grande se reduce ⇒ gasto extraordinario</div></div></li>
+        <li><div>Por eso, para juzgar la carga fiscal real de una empresa, hay que <strong>quitar del tipo efectivo los efectos de una sola vez</strong> y quedarse con los recurrentes. La conciliación del tipo legal al efectivo está publicada en la memoria y es exactamente esa tabla.</div></li>
+      </ol>
+      <div class="cierre"><b>La pregunta de examen:</b> «explica por qué el tipo efectivo de 2016 difiere del 35% legal» se contesta <strong>nombrando las líneas de la conciliación</strong>, no calculando nada — y en la práctica, para una multinacional, la respuesta casi siempre es la misma: <em>utilidades ganadas en jurisdicciones con tipos más bajos</em>. Si además el año tiene un salto grande, el segundo sospechoso es la revalorización de diferidos por un cambio de tipo.</div>
+    </div>
+    <div class="ojo">
+      <b>La provisión de valoración es la contra-cuenta del módulo 2 otra vez.</b> Un DTA sólo vale si habrá beneficios futuros contra los que compensarlo; si no los habrá, se reduce con una provisión, exactamente como la de insolvencias. Y como toda contra-cuenta, se dota y se libera contra resultados: <strong>liberar provisión de valoración es un ingreso</strong>. Una empresa que sale de pérdidas suele mostrar un año de beneficio inflado por ese motivo, sin haber vendido un peso más.
+    </div>
+    <div class="nexo">
+      Los impuestos diferidos son el ejemplo más puro de la tesis del <b>módulo 1</b>: el devengo reparte en el tiempo un total que no cambia. Y son la razón por la que en el <b>módulo 3</b> importa tanto la regla de conformidad LIFO: es el único caso en que la ley <em>prohíbe</em> llevar dos libros distintos, y por eso el ahorro fiscal del LIFO se paga con un beneficio contable menor. En el <b>módulo 8</b> reaparece con los arrendamientos, que también tienen calendarios contable y fiscal distintos.
+    </div>
     <div class="rule">
       <div class="f">Tipo efectivo = Gasto por impuestos / Resultado antes de impuestos
 
@@ -1364,7 +2024,7 @@ Asiento del año 3:
 <!-- ============ M8 ============ -->
 <section class="module" id="m8">
   <div class="mod-head">
-    <div class="mod-num">Módulo 08</div>
+    <div class="mod-num">Módulo 08 · <b>El lado del pasivo</b></div>
     <h2>Deuda a largo plazo y arrendamientos</h2>
   </div>
 
@@ -1375,6 +2035,69 @@ Asiento del año 3:
 
   <div class="prose">
     <h3>Tres tipos de interés, no uno</h3>
+    <div class="defs">
+      <b>Notación del módulo</b>
+      <dl>
+        <dt>Nominal</dt><dd><em>face value</em>: lo que se devuelve al vencimiento. Fija el cupón, nada más</dd>
+        <dt>Tipo de cupón</dt><dd>el impreso en el bono. <strong>Nunca cambia</strong>. Determina la caja que se paga</dd>
+        <dt>Tipo de mercado</dt><dd>el exigido el día de la emisión. <strong>Fija el precio</strong> y se congela como tipo efectivo</dd>
+        <dt>Tipo efectivo</dt><dd>el de mercado del día de emisión, usado toda la vida del bono para calcular el gasto</dd>
+        <dt>Valor contable</dt><dd><em>carrying value</em>: nominal ± prima o descuento pendiente. Empieza en el precio de emisión y acaba en el nominal</dd>
+        <dt>ROU</dt><dd><em>right-of-use asset</em>: el activo por derecho de uso de un arrendamiento</dd>
+        <dt>Pasivo por arrendamiento</dt><dd>valor presente de los pagos comprometidos, al tipo de descuento del contrato</dd>
+        <dt>Financiero / operativo</dt><dd>las dos clasificaciones del arrendamiento bajo la norma nueva. Mismo balance, <strong>distinta cuenta de resultados</strong></dd>
+      </dl>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>el precio de emisión y el método del interés efectivo</em></b>
+      <ol>
+        <li><div>Un bono es un contrato con dos flujos: cupones y nominal. Su precio es lo que el mercado paga hoy por esos flujos, descontados al tipo que el mercado exige <em>ese día</em>:
+          <div class="paso">Precio = cupón × anualidad(n, y) + Nominal × (1+y)^(−n)</div></div></li>
+        <li><div>El cupón lo fija el emisor con meses de antelación; el tipo de mercado se conoce el día de la emisión. Que no coincidan es lo normal, y <strong>la diferencia se cobra en el precio</strong>:
+          <div class="paso">cupón > mercado  ⇒  precio > nominal  ⇒  PRIMA
+cupón < mercado  ⇒  precio < nominal  ⇒  DESCUENTO
+cupón = mercado  ⇒  precio = nominal  ⇒  a la par</div>
+          Nadie regala ni cobra de más: <strong>el precio ajusta hasta que el rendimiento es el de mercado</strong>.</div></li>
+        <li><div>El asiento de emisión reconoce el efectivo que entra, no el nominal:
+          <div class="paso">Caja ↑ 1.017,29  |  Deuda ↑ 1.017,29
+(la prima NO es un ingreso: es más deuda)</div></div></li>
+        <li><div>A partir de ahí, cada periodo el gasto por intereses <strong>no es el cupón</strong>: es el rendimiento real sobre lo que efectivamente se debe.
+          <div class="paso">gasto = tipo EFECTIVO × valor contable al inicio
+caja  = tipo de CUPÓN × nominal
+amortización = la diferencia</div></div></li>
+        <li><div>Con prima, el gasto es menor que la caja pagada, y el exceso va comiéndose la prima:
+          <div class="paso">gasto = 4,00% × 1.017,29 = 40,69
+caja  = 4,10% × 1.000    = 41,00
+amort. prima            =  0,31
+nuevo valor contable    = 1.016,98</div></div></li>
+        <li><div>Repite hasta el vencimiento y el valor contable <strong>aterriza exactamente en el nominal</strong>, que es lo que hay que devolver. Ese aterrizaje es la comprobación de que el método está bien aplicado.
+          <div class="paso">emisión 1.017,29  →  …  →  vencimiento 1.000,00
+la prima se consumió entera como MENOR gasto</div></div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> el tipo efectivo <strong>se congela el día de la emisión y no vuelve a moverse</strong>. Si las tasas de mercado suben al año siguiente, el valor razonable de la deuda cae, pero el balance no se entera: sigue registrando al coste amortizado. Ésa es la pregunta del examen sobre marcar la deuda a valor razonable — y su respuesta incómoda: <em>si una empresa marcase su deuda a mercado, empeorar su crédito le generaría un beneficio</em>.</div>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>que dos arrendamientos con el mismo pasivo den beneficios distintos</em></b>
+      <ol>
+        <li><div>Bajo la norma nueva, <strong>los dos tipos entran igual al balance</strong>: activo ROU y pasivo por el valor presente de los pagos. La clasificación no cambia nada ahí.</div></li>
+        <li><div>Lo que cambia es la cuenta de resultados. El <strong>financiero</strong> trata el contrato como una compra financiada, así que separa las dos cosas:
+          <div class="paso">gasto por intereses  = tipo × pasivo pendiente  ← DECRECIENTE
+amortización del ROU = lineal sobre el plazo   ← CONSTANTE
+gasto total                                    ← DECRECIENTE</div></div></li>
+        <li><div>El <strong>operativo</strong> trata el contrato como un alquiler, así que reporta un solo gasto <em>lineal</em> igual al pago medio:
+          <div class="paso">gasto único = Σ pagos / plazo   ← CONSTANTE</div></div></li>
+        <li><div>Y aquí está el truco de la norma: el pasivo se reduce <strong>igual en los dos casos</strong> (el pago menos el interés implícito). Para que el gasto salga lineal en el operativo, lo que se ajusta es la amortización del activo, que es el residuo:
+          <div class="paso">FINANCIERO   amort. ROU = coste/plazo         (fija)
+OPERATIVO    amort. ROU = gasto único − interés (crece con el tiempo)</div>
+          Por eso el ROU de un operativo <strong>se amortiza más despacio al principio</strong>.</div></li>
+        <li><div>Consecuencia en el resultado, que es lo que se pregunta: el financiero carga más al principio y menos al final; el operativo, lo mismo siempre. El total sobre la vida del contrato es <strong>idéntico</strong>.
+          <div class="paso">año 1:  financiero > operativo  ⇒ beneficio MENOR
+últimos años: financiero < operativo ⇒ beneficio MAYOR
+suma total: IGUAL</div></div></li>
+        <li><div>Y una diferencia que no aparece en el resultado pero sí en los ratios: el financiero parte el pago entre <strong>CFO (intereses) y CFF (principal)</strong>, mientras que el operativo lo mete entero en CFO. <strong>El financiero muestra mejor CFO.</strong></div></li>
+      </ol>
+      <div class="cierre"><b>La respuesta de una frase:</b> «el beneficio del año 1 es <strong>menor</strong> bajo arrendamiento financiero, porque el gasto está cargado al principio — el interés se calcula sobre un pasivo que todavía es grande — mientras que el operativo reparte el mismo total linealmente». Y la razón de que exista esta dualidad es histórica: la norma nueva llevó todos los arrendamientos al balance, pero conservó los dos patrones de gasto para no romper series de resultados.</div>
+    </div>
     <ul>
       <li><strong>Tipo de cupón</strong>: escrito en el bono. Determina el <em>pago en efectivo</em> = cupón × nominal.</li>
       <li><strong>Tipo de mercado a la emisión</strong> (efectivo): determina el <em>gasto financiero</em> y el valor contable del pasivo. <strong>Se fija y no cambia nunca.</strong></li>
@@ -1421,6 +2144,102 @@ DESPUÉS se separan:
     "Amortización" = gasto plano − "interés"   ← es un PLUG
     ⇒ gasto TOTAL CONSTANTE</div>
       <div class="cap">Las empresas estadounidenses presionaron al FASB para conseguir el gasto plano del operativo: el financiero carga más gasto en los primeros años, y eso no gusta. En IFRS <b>todos</b> los arrendamientos se tratan como financieros.</div>
+    </div>
+    <div class="ojo">
+      <b>El cupón se paga, el tipo efectivo se gasta.</b> Es la confusión que más puntos cuesta en este módulo. En el asiento del pago de intereses hay <strong>tres</strong> números y sólo dos se parecen: la caja sale por el cupón sobre el <em>nominal</em>, el gasto entra por el tipo efectivo sobre el <em>valor contable</em>, y la diferencia amortiza la prima o el descuento. Si sólo escribes dos líneas, te falta una.
+    </div>
+    <div class="nexo">
+      Deuda y arrendamiento son <b>el mismo instrumento con distinto nombre</b>, y eso es precisamente lo que la norma nueva reconoció al llevar los operativos al balance. Antes, capitalizar los compromisos fuera de balance era un ajuste que el analista tenía que hacer a mano — el ejercicio de Hertz de este módulo — y que cambiaba de golpe los tres factores del DuPont del <b>módulo 6</b>: más activo (rotación abajo), más pasivo (apalancamiento arriba) y otro perfil de gasto. Que la norma lo haya absorbido no elimina el análisis: sólo lo traslada a <b>qué tipo de descuento</b> eligió la empresa, que sigue siendo juicio del gestor.
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>Bono emitido con prima: los tres números del asiento</span></header>
+    <div class="body">
+      <p class="given">Una empresa emite el 15 de agosto notas senior a <strong>30 años</strong> con nominal <strong>$1.000M</strong> y cupón anual del <strong>4,10%</strong>. Ese día el tipo de mercado para su riesgo y plazo es del <strong>4,00%</strong>. Tipo impositivo 0%. Registra la emisión y el primer pago de intereses.</p>
+      <ol class="steps">
+        <li><div><strong>Ver el signo antes de calcular.</strong> El cupón (4,10%) es <em>mayor</em> que lo que el mercado exige (4,00%): el bono paga de más, así que se venderá <strong>por encima del nominal</strong>. Prima, no descuento. Si el resultado sale por debajo de 1.000, hay un error.</div></li>
+        <li><div><strong>El precio.</strong>
+          <div class="work">anualidad(30 años, 4%) = (1 − 1,04⁻³⁰)/0,04
+                       = (1 − 0,308319)/0,04 = 17,2920
+
+cupones:  41,00 × 17,2920      =   708,97
+nominal: 1.000 × 0,308319      =   308,32
+                                 ────────
+precio de emisión              = $1.017,29</div></div></li>
+        <li><div><strong>El asiento de emisión.</strong> Entra el efectivo real, y la prima <strong>no es un ingreso</strong>: es deuda.
+          <div class="work">           ACTIVO   =   PASIVO   +   PATRIMONIO
+Caja      +1.017,29     Deuda +1.017,29     —
+gasto o ingreso: NINGUNO</div></div></li>
+        <li><div><strong>El primer pago de intereses, un año después.</strong> Los tres números:
+          <div class="work">gasto = tipo EFECTIVO × valor contable
+      = 4,00% × 1.017,29          =  40,69
+caja  = tipo de CUPÓN × NOMINAL
+      = 4,10% × 1.000             =  41,00
+amortización de la prima          =   0,31</div></div></li>
+        <li><div><strong>El asiento.</strong>
+          <div class="work">           ACTIVO   =   PASIVO   +   PATRIMONIO
+Caja        −41,00     Deuda  −0,31      RE −40,69
+comprobar:  −41,00  =  −0,31 − 40,69 = −41,00  ✓</div>
+          Nuevo valor contable: 1.017,29 − 0,31 = <strong>$1.016,98</strong>.</div></li>
+        <li><div><strong>Adónde va esto.</strong> Repitiendo 30 veces, la prima se consume entera y el valor contable aterriza exactamente en $1.000, que es lo que hay que devolver. La empresa reconoce <strong>menos gasto que caja</strong> cada año, y la diferencia acumulada es justo la prima que cobró de más al emitir. <em>Nadie regaló nada.</em></div></li>
+        <li><div><strong>La variante que pregunta el examen.</strong> Si en vez del año 1 te dan un valor contable neto cualquiera — «las notas netas en circulación son $765M» — la mecánica es idéntica: el gasto sale del <strong>valor contable</strong> y la caja del <strong>nominal</strong>.
+          <div class="work">gasto = 4,00% × 765 = $30,60M
+caja  = 4,10% × nominal implícito
+      = 4,10% × (765/1,01729) = 4,10% × 752 = $30,83M
+amortización de prima            = $0,23M</div></div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>Emisión $1.017,29M · gasto año 1 $40,69M · caja $41,00M</span></div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <header><b>Ejemplo resuelto</b><span>El mismo arrendamiento, financiero y operativo</span></header>
+    <div class="body">
+      <p class="given">Arrendamiento que empieza el 1 de enero de 2020: <strong>seis pagos anuales de $20M</strong>, cada 31 de diciembre, tipo <strong>5%</strong>. El valor presente de los pagos es <strong>$102M</strong>. Tipo impositivo 0%. Registra el 31 de diciembre de 2020 bajo las dos clasificaciones, y di bajo cuál el beneficio es mayor. <em>(Es la pregunta 5 del examen de muestra.)</em></p>
+      <ol class="steps">
+        <li><div><strong>El inicio es idéntico en los dos casos.</strong> El 1 de enero:
+          <div class="work">           ACTIVO   =   PASIVO   +   PATRIMONIO
+ROU        +102        Pasivo +102          —</div>
+          Ninguna clasificación toca el resultado al firmar.</div></li>
+        <li><div><strong>El interés implícito del primer año, común a ambos.</strong>
+          <div class="work">interés   = 5% × 102             = $5,1M
+pago                              = $20,0M
+reducción del pasivo = 20 − 5,1   = $14,9M</div>
+          <strong>El pasivo se reduce igual en los dos casos.</strong> Lo único que cambia es cómo se reparte el gasto.</div></li>
+        <li><div><strong>Financiero: dos gastos separados.</strong>
+          <div class="work">gasto financiero     = 5,1
+amortización del ROU = 102/6      = 17,0
+                                   ─────
+gasto total del año                22,1
+
+           ACTIVO   =   PASIVO   +   PATRIMONIO
+Caja       −20,0      Pasivo −14,9    RE −22,1
+ROU        −17,0
+comprobar: −37,0  =  −14,9 − 22,1 = −37,0  ✓</div></div></li>
+        <li><div><strong>Operativo: un solo gasto, plano.</strong> El gasto es el pago medio del contrato.
+          <div class="work">gasto único = 120/6               = 20,0
+reducción del pasivo = 20 − 5,1   = 14,9   ← igual que antes
+reducción del ROU = 20 − 5,1      = 14,9   ← el PLUG
+
+           ACTIVO   =   PASIVO   +   PATRIMONIO
+Caja       −20,0      Pasivo −14,9    RE −20,0
+ROU        −14,9
+comprobar: −34,9  =  −14,9 − 20,0 = −34,9  ✓</div></div></li>
+        <li><div><strong>La comparación, que es lo que puntúa.</strong>
+          <div class="work">gasto 2020    financiero 22,1  vs  operativo 20,0
+⇒ el beneficio neto es MENOR bajo el financiero</div>
+          En una frase: <em>el financiero carga el interés sobre un pasivo que todavía está entero, mientras que el operativo alisa el mismo total a lo largo de los seis años</em>.</div></li>
+        <li><div><strong>Comprobar que el total no cambia.</strong> Sumando los seis años:
+          <div class="work">financiero: 102 (amortización) + 18 (intereses) = 120
+operativo:  20 × 6                             = 120</div>
+          <strong>Idéntico.</strong> La clasificación reparte, no crea. Es el mismo principio del devengo del módulo 1, aplicado a un contrato.</div></li>
+        <li><div><strong>Y el efecto que no se ve en el resultado.</strong> El financiero parte el pago entre las dos secciones del estado de flujos:
+          <div class="work">financiero:  CFO −5,1   CFF −14,9
+operativo:   CFO −20,0  CFF   0</div>
+          Misma caja total, <strong>pero el financiero reporta un CFO mucho mejor</strong>. Es la razón práctica por la que la clasificación importa aunque el total sea igual.</div></li>
+      </ol>
+      <div class="result"><b>Resultado</b><span>Financiero $22,1M de gasto · operativo $20,0M · beneficio menor bajo el financiero</span></div>
     </div>
   </div>
 
@@ -1571,7 +2390,7 @@ OPERATIVO
 <!-- ============ M9 ============ -->
 <section class="module" id="m9">
   <div class="mod-head">
-    <div class="mod-num">Módulo 09</div>
+    <div class="mod-num">Módulo 09 · <b>El lado del pasivo</b></div>
     <h2>Patrimonio neto y beneficio por acción</h2>
   </div>
 
@@ -1608,6 +2427,82 @@ Recuento de acciones
     </ul>
 
     <h3>Beneficio por acción</h3>
+    <div class="defs">
+      <b>Notación del módulo</b>
+      <dl>
+        <dt>Capital aportado</dt><dd>nominal más prima de emisión. Lo que los accionistas pusieron</dd>
+        <dt>Autocartera</dt><dd><em>treasury stock</em>: acciones propias recompradas. Contra-cuenta del patrimonio</dd>
+        <dt>Emitidas / en circulación</dt><dd><em>issued</em> menos autocartera = <em>outstanding</em>. El BPA usa las <strong>en circulación</strong></dd>
+        <dt>Media ponderada</dt><dd>acciones en circulación ponderadas por los meses que lo estuvieron</dd>
+        <dt>BPA básico</dt><dd><code>(Beneficio − dividendo preferente) / media ponderada</code></dd>
+        <dt>BPA diluido</dt><dd>el mismo, suponiendo que se ejerce todo lo que puede convertirse en acciones</dd>
+        <dt>Método de autocartera</dt><dd><em>treasury stock method</em>: para opciones. El dinero del ejercicio se usa para recomprar acciones</dd>
+        <dt>Método <em>if-converted</em></dt><dd>para convertibles: se añaden las acciones <strong>y</strong> se devuelve el interés al beneficio</dd>
+        <dt>Antidilutivo</dt><dd>título que <em>subiría</em> el BPA si se incluyera. Se excluye</dd>
+      </dl>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>que la autocartera no genere nunca ganancia ni pérdida</em></b>
+      <ol>
+        <li><div>Una empresa recompra sus propias acciones a $50 y las revende meses después a $70. Parece una ganancia de $20. <strong>No lo es</strong>, y la razón es estructural.</div></li>
+        <li><div>La cuenta de resultados mide transacciones <em>con terceros</em>. Una operación con los propios dueños no es una fuente de beneficio: es un movimiento dentro del patrimonio.
+          <div class="paso">recompra   Caja ↓ 50  |  Autocartera ↑ 50 (SE ↓ 50)
+reventa    Caja ↑ 70  |  Autocartera ↓ 50, CC ↑ 20</div>
+          Los $20 entran por <strong>capital aportado</strong>, no por reservas.</div></li>
+        <li><div>Si no fuera así, una empresa podría fabricar beneficio comprando y vendiendo sus propias acciones — que es exactamente lo que la norma quiere impedir.</div></li>
+        <li><div>La misma lógica cubre las otras operaciones de patrimonio, y conviene verlas juntas porque el examen las mezcla:
+          <div class="paso">emitir acciones      Caja ↑, CC ↑        RE sin tocar
+gastos de emisión    Caja ↓, CC ↓        RE sin tocar
+recomprar            Caja ↓, autocartera ↑
+dividendo declarado  Pasivo ↑, RE ↓
+dividendo pagado     Caja ↓, Pasivo ↓    RE sin tocar
+split / dividendo
+  en acciones        sólo cambia el número de acciones</div>
+          <strong>Ninguna pasa por la cuenta de resultados.</strong> Es una regla sin excepciones.</div></li>
+        <li><div>De ahí la respuesta a la pregunta de examen sobre los gastos de colocación de una ampliación: <strong>no se capitalizan ni se difieren — reducen el capital aportado</strong>. Económicamente, la empresa recaudó menos.</div></li>
+      </ol>
+      <div class="cierre"><b>La regla de una línea:</b> <strong>lo que pasa entre la empresa y sus dueños nunca es resultado</strong>. Vale para emisiones, recompras, dividendos y gastos de colocación. Si un asiento tuyo mete alguna de esas cuatro cosas en RE por un motivo distinto del propio dividendo, está mal.</div>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>el BPA diluido, y por qué las opciones diluyen menos de lo que parece</em></b>
+      <ol>
+        <li><div>El BPA básico usa las acciones que hay. El diluido contesta otra pregunta: <strong>¿cuánto ganaría cada acción si todo el que puede convertirse en accionista lo hiciera hoy?</strong></div></li>
+        <li><div>Con <strong>opciones</strong>, ejercerlas no sólo crea acciones: también <em>entra dinero</em> en la empresa. La norma supone que ese dinero se usa para recomprar acciones al precio medio del periodo — de ahí el nombre <em>método de autocartera</em>.
+          <div class="paso">20M opciones, strike $60, precio medio $80
+
+acciones emitidas al ejercer          20,0M
+dinero recibido: 20 × 60          = $1.200M
+acciones recompradas: 1.200/80     = 15,0M
+                                    ──────
+acciones NUEVAS netas                5,0M</div>
+          Sólo diluyen <strong>5 millones</strong>, no 20. Ésa es la parte que casi nadie hace bien.</div></li>
+        <li><div>Con un <strong>convertible</strong>, convertirlo crea acciones <em>y</em> elimina el interés que se estaba pagando. Hay que hacer las dos cosas:
+          <div class="paso">convertible de $500M al 3%, canjeable por 10M acciones
+
+interés que se ahorra (τ=0)       = $15M  → al beneficio
+acciones nuevas                   = 10,0M → al denominador</div></div></li>
+        <li><div>Antes de incluir nada hay que comprobar que <strong>diluye de verdad</strong>. Un título es dilutivo sólo si su «BPA propio» es menor que el BPA actual:
+          <div class="paso">BPA del convertible = 15/10 = $1,50
+BPA con opciones    = 2.000/405 = $4,94
+1,50 < 4,94  ⇒  DILUTIVO, se incluye</div>
+          Si saliera al revés, incluirlo <em>subiría</em> el BPA: es antidilutivo y se excluye. La norma no permite mejorar el BPA diluyendo.</div></li>
+        <li><div>Con beneficio de $2.000M y 400M de acciones medias:
+          <div class="paso">BPA básico  = 2.000/400                = $5,00
+BPA diluido = (2.000 + 15)/(400 + 5 + 10)
+            = 2.015/415                = $4,86</div></div></li>
+        <li><div>Y la variante que aparece en el examen desde el otro lado: <strong>¿cuál habría sido el BPA sin la recompra del año?</strong> Se devuelven las acciones al denominador (y, si el enunciado lo dice, se ignora el interés que la caja habría generado):
+          <div class="paso">sin recomprar 10M acciones:
+BPA = 2.000/(400 + 10) = $4,88   contra $5,00 real</div>
+          La recompra subió el BPA doce centavos <strong>sin que el negocio ganara un peso más</strong>. Es la razón por la que el BPA es una métrica manipulable y por la que conviene mirar también el beneficio total.</div></li>
+      </ol>
+      <div class="cierre"><b>Los tres pasos, en orden:</b> <strong>(1)</strong> básico; <strong>(2)</strong> opciones por el método de autocartera — sólo las acciones <em>netas</em>; <strong>(3)</strong> convertibles por <em>if-converted</em>, sumando el interés al numerador, y sólo si son dilutivos. Saltarse la recompra implícita del paso 2 es el error más caro, y comprobar la dilución del paso 3 es lo que separa un 8 de un 10.</div>
+    </div>
+    <div class="ojo">
+      <b>La media ponderada es por meses, no por saldos finales.</b> Si la empresa recompró 12 millones de acciones el 1 de octubre, en la media del año esas acciones estuvieron fuera <em>tres</em> meses: restan <code>12 × 3/12 = 3</code> millones, no 12. El enunciado suele decir «asume que se recompraron el 1 de enero» precisamente para ahorrarte ese cálculo — y cuando <em>no</em> lo dice, la ponderación es la mitad de la nota.
+    </div>
+    <div class="nexo">
+      El patrimonio es donde se cierra el circuito del <b>módulo 1</b>: las tres columnas (capital aportado, reservas, AOCI) son las tres puertas por las que algo puede entrar al patrimonio, y este módulo enseña cuál corresponde en cada caso. La recompra conecta directo con el <b>módulo 6</b> — sube el apalancamiento del DuPont sin tocar el negocio — y con el <b>módulo 10</b>, donde el patrimonio de un banco es tan delgado que cualquier movimiento aquí cambia su ratio de capital.
+    </div>
     <div class="rule">
       <div class="f">           BN − minoritarios − dividendo preferente
 BPA básico = ───────────────────────────────────────────
@@ -1745,7 +2640,7 @@ ESCENARIO B — la acción cotiza por ENCIMA de $100
 <!-- ============ M10 ============ -->
 <section class="module" id="m10">
   <div class="mod-head">
-    <div class="mod-num">Módulo 10</div>
+    <div class="mod-num">Módulo 10 · <b>Aplicación</b></div>
     <h2>Contabilidad bancaria y repaso con Tesla</h2>
   </div>
 
@@ -1797,6 +2692,49 @@ Ratio de capital Tier 1 sobre activos ponderados por riesgo
     </div>
 
     <h3>El gran tema contable: provisiones por insolvencia</h3>
+    <div class="defs">
+      <b>Notación del módulo</b>
+      <dl>
+        <dt>Préstamos brutos</dt><dd>lo que los clientes deben al banco. Es su activo principal</dd>
+        <dt>ALL</dt><dd><em>allowance for loan losses</em>: provisión acumulada. Contra-cuenta de la cartera</dd>
+        <dt>Dotación</dt><dd><em>provision</em>: el gasto del periodo. Es la palanca discrecional del banco</dd>
+        <dt><em>Charge-off</em></dt><dd>dar de baja un préstamo fallido. Consume la ALL, <strong>no</strong> toca resultados</dd>
+        <dt>Pérdida incurrida</dt><dd>norma vieja: sólo se provisiona lo ya <em>probable</em>. Provisión tardía y procíclica</dd>
+        <dt>CECL</dt><dd>norma nueva: se provisiona la pérdida esperada <strong>de toda la vida</strong> del préstamo, desde el día uno</dd>
+        <dt>Liberación de reservas</dt><dd>reducir la ALL cuando el riesgo baja. Es un <em>ingreso</em></dd>
+        <dt>Ratio de capital</dt><dd><code>Patrimonio / Activo</code>. En un banco típico, entre el 8% y el 12%</dd>
+      </dl>
+    </div>
+    <div class="deriv">
+      <b>De dónde sale · <em>que una provisión pequeña destroce el capital de un banco</em></b>
+      <ol>
+        <li><div>El balance de un banco está invertido respecto del de una empresa industrial: sus <strong>pasivos son los depósitos</strong> del público y sus <strong>activos son los préstamos</strong> que concede. El patrimonio es la diferencia, y es delgadísimo.
+          <div class="paso">Activo 100  =  Pasivo 90  +  Patrimonio 10</div></div></li>
+        <li><div>Ahora eleva la provisión del 1% al 2% del activo. Es un punto porcentual: parece poco.
+          <div class="paso">dotación adicional = 1% × 100 = 1
+Activo     100 → 99   (la ALL resta de la cartera)
+Patrimonio  10 →  9   (el gasto va a RE)</div></div></li>
+        <li><div>Mira lo que le pasó al ratio de capital:
+          <div class="paso">antes:   10/100 = 10,0%
+después:  9/99  =  9,09%
+caída del capital: 10%  ← ¡por un punto de provisión!</div></div></li>
+        <li><div>La razón es puro apalancamiento: la provisión se mide sobre el <strong>activo</strong> y se cobra contra el <strong>patrimonio</strong>, que es diez veces más pequeño. <strong>Un punto de activo son diez de capital.</strong>
+          <div class="paso">Δ capital %  ≈  −(Δ provisión / capital inicial)
+             =  −(1/10) = −10%</div></div></li>
+        <li><div>De ahí las dos consecuencias que ordenan el módulo. <strong>(1)</strong> La estimación de insolvencias es, con diferencia, <strong>el juicio contable más importante que hace un banco</strong>: mueve el resultado y el capital regulatorio a la vez. <strong>(2)</strong> Y por eso mismo es la partida más vigilada y más tentadora de manipular.</div></li>
+        <li><div>La palanca funciona en los dos sentidos, y ahí está el «grifo de beneficios»: <strong>liberar</strong> reserva cuando la economía mejora es un ingreso que no viene de prestar mejor.
+          <div class="paso">dotación &gt; charge-offs  ⇒  la ALL crece  ⇒ resultado abajo
+dotación &lt; charge-offs  ⇒  la ALL cae    ⇒ resultado arriba</div>
+          Comparar dotación contra charge-offs efectivos, año a año, es la forma directa de ver qué está haciendo el banco.</div></li>
+      </ol>
+      <div class="cierre"><b>Lo que hay que retener:</b> en un banco el ratio de capital y el resultado <strong>se mueven con la misma palanca</strong>, y esa palanca es una estimación. Por eso una crisis bancaria empieza siempre igual — no con préstamos que dejan de pagar, sino con la <em>revisión de la estimación</em> sobre los que todavía pagan. Y por eso CECL adelantó ese reconocimiento al día de la concesión: para que la mala noticia no llegue toda junta.</div>
+    </div>
+    <div class="ojo">
+      <b>La misma mecánica que el módulo 2, con otra escala.</b> Dotar es gasto, dar de baja no lo es, y la ALL es una contra-cuenta del activo. Lo único que cambia en un banco es el apalancamiento: en una empresa industrial una provisión mal calibrada mueve un margen; en un banco mueve la solvencia. Si en el examen dudas del asiento, <strong>escríbelo primero como si fueran cuentas a cobrar</strong> — es literalmente el mismo.
+    </div>
+    <div class="nexo">
+      El módulo 10 no introduce contabilidad nueva: aplica <b>todo lo anterior</b> a un balance donde cada decisión pesa diez veces más. La provisión es la del <b>módulo 2</b>; el valor razonable de la cartera de títulos es la escalera del <b>módulo 5</b>; el apalancamiento extremo es el tercer factor del DuPont del <b>módulo 6</b>; y el repaso de Tesla cierra el curso pidiendo exactamente lo que pedirá el examen — <b>leer una memoria real y decir, con la BSE, qué asiento hay detrás de cada cifra</b>.
+    </div>
     <p>Mecánica idéntica a la provisión de insolvencias comerciales del módulo 2: contra-activo, subjetiva, con enorme impacto. Si el banco infravalora las pérdidas de su cartera, <strong>sobrevalora su capital</strong> — que es exactamente lo que al regulador le quita el sueño.</p>
     <div class="rule">
       <div class="f">MODELO DE PÉRDIDA INCURRIDA  (hasta 2019)
@@ -2079,6 +3017,21 @@ Convertible → if converted
 Opciones → treasury stock
   neta = opciones − ingresos/precio medio</div>
       </div>
+    </div>
+
+    <div class="exammap">
+      <b>Guion del examen final de muestra</b>
+      <dl>
+        <dt>P1 · 10 pts<br>Inventario</dt><dd>Reexpresar de LIFO a FIFO el inventario final y el COGS, y decir si la rotación sube o baja. <strong>Recetas:</strong> <code>Inv_FIFO = Inv_LIFO + Reserva</code>; <code>COGS_FIFO = COGS_LIFO − ΔReserva</code>; la rotación <em>baja</em> bajo FIFO porque el denominador crece mucho más que lo que baja el numerador. → <a href="#m3">módulo 03</a></dd>
+        <dt>P2 · 15 pts<br>Impuestos</dt><dd>Asiento del gasto por impuestos separando diferidos e impuesto a pagar; tipo efectivo de otro ejercicio; explicar por qué difiere del legal; movimiento de la provisión de valoración. <strong>Recetas:</strong> <code>gasto = pagar + ΔDTL − ΔDTA</code>; <code>tipo efectivo = gasto/PTI</code>; la explicación son las líneas de la conciliación de la memoria. → <a href="#m7">módulo 07</a></dd>
+        <dt>P3 · 12 pts<br>Inversiones</dt><dd>La <em>misma</em> adquisición registrada al 100% (goodwill como residuo), al 40% (puesta en equivalencia) y al 10% (valor razonable), más la revalorización del 10% al cierre. <strong>Recetas:</strong> goodwill = precio − valor razonable neto; con 40% el resultado de la participada mueve la inversión, el dividendo no; con 10% mueve el valor de mercado, el resultado no. → <a href="#m5">módulo 05</a></dd>
+        <dt>P4 · 15 pts<br>Deuda</dt><dd>Amortizaciones de deuda del año; qué pasaría si la marcara a valor razonable; emisión de notas a 30 años con cupón por encima del mercado; pago de intereses partiendo del valor contable neto. <strong>Recetas:</strong> precio = VP de cupones y nominal al tipo de mercado; <code>gasto = tipo efectivo × valor contable</code>, <code>caja = cupón × nominal</code>. → <a href="#m8">módulo 08</a></dd>
+        <dt>P5 · 10 pts<br>Arrendamientos</dt><dd>El mismo contrato como financiero y como operativo, y bajo cuál el beneficio es mayor. <strong>Resuelto entero</strong> con las cifras del examen ($20M × 6 años al 5%, VP $102M) en el segundo ejemplo del módulo. → <a href="#m8">módulo 08</a></dd>
+        <dt>P6 · 15 pts<br>Patrimonio</dt><dd>Asiento de la recompra; cuántas acciones se recompraron; BPA básico si no hubiera habido recompra; asiento de la ampliación; y qué se hizo con los gastos de colocación. <strong>Recetas:</strong> la autocartera nunca genera resultado; los gastos de colocación <em>reducen el capital aportado</em>; sin recompra, se devuelven las acciones al denominador. → <a href="#m9">módulo 09</a></dd>
+        <dt>P7 · 10 pts<br>PPE</dt><dd>Compra de activos fijos; deterioro cuando el valor razonable cae por debajo del VNC; y el efecto de alargar las vidas útiles sobre beneficio y flujo operativo. <strong>Receta:</strong> beneficio <em>mayor</em>, flujo operativo <em>igual</em> — el gasto y su ajuste se cancelan. → <a href="#m3">módulo 03</a></dd>
+        <dt>P8 · 13 pts<br>Varios</dt><dd>Asiento del gasto por incobrables; una baja de $200M seguida del ajuste hasta dejar la provisión en $100M (<strong>son dos filas</strong>); y una pregunta DuPont de opción múltiple sobre por qué cayó el ROE. → <a href="#m2">módulo 02</a> y <a href="#m6">módulo 06</a></dd>
+      </dl>
+      <p><strong>Cómo es el examen.</strong> Las ocho preguntas se responden sobre un <em>informe anual «modificado» de Thermo Fisher</em> que se entrega con el enunciado y que <strong>no está en la carpeta del curso</strong>: sin él no se pueden reproducir las cifras exactas, pero el formato es idéntico en todas — <em>«use the BSE to record…»</em>. Es decir: el examen no pide teoría, pide <strong>rellenar una fila de la tabla</strong> a partir de un dato que hay que ir a buscar a los estados financieros. La forma de prepararlo es practicar las recetas de arriba contra cualquier memoria real; el 10-K de Tesla del módulo 10, que sí está en la carpeta, sirve perfectamente.</p>
     </div>
 
     <footer>
